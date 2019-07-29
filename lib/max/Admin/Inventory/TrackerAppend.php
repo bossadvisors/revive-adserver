@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/Max.php';
 require_once MAX_PATH . '/lib/max/Dal/Inventory/Trackers.php';
 
@@ -50,14 +52,6 @@ class MAX_Admin_Inventory_TrackerAppend
         $this->tracker_id    = MAX_getValue('trackerid', 0);
         $this->assetPath 	 = OX::assetPath();
         $this->showReminder  = false;
-    }
-
-    /**
-     * PHP4-style constructor
-     */
-    function MAX_Admin_Inventory_TrackerAppend()
-    {
-        $this->__construct();
     }
 
     function _useDefaultDal()
@@ -178,6 +172,9 @@ class MAX_Admin_Inventory_TrackerAppend
             'compileDir'        => MAX_PATH . '/var/templates_compiled',
             'flexyIgnore'        => true
         ));
+
+        // Load token now
+        $this->csrf_token    = phpAds_SessionGetToken();
 
         $codes = $this->codes;
         $this->codes = array();

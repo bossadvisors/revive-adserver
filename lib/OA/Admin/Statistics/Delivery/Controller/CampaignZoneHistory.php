@@ -15,7 +15,7 @@ require_once MAX_PATH . '/lib/OA/Admin/Statistics/Delivery/CommonCrossHistory.ph
 /**
  * The class to display the delivery statistcs for the page:
  *
- * Statistics -> Advertisers & Campaigns -> Campaigns -> Publisher Distribution -> Distribution History
+ * Statistics -> Advertisers & Campaigns -> Campaigns -> Publisher Distribution -> Distribution Statistics
  *
  * @package    OpenXAdmin
  * @subpackage StatisticsDelivery
@@ -43,21 +43,6 @@ class OA_Admin_Statistics_Delivery_Controller_CampaignZoneHistory extends OA_Adm
         $this->showDaySpanSelector = true;
 
         parent::__construct($aParams);
-    }
-
-    /**
-     * PHP4-style constructor
-     *
-     * @param array $aParams An array of parameters. The array should
-     *                       be indexed by the name of object variables,
-     *                       with the values that those variables should
-     *                       be set to. For example, the parameter:
-     *                       $aParams = array('foo' => 'bar')
-     *                       would result in $this->foo = bar.
-     */
-    function OA_Admin_Statistics_Delivery_Controller_CampaignZoneHistory($aParams)
-    {
-        $this->__construct($aParams);
     }
 
     /**
@@ -129,13 +114,13 @@ class OA_Admin_Statistics_Delivery_Controller_CampaignZoneHistory extends OA_Adm
             $this->_addShortcut(
                 $GLOBALS['strClientProperties'],
                 'advertiser-edit.php?clientid='.$advertiserId,
-                'images/icon-advertiser.gif'
+                'iconAdvertiser'
             );
         }
         $this->_addShortcut(
             $GLOBALS['strCampaignProperties'],
             'campaign-edit.php?clientid='.$advertiserId.'&campaignid='.$placementId,
-            'images/icon-campaign.gif'
+            'iconCampaign'
         );
 
         // Prepare the data for display by output() method

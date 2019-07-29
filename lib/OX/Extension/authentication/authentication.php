@@ -14,11 +14,13 @@ require_once MAX_PATH . '/lib/max/Plugin/Translation.php';
 require_once LIB_PATH . '/Plugin/Component.php';
 require_once 'Date.php';
 require_once MAX_PATH . '/lib/max/language/Loader.php';
+require_once MAX_PATH . '/lib/pear/HTML/QuickForm/Rule/Email.php';
+require_once MAX_PATH . '/lib/OA/DB/AdvisoryLock.php';
 
 Language_Loader::load('settings');
 
 /**
- * Plugins_Authentication is an parent class for Authentication plugins
+ * Plugins_Authentication is a parent class for Authentication plugins
  *
  * @package    OpenXPlugin
  * @subpackage Authentication
@@ -97,16 +99,55 @@ class Plugins_Authentication extends OX_Component
      */
     function checkPassword($username, $password)
     {
+        // Introduce a random delay in case of failures, as recommended by:
+        // https://www.owasp.org/index.php/Blocking_Brute_Force_Attacks
+        //
+        // The base delay is 1-5 seconds.
+        $waitMs = mt_rand(1000, 5000);
+
+        $oLock = OA_DB_AdvisoryLock::factory();
+
+        // Username check is case insensitive
+        $username = strtolower($username);
+
+        // Try to acquire an excusive advisory lock for the username
+        $lock = $oLock->get('auth.'.md5($username));
+
+        if (!$lock) {
+            // We couldn't acquire the lock immediately, which means that
+            // another authentication process for the same username is underway.
+            //
+            // This might mean that the account is being targeted by a
+            // multi-threaded brute force attack, so we try to discourage such
+            // behaviour by increasing the delay time by 4x.
+            //
+            // However, if the actual user tries to log in while their account
+            // is being attacked, we will allow them in, they'd just have to
+            // be patient (max 20 seconds).
+            usleep($waitMs * 4000);
+        }
+
         $doUser = OA_Dal::factoryDO('users');
-        $doUser->username = strtolower($username);
+        $doUser->username = $username;
         $doUser->password = md5($password);
+
         $doUser->find();
 
         if ($doUser->fetch()) {
+            $oLock->release();
+
             return $doUser;
-        } else {
-            return false;
         }
+
+        if ($lock) {
+            // The password was wrong, but no other login attempt was in place
+            // so we apply just the base delay time.
+            usleep($waitMs * 1000);
+        }
+
+        $oLock->release();
+
+        return false;
     }
 
     /**
@@ -165,7 +206,7 @@ class Plugins_Authentication extends OX_Component
 
         $oTpl = new OA_Admin_Template('login.html');
 
-        $appName = !empty($aConf['ui']['applicationName']) ? $aConf['ui']['applicationName'] : MAX_PRODUCT_NAME;
+        $appName = !empty($aConf['ui']['applicationName']) ? $aConf['ui']['applicationName'] : PRODUCT_NAME;
 
         $oTpl->assign('uiEnabled', $aConf['ui']['enabled']);
         $oTpl->assign('sessionID', $sessionID);
@@ -234,8 +275,7 @@ class Plugins_Authentication extends OX_Component
     {
         $userExists = !empty($userData['user_id']);
         $userDetailsFields = array();
-        $oLanguages = new MAX_Admin_Languages();
-        $aLanguages = $oLanguages->AvailableLanguages();
+        $aLanguages = RV_Admin_Languages::getAvailableLanguages();
 
         $userDetailsFields[] = array(
                 'name'      => 'login',
@@ -309,8 +349,8 @@ class Plugins_Authentication extends OX_Component
      */
     function isValidEmail($email)
     {
-        return eregi("^[a-zA-Z0-9]+[_a-zA-Z0-9-]*(\.[_a-z0-9-]+)*@[a-z??????0-9]+"
-                ."(-[a-z??????0-9]+)*(\.[a-z??????0-9-]+)*(\.[a-z]{2,6})$", $email);
+        $rule = new HTML_QuickForm_Rule_Email;
+        return $rule->validate($email);
     }
 
     function saveUser($userid, $login, $password, $contactName,
@@ -445,17 +485,6 @@ class Plugins_Authentication extends OX_Component
         return true;
     }
 
-    /**
-     * Delete unverified accounts. Used by cas
-     *
-     * @param OA_Maintenance $oMaintenance
-     * @return boolean
-     */
-    function deleteUnverifiedUsers(&$oMaintenance)
-    {
-        return true;
-    }
-
     // These were pulled straight from the internal class...
         /**
      * Validates user login - required for linking new users
@@ -517,4 +546,7 @@ class Plugins_Authentication extends OX_Component
     }
 }
 
-?>
+
+class Plugins_Authentication_Exception extends Exception
+{
+}

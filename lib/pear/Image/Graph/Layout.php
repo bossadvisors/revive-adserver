@@ -67,7 +67,7 @@ class Image_Graph_Layout extends Image_Graph_Plotarea_Element
     /**
      * Image_Graph_Layout [Constructor]
      */
-    function Image_Graph_Layout()
+    function __construct()
     {
         parent::__construct();
         $this->_padding = array('left' => 2, 'top' => 2, 'right' => 2, 'bottom' => 2);
@@ -174,7 +174,7 @@ class Image_Graph_Layout extends Image_Graph_Plotarea_Element
     function _push($edge, $size = '100%')
     {
         $result = array();
-        if (ereg("([0-9]*)\%", $size, $result)) {
+        if (preg_match("/([0-9]*)\%/D", $size, $result)) {
             $this->_alignSize[$edge] = array(
                 'value' => min(100, max(0, $result[1])),
                 'unit' => 'percentage'

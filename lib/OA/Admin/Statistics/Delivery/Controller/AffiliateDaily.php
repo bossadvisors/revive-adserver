@@ -19,7 +19,7 @@ require_once MAX_PATH . '/lib/OA/Admin/Statistics/Delivery/CommonCrossHistory.ph
  *
  * and:
  *
- * Statistics -> Publishers & Zones -> Campaign Distribution -> Distribution History -> Daily Statistics
+ * Statistics -> Publishers & Zones -> Campaign Distribution -> Distribution Statistics -> Daily Statistics
  *
  * @package    OpenXAdmin
  * @subpackage StatisticsDelivery
@@ -47,21 +47,6 @@ class OA_Admin_Statistics_Delivery_Controller_AffiliateDaily extends OA_Admin_St
         $this->useDailyClass = true;
 
         parent::__construct($aParams);
-    }
-
-    /**
-     * PHP4-style constructor
-     *
-     * @param array $aParams An array of parameters. The array should
-     *                       be indexed by the name of object variables,
-     *                       with the values that those variables should
-     *                       be set to. For example, the parameter:
-     *                       $aParams = array('foo' => 'bar')
-     *                       would result in $this->foo = bar.
-     */
-    function OA_Admin_Statistics_Delivery_Controller_AffiliateDaily($aParams)
-    {
-        $this->__construct($aParams);
     }
 
     /**
@@ -143,7 +128,7 @@ class OA_Admin_Statistics_Delivery_Controller_AffiliateDaily extends OA_Admin_St
             $this->_addShortcut(
                 $GLOBALS['strAffiliateProperties'],
                 'affiliate-edit.php?affiliateid='.$publisherId,
-                'images/icon-affiliate.gif'
+                'iconAffiliate'
             );
         }
 

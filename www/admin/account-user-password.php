@@ -17,7 +17,7 @@ require_once '../../init.php';
 require_once MAX_PATH . '/lib/OA/Admin/Option.php';
 require_once MAX_PATH . '/lib/OA/Admin/UI/UserAccess.php';
 
-require_once MAX_PATH . '/lib/max/Admin/Languages.php';
+require_once MAX_PATH . '/lib/RV/Admin/Languages.php';
 require_once MAX_PATH . '/lib/max/Plugin/Translation.php';
 require_once MAX_PATH . '/www/admin/config.php';
 
@@ -39,6 +39,9 @@ if (isset($_POST['submitok']) && $_POST['submitok'] == 'true') {
         'pw',
         'pw2'
     );
+
+    OA_Permission::checkSessionToken();
+
     // Get the DB_DataObject for the current user
     $doUsers = OA_Dal::factoryDO('users');
     $doUsers->get(OA_Permission::getUserId());
@@ -72,8 +75,10 @@ if (isset($_POST['submitok']) && $_POST['submitok'] == 'true') {
         if ($doUsers->update() === false) {
             // Unable to update the preferences
             $aErrormessage[0][] = $strUnableToWritePrefs;
-        }
-        else {
+        } else {
+            // Regenerate session ID and clear all other sessions
+            phpAds_SessionRegenerateId(true);
+
             $translation = new OX_Translation ();
             $translated_message = $translation->translate($GLOBALS['strPasswordChanged']);
             OA_Admin_UI::queueMessage($translated_message, 'local', 'confirm', 0);

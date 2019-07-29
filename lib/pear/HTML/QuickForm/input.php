@@ -51,9 +51,9 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_input($elementName=null, $elementLabel=null, $attributes=null)
+    function __construct($elementName=null, $elementLabel=null, $attributes=null)
     {
-        $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
     } //end constructor
 
     // }}}
@@ -168,7 +168,7 @@ class HTML_QuickForm_input extends HTML_QuickForm_element
      * @return    void
      * @throws
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    function onQuickFormEvent($event, $arg, $caller = null)
     {
         // do not use submit values for button-type elements
         $type = $this->getType();

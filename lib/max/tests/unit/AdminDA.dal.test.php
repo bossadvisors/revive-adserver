@@ -53,9 +53,9 @@ class Admin_DaTest extends DalUnitTestCase
     // +---------------------------------------+
     var $dbh = null;
 
-    function Admin_DaTest()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         $this->dbh =& OA_DB::singleton();
     }
 
@@ -337,7 +337,7 @@ class Admin_DaTest extends DalUnitTestCase
 
         $tracker2 = Admin_DA::getTracker($trackerId);
         $this->assertTrue(is_array($tracker2));
-        $this->assertTrue(count($ret));
+        $this->assertTrue($ret);
 
         //  compare two trackers
         $this->assertEqual($tracker1, $tracker2);

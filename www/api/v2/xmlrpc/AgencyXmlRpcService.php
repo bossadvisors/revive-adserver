@@ -42,9 +42,9 @@ class AgencyXmlRpcService extends BaseAgencyService
      * initialise the service
      *
      */
-    function AgencyXmlRpcService()
+    function __construct()
     {
-        $this->BaseAgencyService();
+        parent::__construct();
     }
 
     /**
@@ -165,6 +165,43 @@ class AgencyXmlRpcService extends BaseAgencyService
                 $agencyId, $oStartDate, $oEndDate, $localTZ, $aData)) {
 
             return XmlRpcUtils::arrayOfStructuresResponse(array('day' => 'date',
+                                                                'requests' => 'integer',
+                                                                'impressions' => 'integer',
+                                                                'clicks' => 'integer',
+                                                                'revenue' => 'float',
+                                                                ), $aData);
+
+        } else {
+
+            return XmlRpcUtils::generateError($this->_oAgencyServiceImp->getLastError());
+        }
+    }
+
+    /**
+     * The agencyHourlyStatistics method returns either the hourly statistics for an agency
+     * for a specified period or an error message.
+     *
+     * @access public
+     *
+     * @param XML_RPC_Message &$oParams
+     *
+     * @return generated result (data or error)
+     */
+    function agencyHourlyStatistics(&$oParams)
+    {
+        $oResponseWithError = null;
+        if (!XmlRpcUtils::getScalarValues(
+                array(&$sessionId, &$agencyId, &$oStartDate, &$oEndDate, &$localTZ),
+                array(true, true, false, false, false), $oParams, $oResponseWithError)) {
+           return $oResponseWithError;
+        }
+
+        $aData = null;
+        if ($this->_oAgencyServiceImp->getAgencyHourlyStatistics($sessionId,
+                $agencyId, $oStartDate, $oEndDate, $localTZ, $aData)) {
+
+            return XmlRpcUtils::arrayOfStructuresResponse(array('day' => 'date',
+                                                                'hour' => 'integer',
                                                                 'requests' => 'integer',
                                                                 'impressions' => 'integer',
                                                                 'clicks' => 'integer',

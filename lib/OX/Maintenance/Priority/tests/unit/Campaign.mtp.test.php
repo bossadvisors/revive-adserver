@@ -24,9 +24,9 @@ class Test_OX_Maintenance_Priority_Campaign extends UnitTestCase
     /**
      * The class constructor method.
      */
-    function  Test_OX_Maintenance_Priority_Campaign()
+    function  __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         Mock::generate('MAX_Dal_Entities');
         Mock::generate('OA_Dal_Maintenance_Priority');
         Mock::generatePartial(
@@ -75,25 +75,25 @@ class Test_OX_Maintenance_Priority_Campaign extends UnitTestCase
         $aParams = 'foo';
         $oCampaign = new MockPartialOX_Maintenance_Priority_Campaign($this);
         $oCampaign->expectCallCount('_abort', 1);
-        $oCampaign->OX_Maintenance_Priority_Campaign($aParams);
+        $oCampaign->__construct($aParams);
         $oCampaign->tally();
 
         $aParams = array();
         $oCampaign = new MockPartialOX_Maintenance_Priority_Campaign($this);
         $oCampaign->expectCallCount('_abort', 1);
-        $oCampaign->OX_Maintenance_Priority_Campaign($aParams);
+        $oCampaign->__construct($aParams);
         $oCampaign->tally();
 
         $aParams = array('campaign_id' => 'foo');
         $oCampaign = new MockPartialOX_Maintenance_Priority_Campaign($this);
         $oCampaign->expectCallCount('_abort', 1);
-        $oCampaign->OX_Maintenance_Priority_Campaign($aParams);
+        $oCampaign->__construct($aParams);
         $oCampaign->tally();
 
         $aParams = array('priority' => 5);
         $oCampaign = new MockPartialOX_Maintenance_Priority_Campaign($this);
         $oCampaign->expectCallCount('_abort', 1);
-        $oCampaign->OX_Maintenance_Priority_Campaign($aParams);
+        $oCampaign->__construct($aParams);
         $oCampaign->tally();
 
         // Test 2

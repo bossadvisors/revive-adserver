@@ -50,7 +50,7 @@ class OX_Component
      *       they should be added to the refactoredExtensions until this whole section can be removed
      * @return mixed The instantiated component object, or false on error.
      */
-    function factory($extension, $group, $component = null)
+    static function factory($extension, $group, $component = null)
     {
         $aConf = $GLOBALS['_MAX']['CONF'];
         if ($component === null) {
@@ -350,7 +350,7 @@ class OX_Component
         $className = self::_getComponentClassName($extension, $group, $component);
 
         // PHP4/5 compatibility for get_class_methods.
-        $aClassMethods = array_map(strtolower, (get_class_methods($className)));
+        $aClassMethods = array_map('strtolower', (get_class_methods($className)));
         if (!$aClassMethods) {
             $aClassMethods = array();
         }

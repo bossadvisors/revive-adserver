@@ -16,7 +16,7 @@ require_once(MAX_PATH.'/etc/changes/tools/DeliveryLimitationsMigration_128_324.p
 class Migration_128 extends Migration
 {
 
-    function Migration_128()
+    function __construct()
     {
         //$this->__construct();
 
@@ -87,7 +87,7 @@ class Migration_128 extends Migration
 	{
         $table = $this->oDBH->quoteIdentifier($this->getPrefix().'banners',true);
 
-	    if ($this->oDBH->dbsyntax == 'mysql') {
+	    if ($this->oDBH->dbsyntax == 'mysql' || $this->oDBH->dbsyntax == 'mysqli') {
     	    $sql = "
     	       UPDATE {$table}
     	       SET transparent = 0

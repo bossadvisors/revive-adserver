@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/DB.php';
 require_once MAX_PATH . '/lib/pear/Date.php';
@@ -26,9 +28,9 @@ class Test_OA_DB extends UnitTestCase
     /**
      * The constructor method.
      */
-    function Test_OA_DB()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
     }
 
     /**
@@ -131,14 +133,16 @@ class Test_OA_DB extends UnitTestCase
 
     function testSingleton()
     {
+        $aConf = $GLOBALS['_MAX']['CONF'];
+
         $oDbh = OA_DB::singleton();
         $this->assertNotNull($oDbh);
         $this->assertFalse(PEAR::isError($oDbh));
 
-        $dsn = "mysql://scott:tiger@non-existent-host:666/non-existent-database";
-        OA::disableErrorHandling();
+        $dsn = "{$aConf['database']['type']}://scott:tiger@non-existent-host:666/non-existent-database";
+        RV::disableErrorHandling();
         $oDbh =& OA_DB::singleton($dsn);
-        OA::enableErrorHandling();
+        RV::enableErrorHandling();
         $this->assertNotNull($oDbh);
         $this->assertTrue(PEAR::isError($oDbh));
     }
@@ -185,8 +189,8 @@ class Test_OA_DB extends UnitTestCase
         $aConf = $GLOBALS['_MAX']['CONF'];
         $oDbh  = &OA_DB::singleton();
 
-        OA::disableErrorHandling();
-        if ($aConf['database']['type'] == 'mysql') {
+        RV::disableErrorHandling();
+        if ($aConf['database']['type'] == 'mysql' || $aConf['database']['type'] == 'mysqli') {
             $result = $oDbh->manager->validateDatabaseName('test white space ');
             $this->assertTrue(PEAR::isError($result));
             $result = $oDbh->manager->validateDatabaseName('special'.chr(255).'char');
@@ -205,31 +209,8 @@ class Test_OA_DB extends UnitTestCase
             $this->assertTrue(PEAR::isError($result));
             $this->assertTrue($oDbh->manager->validateDatabaseName('properName'));
         }
-        OA::enableErrorHandling();
+        RV::enableErrorHandling();
     }
-
-    /**
-     * dumps a list of chars that cause table creation failure
-     */
-    /*function testCreateTableNames()
-    {
-        $oDbh = OA_DB::singleton();
-        OA::disableErrorHandling();
-        $fh = fopen(MAX_PATH.'/var/badchars_'.$GLOBALS['_MAX']['CONF']['database']['type'].'.txt','w');
-        for ($i=0;$i<256;$i++)
-        {
-            $tbl = $oDbh->quoteIdentifier('ox_'.$i.'_'.chr($i).'_test',true);
-            $result = $oDbh->exec("CREATE TABLE {$tbl} (tmp int)");
-            if (PEAR::isError($result))
-            {
-                //fwrite($fh, '\\x'.dechex($i)." chr({$i}) {$tbl} \n");
-                fwrite($fh, "{$i}, // chr({$i}) {$tbl} \n");
-                $this->fail('Test chr('.$i.') '.$tbl); //.$result->getUserInfo());
-            }
-        }
-        fclose($fh);
-        OA::enableErrorHandling();
-    }*/
 
     /**
      *  Method to test function validateDatabaseName in MDB2 Manager modules
@@ -238,7 +219,7 @@ class Test_OA_DB extends UnitTestCase
     {
         $aConf = $GLOBALS['_MAX']['CONF'];
 
-        OA::disableErrorHandling();
+        RV::disableErrorHandling();
 
         $vals = array(
                         0,
@@ -285,7 +266,7 @@ class Test_OA_DB extends UnitTestCase
             $this->assertTrue(PEAR::isError($result), 'chr('.$i.') /'.dechex($i));
         }
 
-        if ($aConf['database']['type'] == 'mysql')
+        if ($aConf['database']['type'] == 'mysql' || $aConf['database']['type'] == 'mysqli')
         {
             $result = OA_DB::validateTableName('abcdefghij1234567890123456789012345678901234567890123456789012345'); //65 chars
             $this->assertTrue(PEAR::isError($result));
@@ -324,10 +305,9 @@ class Test_OA_DB extends UnitTestCase
             $result = OA_DB::validateTableName('_$2');
             $this->assertFalse(PEAR::isError($result));
         }
-        OA::enableErrorHandling();
+        RV::enableErrorHandling();
     }
 
 }
-
 
 ?>

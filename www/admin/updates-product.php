@@ -39,8 +39,8 @@ $doApplicationVariable->name    = 'oa_version';
 $doApplicationVariable->find();
 $doApplicationVariable->fetch();
 
-$current  = $strCurrentlyUsing.' '.MAX_PRODUCT_NAME.'&nbsp;v'.OA_VERSION.' '.($doApplicationVariable->value!=OA_VERSION ? '(warning: database is stamped as v'.$doApplicationVariable->value.') ' : '');
-$current .= $strRunningOn.' '.str_replace('/', '&nbsp;', ereg_replace(" .*$", '', $_SERVER["SERVER_SOFTWARE"])).', ';
+$current  = $strCurrentlyUsing.' '.PRODUCT_NAME.'&nbsp;v'.VERSION.' '.($doApplicationVariable->value!=VERSION ? '(warning: database is stamped as v'.$doApplicationVariable->value.') ' : '');
+$current .= $strRunningOn.' '.str_replace('/', '&nbsp;', preg_replace("/ .*$/D", '', $_SERVER["SERVER_SOFTWARE"])).', ';
 $current .= 'PHP&nbsp;'.phpversion().' '.$strAndPlain.' '.phpAds_dbmsname;
 
 // Get the database version number.

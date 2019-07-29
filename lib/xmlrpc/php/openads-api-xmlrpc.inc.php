@@ -39,7 +39,6 @@ class OA_Api_Xmlrpc
     var $host;
     var $basepath;
     var $port;
-    var $ssl;
     var $timeout;
     var $username;
     var $password;
@@ -72,12 +71,11 @@ class OA_Api_Xmlrpc
      * @param bool   $ssl       Set to true to connect using an SSL connection.
      * @param int    $timeout   The timeout period to wait for a response.
      */
-    function OA_Api_Xmlrpc($host, $basepath, $username, $password, $port = 0, $ssl = false, $timeout = 15)
+    function __construct($host, $basepath, $username, $password, $port = 0, $ssl = false, $timeout = 15)
     {
-        $this->host = $host;
-        $this->basepath = $basepath;
+        $this->host = ($ssl ? 'https://' : 'http://').$host;
+        $this->basepath = rtrim($basepath, '/');
         $this->port = $port;
-        $this->ssl  = $ssl;
         $this->timeout = $timeout;
         $this->username = $username;
         $this->password = $password;
@@ -92,7 +90,7 @@ class OA_Api_Xmlrpc
      */
     function &_getClient($service)
     {
-        $oClient = new XML_RPC_Client($this->basepath . '/' . $service . $this->debug, $this->host);
+        $oClient = new XML_RPC_Client($this->basepath . '/' . $service . $this->debug, $this->host, $this->port);
         return $oClient;
     }
 
@@ -133,7 +131,7 @@ class OA_Api_Xmlrpc
         $client = &$this->_getClient($service);
 
         // Send the XML-RPC message to the server.
-        $response = $client->send($message, $this->timeout, $this->ssl ? 'https' : 'http');
+        $response = $client->send($message, $this->timeout);
 
         // Check for an error response.
         if ($response && $response->faultCode() == 0) {
@@ -730,7 +728,7 @@ class OA_Api_Xmlrpc
      * @param integer $bannerId
      * @param array $aTargeting
      */
-    function setBannerTargeting($bannerId, &$aTargeting)
+    function setBannerTargeting($bannerId, $aTargeting)
     {
         $aTargetingInfoObjects = array();
         foreach ($aTargeting as $aTargetingArray) {

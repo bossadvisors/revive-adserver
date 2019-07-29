@@ -221,8 +221,8 @@ function MAX_commonSendContentTypeHeader($type = 'text/html', $charset = null)
 function MAX_commonSetNoCacheHeaders()
 {
     MAX_header('Pragma: no-cache');
-    MAX_header('Cache-Control: private, max-age=0, no-cache');
-    MAX_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+    MAX_header('Cache-Control: no-cache, no-store, must-revalidate');
+    MAX_header('Expires: 0');
 
     // Also send default CORS headers
     MAX_header('Access-Control-Allow-Origin: *');
@@ -442,6 +442,30 @@ function MAX_commonInitVariables()
     );
 
     if (strtolower($charset) == 'unicode') { $charset = 'utf-8'; }
+}
+
+/**
+ * A function that determines if ad impression logging/click logging/click
+ * URL re-direction should be blocked, because the option to do so is enabled
+ * and the banner is inactive.
+ *
+ * Returns true if the ad action is blocked; false if the ad ad action is not
+ * blocked.
+ *
+ * @param int $adId The ad ID.
+ * @return bool
+ */
+function MAX_commonIsAdActionBlockedBecauseInactive($adId)
+{
+    if (!empty($GLOBALS['_MAX']['CONF']['logging']['blockInactiveBanners'])) {
+        // Check if the ad and/or campaign is inactive - therefore the ad action is blocked
+        $aAdInfo = MAX_cacheGetAd($adId);
+
+        // OA_ENTITY_STATUS_RUNNING == 0, but the constant is not set during delivery, so we use a shortcut:
+        return $aAdInfo['status'] || $aAdInfo['campaign_status'];
+    }
+
+    return false;
 }
 
 /**
@@ -693,6 +717,16 @@ function OX_Delivery_Common_hook($hookName, $aParams = array(), $functionName = 
  */
 function OX_Delivery_Common_getFunctionFromComponentIdentifier($identifier, $hook = null)
 {
+    // Security check
+    if (preg_match('/[^a-zA-Z0-9:]/', $identifier)) {
+        if (PHP_SAPI === 'cli') {
+            exit(1);
+        } else {
+            MAX_sendStatusCode(400);
+            exit;
+        }
+    }
+
     $aInfo = explode(':', $identifier);
     $functionName = 'Plugin_' . implode('_', $aInfo) . '_Delivery' . (!empty($hook) ? '_' . $hook : '');
 

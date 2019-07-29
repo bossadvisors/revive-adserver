@@ -22,7 +22,7 @@ class StatMigration extends Migration
     // Use this property to instruct the stats migration to do the right thing.
     var $compactStats = false;
 
-    function StatMigration()
+    function __construct()
     {
 
     }
@@ -78,7 +78,7 @@ class StatMigration extends Migration
         // The temporary table doesn't get deleted on purpose -- it would obscure the code as
         // it does exists now.
 
-        if ($this->oDBH->dbsyntax == 'mysql') {
+        if ($this->oDBH->dbsyntax == 'mysql' || $this->oDBH->dbsyntax == 'mysqli') {
             $tmpTableInformation = "ENGINE={$aConf['table']['type']}";
             $tmpCastDate = '';
             $tmpCastInt = '';

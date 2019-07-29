@@ -63,9 +63,9 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_radio($elementName=null, $elementLabel=null, $text=null, $value=null, $attributes=null)
+    function __construct($elementName=null, $elementLabel=null, $text=null, $value=null, $attributes=null)
     {
-        $this->HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         if (isset($value)) {
             $this->setValue($value);
         }
@@ -196,7 +196,7 @@ class HTML_QuickForm_radio extends HTML_QuickForm_input
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    function onQuickFormEvent($event, $arg, $caller = null)
     {
         switch ($event) {
             case 'updateValue':

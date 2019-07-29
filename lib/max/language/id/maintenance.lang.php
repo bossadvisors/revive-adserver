@@ -1,108 +1,159 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
+ */
 
-// Indonesian
 // Main strings
-$GLOBALS['strChooseSection']				= "Pilihan Bagian";
+$GLOBALS['strChooseSection'] = "Pilihan Bagian";
+$GLOBALS['strAppendCodes'] = "Tambahkan kode";
 
+// Maintenance
+$GLOBALS['strScheduledMaintenanceHasntRun'] = "<b>Pemeliharaan terjadwal belum berjalan dalam satu jam terakhir. Ini mungkin berarti Anda belum mengaturnya dengan benar. </b>";
+
+$GLOBALS['strAutoMantenaceEnabledAndHasntRun'] = "	Pemeliharaan otomatis diaktifkan, namun belum dipicu. Pemeliharaan otomatis hanya dipicu bila {$PRODUCT_NAME} mengirimkan spanduk.
+    Untuk kinerja terbaik, Anda harus menyiapkan <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>pemeliharaan terjadwal</a>.";
+
+$GLOBALS['strAutoMantenaceDisabledAndHasntRun'] = "	Pemeliharaan otomatis saat ini dinonaktifkan, jadi ketika {$PRODUCT_NAME} mengirimkan spanduk, perawatan otomatis tidak akan dipicu.
+       Untuk kinerja terbaik, Anda harus menyiapkan <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>pemeliharaan terjadwal </a>.
+    Namun, jika Anda tidak akan menyiapkan <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>pemeliharaan terjadwal </a>,
+    maka <i>harus</i> <a href='account-settings-maintenance.php'>mengaktifkan pemeliharaan otomatis</a>untuk memastikan bahwa {$PRODUCT_NAME} bekerja dengan benar.";
+
+$GLOBALS['strAutoMantenaceEnabledAndRunning'] = "	Pemeliharaan otomatis diaktifkan dan akan dipicu, jika diperlukan, bila {$PRODUCT_NAME} mengirimkan spanduk. Namun, untuk kinerja terbaik, Anda harus menyiapkan <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>pemeliharaan terjadwal</a>.";
+
+$GLOBALS['strAutoMantenaceDisabledAndRunning'] = "	Namun, perawatan otomatis baru saja dinonaktifkan. Untuk memastikan bahwa {$PRODUCT_NAME} bekerja dengan benar, Anda harus menyiapkan akun <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>terjadwal pemeliharaan</a> atau
+	 <a href ='-settings-maintenance.php'>mengaktifkan kembali pemeliharaan otomatis</a>.<br><br> 
+	Untuk kinerja terbaik, Anda harus menyiapkan <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>pemeliharaan terjadwal</a>.";
+
+$GLOBALS['strScheduledMantenaceRunning'] = "<b>Pemeliharaan terjadwal berjalan dengan benar.</b>";
+
+$GLOBALS['strAutomaticMaintenanceHasRun'] = "<b>Pemeliharaan otomatis berjalan dengan benar.</b>";
+
+$GLOBALS['strAutoMantenaceEnabled'] = "Namun, perawatan otomatis masih dimungkinkan. Untuk kinerja terbaik, sebaiknya <a href='account-settings-maintenance.php'>nonaktifkan pemeliharaan otomatis</a>.";
 
 // Priority
-$GLOBALS['strRecalculatePriority']			= "Ulangi kalkulasi prioritas";
-$GLOBALS['strHighPriorityCampaigns']		= "Kampanye prioritas tinggi";
-$GLOBALS['strAdViewsAssigned']				= "Memperuntukkan AdViews";
-$GLOBALS['strLowPriorityCampaigns']			= "Kampanye prioritas rendah";
-$GLOBALS['strPredictedAdViews']				= "Prediksi AdViews";
-$GLOBALS['strPriorityDaysRunning']			= "Pada saat ini {days} hari tercatat dalam statistik pada ".MAX_PRODUCT_NAME." sebagai data dasar untuk memprediksikan statistik harian. ";
-$GLOBALS['strPriorityBasedLastWeek']		= "Prediksi ini berdasar pada data minggu ini dan data minggu terakhir. ";
-$GLOBALS['strPriorityBasedLastDays']		= "Prediksi ini berdasar pada data berberapa hari terakhir. ";
-$GLOBALS['strPriorityBasedYesterday']		= "Prediksi ini berdasar pada data hari kemarin. ";
-$GLOBALS['strPriorityNoData']				= "Data yang tersedia tidak cukup untuk memprediksikan secara akur berapa Impression yang akan diolah oleh Adserver pada hari ini. Memperuntukkan prioritas akan didasarkan oleh statisik Real Time. ";
-$GLOBALS['strPriorityEnoughAdViews']		= "Jumlah AdViews sudah cukup untuk mempenuhi target dari seluruh kampanye dengan prioritas tinggi. ";
-$GLOBALS['strPriorityNotEnoughAdViews']		= "Pada saat ini belum cukup jelas apakah jumlah AdViews telah cukup untuk mempenuhi target dari seluruh kampanye dengan prioritas tinggi. ";
-
+$GLOBALS['strRecalculatePriority'] = "Ulangi kalkulasi prioritas";
 
 // Banner cache
-$GLOBALS['strCheckBannerCache']				= "Periksa banner cache";
-$GLOBALS['strRebuildBannerCache']			= "Bangun ulang cache banner";
-$GLOBALS['strBannerCacheErrorsFound'] 		= "The database banner cache check has found some errors. These banners will not work until you manually fix them.";
-$GLOBALS['strBannerCacheOK'] 				= "There were no errors detected. Your database banner cache is up to date";
-$GLOBALS['strBannerCacheDifferencesFound'] 	= "The database banner cache check has found that your cache is not up to date and requires rebuilding. Click here to automatically  update your cache.";
-$GLOBALS['strBannerCacheFixed'] 			= "The database banner cache rebuild was successfully completed. Your database cache is now up to date.";
-$GLOBALS['strBannerCacheRebuildButton'] 	= "Bangun ulang";
-$GLOBALS['strRebuildDeliveryCache']			= "Bangun ulang database banner cache";
-$GLOBALS['strBannerCacheExplaination']		= "\nCache ini perlu dibangun ulang bilamana:<br />\n<ul>\n<li>Versi dari OpenX di-upgrade</li>\n<li>Instalasi OpenX dipindahkan ke server lain</li>\n</ul>\n\n";
+$GLOBALS['strCheckBannerCache'] = "Periksa banner cache";
+$GLOBALS['strBannerCacheErrorsFound'] = "Cek tembolok spanduk database telah menemukan beberapa kesalahan. Spanduk ini tidak akan bekerja sampai Anda memperbaikinya secara manual.";
+$GLOBALS['strBannerCacheOK'] = "Tidak ada kesalahan yang terdeteksi. Cache banner database Anda up to date";
+$GLOBALS['strBannerCacheDifferencesFound'] = "Cek cache banner database telah menemukan bahwa cache Anda tidak up to date dan memerlukan pembangunan kembali. Klik di sini untuk memperbarui cache Anda secara otomatis.";
+$GLOBALS['strBannerCacheRebuildButton'] = "Bangun ulang";
+$GLOBALS['strRebuildDeliveryCache'] = "Bangun ulang database banner cache";
+$GLOBALS['strBannerCacheExplaination'] = "Cache ini perlu dibangun ulang bilamana:<br />
+<ul>
+<li>Versi dari OpenX di-upgrade</li>
+<li>Instalasi OpenX dipindahkan ke server lain</li>
+</ul>
+";
 
 // Cache
-$GLOBALS['strCache']						= "Cache penyampaian";
-$GLOBALS['strAge']							= "Umur";
-$GLOBALS['strDeliveryCacheSharedMem']		= "\nDatabase pada saat ini digunakan untuk menyimpan cache penyampaian.\n\n";
-$GLOBALS['strDeliveryCacheDatabase']		= "\nDatabase pada saat ini digunakan untuk menyimpan cache penyampaian.\n\n";
-$GLOBALS['strDeliveryCacheFiles']			= "\nCache penyampaian pada saat ini disimpan pada berberapa file yang berbeda di server Anda.\n\n";
-
-
-// Storage
-$GLOBALS['strStorage']						= "Tempat Penampungan";
-$GLOBALS['strMoveToDirectory']				= "Pindahkan gambar yang ditampung dalam database kedalam direktori";
-$GLOBALS['strStorageExplaination']			= "\nGambar-gambar yang digunakan oleh banner lokal tertampung pada database atau dalam direktori. Bila Anda menampung gambar\ndalam sebuah direktori, beban pada database berkurang yang mengakibatkan kecepatan yang lebih tinggi.\n\n";
-
+$GLOBALS['strCache'] = "Cache penyampaian";
+$GLOBALS['strDeliveryCacheSharedMem'] = "Database pada saat ini digunakan untuk menyimpan cache penyampaian.
+";
+$GLOBALS['strDeliveryCacheDatabase'] = "Database pada saat ini digunakan untuk menyimpan cache penyampaian.
+";
+$GLOBALS['strDeliveryCacheFiles'] = "Cache penyampaian pada saat ini disimpan pada berberapa file yang berbeda di server Anda.
+";
 
 // Storage
-$GLOBALS['strStatisticsExplaination']		= "\nAnda telah aktifkan <i>Statistik Kompak</i> tetapi statistik yang lama masih dalam format Verbose (terperinci).\nApakah Anda ingin merubah statistik verbose ke dalam format kompak?\n\n";
+$GLOBALS['strStorage'] = "Tempat Penampungan";
+$GLOBALS['strMoveToDirectory'] = "Pindahkan gambar yang ditampung dalam database kedalam direktori";
+$GLOBALS['strStorageExplaination'] = "Gambar-gambar yang digunakan oleh banner lokal tertampung pada database atau dalam direktori. Bila Anda menampung gambar
+dalam sebuah direktori, beban pada database berkurang yang mengakibatkan kecepatan yang lebih tinggi.
+";
 
+// Encoding
+$GLOBALS['strEncoding'] = "Pengkodean";
+$GLOBALS['strEncodingExplaination'] = "{$PRODUCT_NAME} sekarang menyimpan semua data dalam database dalam format UTF-8.<br/>
+     Bila memungkinkan, data Anda akan otomatis dikonversi ke pengkodean ini.<br/>
+     Jika setelah mengupgrade karakter Anda yang korup, dan Anda tahu pengkodean yang digunakan, Anda dapat menggunakan alat ini untuk mengubah data dari format tersebut menjadi UTF-8";
+$GLOBALS['strEncodingConvertFrom'] = "Konversikan dari pengkodean ini:";
+$GLOBALS['strEncodingConvertTest'] = "Uji konversi";
+$GLOBALS['strConvertThese'] = "Data berikut akan berubah jika Anda melanjutkan";
 
 // Product Updates
-$GLOBALS['strSearchingUpdates']				= "Mencari Update. Silakan tunggu...";
-$GLOBALS['strAvailableUpdates']				= "Update yang tersedia";
-$GLOBALS['strDownloadZip']					= "Download (.zip)";
-$GLOBALS['strDownloadGZip']					= "Download (.tar.gz)";
+$GLOBALS['strSearchingUpdates'] = "Mencari Update. Silakan tunggu...";
+$GLOBALS['strAvailableUpdates'] = "Update yang tersedia";
+$GLOBALS['strDownloadZip'] = "Download (.zip)";
+$GLOBALS['strDownloadGZip'] = "Download (.tar.gz)";
 
-$GLOBALS['strUpdateAlert']					= "Tersedia versi baru dari .                 \n\nApakah Anda inginkan informasi yang lebih lanjut \ntentang Update yang tersedia?";
-$GLOBALS['strUpdateAlertSecurity']			= "Tersedia versi baru dari .                 \n\nKami sarankan untuk meng-update \nsecepat mungkin \nsehubungan versi baru ini mengandung berberapa peningkatan dalam segi keamanan.";
+$GLOBALS['strUpdateAlert'] = "Tersedia versi baru dari .
 
-$GLOBALS['strUpdateServerDown']				= "\nBerdasarkan alasan yang tidak jelas pada saat ini pengecheckan tentang<br>\nadanya Update gagal dilakukan. Silakan coba kembali pada lain waktu.\n\n";
+Apakah Anda inginkan informasi yang lebih lanjut
+tentang Update yang tersedia?";
+$GLOBALS['strUpdateAlertSecurity'] = "Tersedia versi baru dari .
 
-$GLOBALS['strNoNewVersionAvailable']		= "\nAnda telah menggunakan versi ". MAX_PRODUCT_NAME ." yang terbaru. Pada saat ini belum ada Update untuk versi ini.\n\n";
+Kami sarankan untuk meng-update
+secepat mungkin
+sehubungan versi baru ini mengandung berberapa peningkatan dalam segi keamanan.";
 
-$GLOBALS['strNewVersionAvailable']			= "\n<b>Ada versi baru untuk ". MAX_PRODUCT_NAME .".</b><br> Disarankan untuk meng-update sehubungan\nupdate tersebut memperbaiki berberapa masalah dan membawa fasilitas baru. Untuk informasi lebih lanjut\nbacalah	dokumentasi yang tersedia dalam file dibawah ini.\n\n";
+$GLOBALS['strUpdateServerDown'] = "Berdasarkan alasan yang tidak jelas pada saat ini pengecheckan tentang<br>
+adanya Update gagal dilakukan. Silakan coba kembali pada lain waktu.
+";
 
-$GLOBALS['strSecurityUpdate']				= "\n	<b>Disarankan untuk meng-update secepat mungkin sehubungan dalam update ini ada berberapa perbaikan\n	dalam segi keamanan.</b> Ada kemungkinan bahwa versi dari ". MAX_PRODUCT_NAME ." yang digunakan\noleh Anda mudah diserang dan sudah tidak aman lagi. Untuk informasi lebih lanjut bacalah dokumentasi\n	tentang caranya meng-update yang tersedia dalam file dibawah ini.\n\n";
+$GLOBALS['strNoNewVersionAvailable'] = "Anda telah menggunakan versi {$PRODUCT_NAME} yang terbaru. Pada saat ini belum ada Update untuk versi ini.
+";
 
-$GLOBALS['strNotAbleToCheck']				= "\n<b>Sehubungan ekstensi XML tidak tersedia pada server Anda, maka ". MAX_PRODUCT_NAME ." tidak sanggup\nuntuk mencari ketersediaan versi baru.</b>\n\n";
+$GLOBALS['strServerCommunicationError'] = "    <b>Komunikasi dengan server pembaruan habis waktunya, jadi {$PRODUCT_NAME} tidak
+     dapat memeriksa apakah versi yang lebih baru tersedia pada tahap ini. Silakan coba lagi nanti.</b>";
 
-$GLOBALS['strForUpdatesLookOnWebsite']		= "\n	Bila Anda ingin tahu apakah telah tersedia versi yang lebih baru silakan kunjungi website kami.\n\n";
+$GLOBALS['strCheckForUpdatesDisabled'] = "    <b>Periksa pembaruan dinonaktifkan. Mohon aktifkan  via
+    <a href='account-settings-update.php'>perbarui setelan</a> layar.</b>";
 
-$GLOBALS['strClickToVisitWebsite']			= "Klik disini untuk kunjungi website kami";
-$GLOBALS['strCurrentlyUsing'] 				= "Anda gunakan";
-$GLOBALS['strRunningOn']					= "yang bekerjasama dengan";
-$GLOBALS['strAndPlain']						= "dan";
+$GLOBALS['strNewVersionAvailable'] = "<b>Ada versi baru untuk {$PRODUCT_NAME}.</b><br> Disarankan untuk meng-update sehubungan
+update tersebut memperbaiki berberapa masalah dan membawa fasilitas baru. Untuk informasi lebih lanjut
+bacalah	dokumentasi yang tersedia dalam file dibawah ini.
+";
 
-// Stats conversion
-$GLOBALS['strConverting']					= "Menukarkan";
-$GLOBALS['strConvertingStats']				= "Menukarkan statistik...";
-$GLOBALS['strConvertStats']					= "Menukarkan statistik";
-$GLOBALS['strConvertAdViews']				= "AdViews telah ditukarkan,";
-$GLOBALS['strConvertAdClicks']				= "AdClicks telah ditukarkan...";
-$GLOBALS['strConvertAdConversions']			= "AdConversions converted...";
-$GLOBALS['strConvertNothing']				= "Tidak ada yang perlu ditukarkan...";
-$GLOBALS['strConvertFinished']				= "Selesai...";
+$GLOBALS['strSecurityUpdate'] = "	<b>Disarankan untuk meng-update secepat mungkin sehubungan dalam update ini ada berberapa perbaikan
+	dalam segi keamanan.</b> Ada kemungkinan bahwa versi dari {$PRODUCT_NAME} yang digunakan
+oleh Anda mudah diserang dan sudah tidak aman lagi. Untuk informasi lebih lanjut bacalah dokumentasi
+	tentang caranya meng-update yang tersedia dalam file dibawah ini.
+";
 
-$GLOBALS['strConvertExplaination']			= "\n	Pada saat ini Anda menggunakan format kompak untuk menyimpan statistik Anda. Tetapi <br>\n	tetap masih ada statistik dalam format verbose (terperinci). Selama statistik verbose <br>\n	tidak diubah menjadi format kompak, statistik tersebut tidak digunakan untuk tampilan\n	di halaman-halaman tersebut.  <br>\n	Sebelum mengubah statistik Anda disarankan untuk meng-backup database Anda!  <br>\n	Apakah Anda ingin mengubah statistik Anda kedalam format kompak yang baru? <br>\n";
+$GLOBALS['strNotAbleToCheck'] = "<b>Sehubungan ekstensi XML tidak tersedia pada server Anda, maka {$PRODUCT_NAME} tidak sanggup
+untuk mencari ketersediaan versi baru.</b>
+";
 
-$GLOBALS['strConvertingExplaination']		= "\n	Seluruh statistik verbose (terperinci) yang tersisa akan diubah kedalam format kompak. <br>\n	Tergantung pada jumlah Impression yang tersimpan dalam format verbose, pengolahan ini  <br>\n	butuh waktu berberapa menit. Mohon tunggu sampai perubahaan ini selesai sebelum halaman <br>\n	lain dikunjungi. Dibawah ini akan tertampil seluruh perubahan yang dilakukan dalam database. <br>\n";
+$GLOBALS['strForUpdatesLookOnWebsite'] = "	Bila Anda ingin tahu apakah telah tersedia versi yang lebih baru silakan kunjungi website kami.
+";
 
-$GLOBALS['strConvertFinishedExplaination']  	= "\n	Perubahan dari statistik verbose telah selesai dengan sukses dan data-data bisa <br>\n	dipakai kembali seperti biasa. Dibawah ini akan tertampil seluruh perubahan yang <br>\n	dilakukan dalam	database. <br>\n";
+$GLOBALS['strClickToVisitWebsite'] = "Klik disini untuk kunjungi website kami";
+$GLOBALS['strCurrentlyUsing'] = "Anda gunakan";
+$GLOBALS['strRunningOn'] = "yang bekerjasama dengan";
+$GLOBALS['strAndPlain'] = "dan";
 
+//  Deliver Limitations
+$GLOBALS['strDeliveryLimitations'] = "Aturan Pengiriman";
+$GLOBALS['strAllBannerChannelCompiled'] = "Semua aturan banner/pengiriman menetapkan nilai aturan pengiriman terkompilasi telah dikompilasi ulang";
+$GLOBALS['strBannerChannelResult'] = "Berikut adalah hasil dari aturan banner/delivery yang mengatur validasi aturan pengiriman";
+$GLOBALS['strChannelCompiledLimitationsValid'] = "Semua aturan pengiriman yang dikompilasi untuk aturan pengiriman berlaku";
+$GLOBALS['strBannerCompiledLimitationsValid'] = "Semua aturan pengiriman yang disatukan untuk banner berlaku";
+$GLOBALS['strErrorsFound'] = "Kesalahan ditemukan";
+$GLOBALS['strRepairCompiledLimitations'] = "Beberapa ketidakkonsistenan ditemukan di atas, Anda dapat memperbaiki ini dengan menggunakan tombol di bawah ini, ini akan mengkompilasi ulang batasan yang dikompilasi untuk setiap aturan banner/pengiriman yang diatur dalam sistem<br/>";
+$GLOBALS['strRecompile'] = "Kompilasi ulang";
+$GLOBALS['strDeliveryEngineDisagreeNotice'] = "Dalam keadaan tertentu, mesin pengiriman tidak dapat menyetujui peraturan pengiriman yang tersimpan untuk spanduk dan rangkaian aturan pengiriman, gunakan tautan berikut untuk memvalidasi aturan pengiriman di basis data";
+$GLOBALS['strCheckACLs'] = "Periksa aturan pengiriman";
 
+//  Append codes
+$GLOBALS['strAppendCodesDesc'] = "Dalam keadaan tertentu, mesin pengiriman tidak dapat menyetujui kode tambahan yang tersimpan untuk pelacak, gunakan tautan folowing untuk memvalidasi kode tambahan di database";
+$GLOBALS['strCheckAppendCodes'] = "Periksa kode Append";
+$GLOBALS['strAppendCodesRecompiled'] = "Semua nilai kode append yang dikompilasi telah dikompilasi ulang";
+$GLOBALS['strAppendCodesResult'] = "Berikut adalah hasil dari validasi kode append yang dikompilasi";
+$GLOBALS['strAppendCodesValid'] = "Semua appendcode yang dilacak tracker valid";
+$GLOBALS['strRepairAppenedCodes'] = "Beberapa ketidakkonsistenan ditemukan di atas, Anda dapat memperbaiki ini dengan menggunakan tombol di bawah ini, ini akan mengkompilasi ulang kode tambahan untuk setiap pelacak di sistem";
 
-// Note: New translations not found in original lang files but found in CSV
-$GLOBALS['strEncodingConvert'] = "Tukarkan";
-?>
+$GLOBALS['strPlugins'] = "Plugin";
+$GLOBALS['strPluginsPrecis'] = "Diagnosa dan perbaiki masalah dengan plugin {$PRODUCT_NAME}";
+
+$GLOBALS['strMenus'] = "Menu";
+$GLOBALS['strMenusPrecis'] = "Membangun kembali cache menu";
+$GLOBALS['strMenusCachedOk'] = "Menu cache telah dibangun kembali";

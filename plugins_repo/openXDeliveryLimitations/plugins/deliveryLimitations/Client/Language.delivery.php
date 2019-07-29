@@ -41,7 +41,10 @@ function MAX_checkClient_Language($limitation, $op, $aParams = array())
     $aLimitation = MAX_limitationsGetAFromS($limitation);
     $aLanguages = MAX_limitationsGetAFromS($language);
 
-    $aMatchedValues = array_intersect($aLimitation, $aLanguages);
+    $aMatchedValues = array_uintersect($aLimitation, $aLanguages, function ($limitation, $language) {
+        return strncasecmp($language, $limitation, strlen($limitation));
+    });
+
     if ('=~' == $op) {
         return !empty($aMatchedValues);
     } else {

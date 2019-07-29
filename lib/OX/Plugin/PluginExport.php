@@ -132,6 +132,7 @@ class OX_PluginExport
             switch ($oDbh->dbsyntax)
             {
                 case 'mysql':
+                case 'mysqli':
                     $engine = $oDbh->getOption('default_table_type');
                     $sql = "CREATE TABLE %s ENGINE={$engine} (SELECT * FROM %s)";
                     break;
@@ -157,7 +158,7 @@ class OX_PluginExport
                             $aResult[] = $group.' : '.$tblSrc.' backup failed';
                             $this->aErrors[] = 'error creating backup '.$tblSrc.' : '.$result->getUserInfo();
                         }
-                        if (count(OA_DB_Table::listOATablesCaseSensitive($tblTgt) == 1))
+                        if (count(OA_DB_Table::listOATablesCaseSensitive($tblTgt)) == 1)
                         {
                             $aResult[] = $group.' : '.$tblSrc.' copied to '.$tblTgt;
                         }

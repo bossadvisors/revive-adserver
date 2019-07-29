@@ -11,6 +11,8 @@
 */
 
 // Required files
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA/Dal.php';
 require_once MAX_PATH . '/lib/OA/Admin/Help.php';
 require_once MAX_PATH . '/lib/OA/Admin/UI.php';
@@ -121,14 +123,13 @@ function setCurrentLeftMenuSubItem($itemId)
  *
  * @param string $title action title - translated
  * @param string $url link url for the action
- * @param string $iconClass icon class for action (if any) see icons.css for examples of icon classes
+ * @param string $iconClass icon class for action; see icons.css for examples of icon classes
  * @param string $accesskey access key for action (if any)
  */
 function addPageShortcut($title, $url, $iconClass, $accesskey = null)
 {
     $oUI = OA_Admin_UI::getInstance();
     $oUI->addPageShortcut($title, $url, $iconClass);
-
 }
 
 
@@ -295,7 +296,7 @@ function phpAds_sqlDie()
         }
         if ($errornumber == 1016 || $errornumber == 1030) {
             // Probably corrupted table, do additional check
-            eregi ("[0-9]+", $error, $matches);
+            preg_match ("/[0-9]+/Di", $error, $matches);
             if ($matches[0] == 126 || $matches[0] == 127 ||
             $matches[0] == 132 || $matches[0] == 134 ||
             $matches[0] == 135 || $matches[0] == 136 ||
@@ -315,7 +316,7 @@ function phpAds_sqlDie()
     }
     if ($corrupt) {
         $title    = $GLOBALS['strErrorDBSerious'];
-        $message  = $GLOBALS['strErrorDBNoDataSerious'];
+        $message  = sprintf($GLOBALS['strErrorDBNoDataSerious'], PRODUCT_NAME);
         if (OA_Auth::isLoggedIn() && OA_Permission::isAccount(OA_ACCOUNT_ADMIN)) {
             $message .= " (".$error.").<br><br>".$GLOBALS['strErrorDBCorrupt'];
         } else {
@@ -323,7 +324,7 @@ function phpAds_sqlDie()
         }
     } else {
         $title    = $GLOBALS['strErrorDBPlain'];
-        $message  = $GLOBALS['strErrorDBNoDataPlain'];
+        $message  = sprintf($GLOBALS['strErrorDBNoDataPlain'], PRODUCT_NAME);
         if ((OA_Auth::isLoggedIn() && (OA_Permission::isAccount(OA_ACCOUNT_ADMIN) || OA_Permission::isAccount(OA_ACCOUNT_MANAGER))) || defined('phpAds_installing')) {
 
             // Get the DB server version
@@ -332,10 +333,10 @@ function phpAds_sqlDie()
             $aVersion = $connectionId->getServerVersion();
             $dbVersion = $aVersion['major'] . '.' . $aVersion['minor'] . '.' . $aVersion['patch'] . '-' . $aVersion['extra'];
 
-            $message .= $GLOBALS['strErrorDBSubmitBug'];
+            $message .= sprintf($GLOBALS['strErrorDBSubmitBug'], PRODUCT_NAME);
             $last_query = $phpAds_last_query;
             $message .= "<br><br><table cellpadding='0' cellspacing='0' border='0'>";
-            $message .= "<tr><td valign='top' nowrap><b>Version:</b>&nbsp;&nbsp;&nbsp;</td><td>".htmlspecialchars(MAX_PRODUCT_NAME)." v".htmlspecialchars(OA_VERSION)."</td></tr>";
+            $message .= "<tr><td valign='top' nowrap><b>Version:</b>&nbsp;&nbsp;&nbsp;</td><td>".htmlspecialchars(PRODUCT_NAME)." v".htmlspecialchars(VERSION)."</td></tr>";
             $message .= "<tr><td valien='top' nowrap><b>PHP/DB:</b></td><td>PHP ".phpversion()." / ".$dbmsName." " . $dbVersion . "</td></tr>";
             $message .= "<tr><td valign='top' nowrap><b>Page:</b></td><td>".htmlspecialchars($_SERVER['PHP_SELF'])."</td></tr>";
             $message .= "<tr><td valign='top' nowrap><b>Error:</b></td><td>".htmlspecialchars($error)."</td></tr>";

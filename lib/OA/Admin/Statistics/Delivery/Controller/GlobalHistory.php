@@ -15,7 +15,7 @@ require_once MAX_PATH . '/lib/OA/Admin/Statistics/Delivery/CommonHistory.php';
 /**
  * The class to display the delivery statistcs for the page:
  *
- * Statistics -> Global History
+ * Statistics -> Global Statistics
  *
  * @package    OpenXAdmin
  * @subpackage StatisticsDelivery
@@ -43,21 +43,6 @@ class OA_Admin_Statistics_Delivery_Controller_GlobalHistory extends OA_Admin_Sta
         $this->showDaySpanSelector = true;
 
         parent::__construct($aParams);
-    }
-
-    /**
-     * PHP4-style constructor
-     *
-     * @param array $aParams An array of parameters. The array should
-     *                       be indexed by the name of object variables,
-     *                       with the values that those variables should
-     *                       be set to. For example, the parameter:
-     *                       $aParams = array('foo' => 'bar')
-     *                       would result in $this->foo = bar.
-     */
-    function OA_Admin_Statistics_Delivery_Controller_GlobalHistory($aParams)
-    {
-        $this->__construct($aParams);
     }
 
     /**

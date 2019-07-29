@@ -136,10 +136,10 @@ class PEAR_Registry extends PEAR
      *
      * @access public
      */
-    function PEAR_Registry($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
+    function __construct($pear_install_dir = PEAR_INSTALL_DIR, $pear_channel = false,
                            $pecl_channel = false)
     {
-        parent::PEAR();
+        parent::__construct();
         $ds = DIRECTORY_SEPARATOR;
         $this->install_dir = $pear_install_dir;
         $this->channelsdir = $pear_install_dir.$ds.'.channels';
@@ -761,7 +761,7 @@ class PEAR_Registry extends PEAR
      */
     function _lock($mode = LOCK_EX)
     {
-        if (!eregi('Windows 9', php_uname())) {
+        if (!preg_match('/Windows 9/Di', php_uname())) {
             if ($mode != LOCK_UN && is_resource($this->lock_fp)) {
                 // XXX does not check type of lock (LOCK_SH/LOCK_EX)
                 return true;
@@ -1084,7 +1084,7 @@ class PEAR_Registry extends PEAR
         }
         $dp = opendir($this->channelsdir);
         while ($ent = readdir($dp)) {
-            if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
+            if ($ent[0] == '.' || substr($ent, -4) != '.reg') {
                 continue;
             }
             if ($ent == '__uri.reg') {
@@ -1123,7 +1123,7 @@ class PEAR_Registry extends PEAR
             return $pkglist;
         }
         while ($ent = readdir($dp)) {
-            if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
+            if ($ent[0] == '.' || substr($ent, -4) != '.reg') {
                 continue;
             }
             $pkglist[] = substr($ent, 0, -4);
@@ -1147,7 +1147,7 @@ class PEAR_Registry extends PEAR
             return $pkglist;
         }
         while ($ent = readdir($dp)) {
-            if ($ent{0} == '.' || substr($ent, -4) != '.reg') {
+            if ($ent[0] == '.' || substr($ent, -4) != '.reg') {
                 continue;
             }
             $pkglist[] = substr($ent, 0, -4);
@@ -2018,7 +2018,7 @@ class PEAR_Registry extends PEAR
             }
             if (!isset($components['scheme'])) {
                 if (strpos($components['path'], '/') !== false) {
-                    if ($components['path']{0} == '/') {
+                    if ($components['path'][0] == '/') {
                         return PEAR::raiseError('parsePackageName(): this is not ' .
                             'a package name, it begins with "/" in "' . $param . '"',
                             'invalid', null, null, $param);

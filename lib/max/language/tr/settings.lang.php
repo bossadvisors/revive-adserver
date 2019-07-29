@@ -1,302 +1,202 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
+ */
 
 // Installer translation strings
-$GLOBALS['strInstall']				= "Kurulum";
-$GLOBALS['strChooseInstallLanguage']		= "Kurulum sürecinde kullanacağnız dili seçiniz";
-$GLOBALS['strLanguageSelection']		= "Dil Seçimi";
-$GLOBALS['strDatabaseSettings']			= "Veritabanı Ayarları";
-$GLOBALS['strAdminSettings']			= "Yönetici Ayarları";
-$GLOBALS['strAdvancedSettings']			= "Gelişmiş Ayarlar";
-$GLOBALS['strOtherSettings']			= "Diğer Ayarlar";
+$GLOBALS['strInstall'] = "Kurulum";
+$GLOBALS['strDatabaseSettings'] = "Veritabanı ayarları";
+$GLOBALS['strAdminAccount'] = "Sistem Yöneticisi Hesabı";
+$GLOBALS['strAdvancedSettings'] = "Gelişmiş Ayarlar";
+$GLOBALS['strWarning'] = "Uyarı";
+$GLOBALS['strBtnContinue'] = "Devam »";
+$GLOBALS['strBtnRetry'] = "Yeniden Dene";
+$GLOBALS['strWarningRegisterArgcArv'] = "Bakım komut satırında çalışmak için PHP yapılandırma değişkeni register_argc_argv açık olmalıdır.";
+$GLOBALS['strTablesPrefix'] = "Tablo isim önadları";
+$GLOBALS['strTablesType'] = "Tablo tipleri";
 
-$GLOBALS['strWarning']				= "Uyarı";
-$GLOBALS['strFatalError']			= "Tehlikeli hata oluştu";
-$GLOBALS['strAlreadyInstalled']			= MAX_PRODUCT_NAME." programı bu sistemde zaten kurulu. Ayarları düzenlemek istiyorsanız <a href='settings-index.php'>ayarlar bölümüne</a> gidiniz";
-$GLOBALS['strCouldNotConnectToDB']		= "Veritabanına bağlanılamadı, lütfen belirtmiş olduğunuz ayarları kontrol ediniz";
-$GLOBALS['strCreateTableTestFailed']		= "Belirtmiş olduğunuz kullanıcı veritabanı yapısına ekleme yapma iznine sahip değil, veritabanı yöneticinizle irtibata geçiniz.";
-$GLOBALS['strUpdateTableTestFailed']		= "Belirtmiş olduğunuz kullanıcı veritabanı yapısını değiştirme iznine sahip değil, veritabanı yöneticinizle irtibata geçiniz.";
-$GLOBALS['strTablePrefixInvalid']		= "Tablo önadları geçersiz karakter içeriyor";
-$GLOBALS['strTableInUse']			= "Belirtmiş olduğunuz önadlar ".MAX_PRODUCT_NAME." programı tarafından kullanılıyor, lütfen farklı önad tanımlayın, veya klavuzu okuyunuz.";
-$GLOBALS['strMayNotFunction']			= "Devam etmeden önce aşağıdaki problemleri düzeltiniz:";
-$GLOBALS['strIgnoreWarnings']			= "Hataları yoksay";
-$GLOBALS['strWarningPHPversion']		= MAX_PRODUCT_NAME." programı PHP 4.0 ve üzeri sürümleri daha iyi çalışması için destekler. şu anda PHPnin {php_version} sürümünü kullanıyorsunuz.";
-$GLOBALS['strWarningRegisterGlobals']		= "PHP ayarlarındaki register_globals değişkeni <b>on</b> olmalıdır.";
-$GLOBALS['strWarningMagicQuotesGPC']		= "PHP ayarlarındaki magic_quotes_gpc değişkeni <b>on</b> olmalıdır.";
-$GLOBALS['strWarningMagicQuotesRuntime']	= "PHP ayarlarındaki magic_quotes_runtime değişkeni <b>off</b> olmalıdır.";
-$GLOBALS['strWarningFileUploads']		= "PHP ayarlarındaki file_uploads değişkeni <b>on</b> olmalıdır.";
-$GLOBALS['strConfigLockedDetected']		= MAX_PRODUCT_NAME." programı <b>config.inc.php</b> dosyasının güncellenemediğini tespit etti.<br> Dosyanın izinlerini değiştirmeden kurulum işlemini gerçekleştiremezsiniz. <br>Bunun nasıl yapılacağını bilmiyorsanız lütfen klavuzu okuyunuz.";
-$GLOBALS['strCantUpdateDB']  			= "Şu anda veritabanını güncelleme izni yok. Eğer devam etmek istiyorsanız, tüm bannerlar, istatistikler ve reklamlarsilinecek.";
-$GLOBALS['strTableNames']			= "Tablo isimleri";
-$GLOBALS['strTablesPrefix']			= "Tablo isim önadları";
-$GLOBALS['strTablesType']			= "Tablo tipleri";
+$GLOBALS['strRecoveryRequiredTitle'] = "Önceki yükseltme girişiminiz bir hatayla karşılaştı";
+$GLOBALS['strRecoveryRequired'] = "Önceki yükseltmenizi işleme koyarken bir hata oluştu ve {$PRODUCT_NAME}, yükseltme işlemini kurtarmaya çalışmalıdır. Lütfen aşağıdaki İyileştir düğmesine tıklayın.";
 
-$GLOBALS['strInstallWelcome']			= "Hoşgeldiniz ".MAX_PRODUCT_NAME;
-$GLOBALS['strInstallMessage']			= MAX_PRODUCT_NAME." programı kullnmaya başlamadan önce ayarlanması ve <br> veritabanının oluşturulması gerekiyor. Devam etmek için <b>İlerleye</b> tıklayınyz.";
-$GLOBALS['strInstallSuccess']			= "<b>".MAX_PRODUCT_NAME." kurulumu tamamlandı.</b><br><br>".MAX_PRODUCT_NAME." programının düzgün çalışması için bakım programının\n						   her saat çalışması gerekmektedir. Bu konuyla ilgili detaylı bilgiyi dökümanlarda bulabilirsiniz.\n						   <br><br>Ayarlama sayfasına gitmek için <b>İleri</b>yi tıklayınız. <br>\n						   Lütfen işlemlerinizi bitirdikten sonra config.inc.php dosyasının değişiklik iznini kilitleyiniz.";
-$GLOBALS['strUpdateSuccess']			= "<b> ".MAX_PRODUCT_NAME." güncellemeleri başarıyla yüklendi.</b><br><br>".MAX_PRODUCT_NAME." programının düzenli olarak çalışması için\n						   her saat bakım programını çalıştırınız (Daha önceki sürümlerde bu günde bir defa idi). Bu konuyla ilgili detaylı bilgiyi dökümanlarda bulabilirsiniz.\n						   <br><br>Yönetici paneline gitmek için <b>İleri</b>yi tıklayınız. Lütfen işlemlerinizi bitirdikten sonra config.inc.php dosyasının değişiklik iznini kilitleyiniz.";
-$GLOBALS['strInstallNotSuccessful']		= "<b>". MAX_PRODUCT_NAME ." kurulumu gerçekleştirilemedi.</b><br /><br />Kurulum sürecinin bazı bölümleri çalışamadı.\n";
-$GLOBALS['strErrorOccured']			= "Aşağıdaki hatalar oluştu:";
-$GLOBALS['strErrorInstallDatabase']		= "Veritabanı yapısı oluşturulamıyor.";
-$GLOBALS['strErrorInstallConfig']		= "Ayar dosyası veya veritabanı düzenlenemiyor.";
-$GLOBALS['strErrorInstallDbConnect']		= "Veritabanına bağlantı sağlanamıyor.";
+$GLOBALS['strOaUpToDateCantRemove'] = "YÜKSELTME dosyası hala 'var' klasörünüzün içinde bulunuyor. İzinler nedeniyle bu dosyayı kaldıramıyoruz. Lütfen bu dosyayı kendiniz silin.";
+$GLOBALS['strErrorWritePermissions'] = "Dosya izin hataları tespit edildi ve devam etmeden önce düzeltilmesi gerekiyor. <br/> Bir Linux sistemindeki hataları düzeltmek için aşağıdaki komutları yazmayı deneyin:";
 
-$GLOBALS['strUrlPrefix']			= "URL Önadı";
+$GLOBALS['strErrorWritePermissionsWin'] = "Dosya izin hataları tespit edildi ve devam etmeden önce düzeltilmesi gerekiyor.";
+$GLOBALS['strSystemCheckBadPHPConfig'] = "Geçerli PHP yapılandırmanız {$PRODUCT_NAME} şartlarını karşılamıyor. Sorunları çözmek için lütfen 'php.ini' dosyanızdaki ayarları değiştirin.";
 
-$GLOBALS['strProceed']				= "İleri >";
-$GLOBALS['strRepeatPassword']			= "Parola Tekrarı";
-$GLOBALS['strNotSamePasswords']			= "İki farklı alana yazdığınız parolalar birbirini tutmuyor.";
-$GLOBALS['strInvalidUserPwd']			= "Geçersiz kullanıcı adı veya parolası";
-
-$GLOBALS['strUpgrade']				= "Güncelle";
-$GLOBALS['strSystemUpToDate']			= "Sisteminiz güncellenmiştir, yeniden güncelleme gerekmemektedir. <br>Ana Sayfaya dönmek için <b>İleri</b>yi tıklayınız.";
-$GLOBALS['strSystemNeedsUpgrade']		= "Veritabanı yapısı ve ayar dosyası düzgün çalışması için güncellenmesi için gerekiyor. Güncelleme için <b>İleriyi</b> tıklayınız. <br>Güncelleme bir kaç dakika sürebilir lütfen sabırlı olun.";
-$GLOBALS['strSystemUpgradeBusy']		= "Sistem güncelleniyor, lütfen bekleyiniz...";
-$GLOBALS['strSystemRebuildingCache']		= "Hafıza tekrar oluşturuluyor, lütfen bekleyiniz...";
-$GLOBALS['strServiceUnavalable']		= "Siste geçici olarak çalışmıyor. Sistem güncelemesi devam ediyor";
-
-$GLOBALS['strConfigNotWritable']		= "config.inc.php dosyası yazılamıyor";
-
-
-
-
-
-/*-------------------------------------------------------*/
-/* Configuration translations                            */
-/*-------------------------------------------------------*/
-
-// Global
-$GLOBALS['strChooseSection']			= "Bölüm Seçiniz";
-$GLOBALS['strDayFullNames'][0] = "Pazar";
-$GLOBALS['strDayFullNames'][1] = "Pazartesi";
-$GLOBALS['strDayFullNames'][2] = "Salı";
-$GLOBALS['strDayFullNames'][3] = "Çarşamba";
-$GLOBALS['strDayFullNames'][4] = "Perşembe";
-$GLOBALS['strDayFullNames'][5] = "Cuma";
-$GLOBALS['strDayFullNames'][6] = "Cumartesi";
-
-$GLOBALS['strEditConfigNotPossible']   		= "Ayarları düzenleyemiyorsunuz. çünkü ayar dosyanız güvenlik nedeniyle kilitlenmiş.";
-$GLOBALS['strEditConfigPossible']		= "Tüm düzenleme işlemlerini yapabilirsiniz çünkü ayar dosyası kilitli değil, ama bu güvenlik açıklıklarına sebep olabilir.";
-
-
-
-// Database
-$GLOBALS['strDatabaseSettings']			= "Veritabanı ayarları";
-$GLOBALS['strDatabaseServer']			= "Veritabanı server";
-$GLOBALS['strDbHost']				= "Veritabanı sunucu";
-$GLOBALS['strDbUser']				= "Veritabanı kullanıcı adı";
-$GLOBALS['strDbPassword']			= "Veritabanı parolası";
-$GLOBALS['strDbName']				= "Veritabanı adı";
-
-$GLOBALS['strDatabaseOptimalisations']		= "Veritabanı Uygunluğu";
-$GLOBALS['strPersistentConnections']		= "Israrlı bağlantıları kullan";
-$GLOBALS['strInsertDelayed']			= "Ertelemeli eklemeleri kullan";
-$GLOBALS['strCompatibilityMode']		= "Veritabanı uyumluluk modunu kullan";
-$GLOBALS['strCantConnectToDb']			= "Veritabanına bağlanılamıyor";
-
-
-
-// Invocation and Delivery
-$GLOBALS['strInvocationAndDelivery']		= "Invocation ve Teslimat Ayarları";
-
-$GLOBALS['strAllowedInvocationTypes']		= "İzin verilen invocation tipleri";
-$GLOBALS['strAllowRemoteInvocation']		= "Uzak Invocationlara izin ver";
-$GLOBALS['strAllowRemoteJavascript']		= "Javascript için Uzak Invocation izin ver";
-$GLOBALS['strAllowRemoteFrames']		= "Frameler için Uzak Invocation izin ver";
-$GLOBALS['strAllowRemoteXMLRPC']		= "XML-RPC kullanan Uzak Invocation izin ver";
-$GLOBALS['strAllowLocalmode']			= "Yerel Mod izni ver";
-$GLOBALS['strAllowInterstitial']		= "Interstitial lara izin ver";
-$GLOBALS['strAllowPopups']			= "Popuplara izin ver";
-
-$GLOBALS['strUseAcl']				= "Teslimat sınırlamalarını kullan";
-$GLOBALS['strGeotrackingType']			= "Coğrafi Tıklama veritabanının tipi";
-$GLOBALS['strGeotrackingLocation'] 		= "Coğrafi Tıklama veritabanının yeri";
-
-$GLOBALS['strKeywordRetrieval']			= "Anahtar kelime düzeltmeleri";
-$GLOBALS['strBannerRetrieval']			= "Banner düzeltme metodu";
-$GLOBALS['strRetrieveRandom']			= "Rastgele banner düzeltme (öntanımlı)";
-$GLOBALS['strRetrieveNormalSeq']		= "Normal sıralı banner düzeltme";
-$GLOBALS['strWeightSeq']			= "Ağarlık tabanlı sıralı banner düzeltme";
-$GLOBALS['strFullSeq']				= "Tam sıralı banner düzeltme";
-$GLOBALS['strUseConditionalKeys']		= "Şartlı anahtar kelimeleri kullan";
-$GLOBALS['strUseMultipleKeys']			= "Birden fazla anahtar kullan";
-
-$GLOBALS['strZonesSettings']			= "Alan Düzeltmeleri";
-$GLOBALS['strZoneCache']			= "Alan hafızası kullan, alan kullanılırken hızı arttırır";
-$GLOBALS['strZoneCacheLimit']			= "Hafıza güncellemeleri arasındaki zaman (dakika olarak)";
-$GLOBALS['strZoneCacheLimitErr']		= "Hafıza güncellemeleri arasındaki zaman pozitif tam sayı olmalıdır";
-
-$GLOBALS['strP3PSettings']			= "P3P Gizlilik Politikaları";
-$GLOBALS['strUseP3P']				= "P3P Politikalarını kullan";
-$GLOBALS['strP3PCompactPolicy']			= "P3P Yoğunlaştırılmış politika";
-$GLOBALS['strP3PPolicyLocation']		= "P3P Politika yeri";
-
-
-
-// Banner Settings
-$GLOBALS['strBannerSettings']			= "Banner ayarları";
-
-$GLOBALS['strAllowedBannerTypes']		= "İzin verilen banner tipleri";
-$GLOBALS['strTypeSqlAllow']			= "Yerel bannerlara izin ver (SQL)";
-$GLOBALS['strTypeWebAllow']			= "Yerel bannerlara izin ver (Webserver)";
-$GLOBALS['strTypeUrlAllow']			= "Harici bannerlara izin ver";
-$GLOBALS['strTypeHtmlAllow']			= "HTML bannerlarına izin ver";
-$GLOBALS['strTypeTxtAllow']			= "Yazı reklamlarına banner ver";
-
-$GLOBALS['strTypeWebSettings']			= "Yerel banner (Webserver) ayarları";
-$GLOBALS['strTypeWebMode']			= "Depolama metodu";
-$GLOBALS['strTypeWebModeLocal']			= "Yerel Klasörler";
-$GLOBALS['strTypeWebModeFtp']			= "Harici FTP sunucu";
-$GLOBALS['strTypeWebDir']			= "Yerel Klasörler";
-$GLOBALS['strTypeWebFtp']			= "FTP modunda Web banner sunucusu";
-$GLOBALS['strTypeWebUrl']			= "Umumi URL";
-$GLOBALS['strTypeFTPHost']			= "FTP Sunucu";
-$GLOBALS['strTypeFTPDirectory']			= "Sunucu klasörü";
-$GLOBALS['strTypeFTPUsername']			= "Giriş";
-$GLOBALS['strTypeFTPPassword']			= "Parola";
-
-$GLOBALS['strDefaultBanners']			= "Öntanımlı bannerlar";
-$GLOBALS['strDefaultBannerUrl']			= "Öntanımlı resim URL";
-$GLOBALS['strDefaultBannerTarget']		= "Öntanımlı hedef URL";
-
-$GLOBALS['strTypeHtmlSettings']			= "HTML banner ayarları";
-$GLOBALS['strTypeHtmlAuto']			= "HTML Bannerlarını otomatik olarak tıklama izlemek için zorla";
-$GLOBALS['strTypeHtmlPhp']			= "PHP ifadelerinin HTML içerisinde çalışmasına izin ver";
-
-
-
-// Statistics Settings
-$GLOBALS['strStatisticsSettings']		= "İstatistik Ayarları";
-
-$GLOBALS['strStatisticsFormat']			= "İstatistik Biçimi";
-$GLOBALS['strLogBeacon']			= "Görüntülenmeyi saklamak için yol gösterici kullan";
-$GLOBALS['strCompactStats']			= "Yoğunlaştırılmış istatistik kullan";
-$GLOBALS['strLogAdviews']			= "Görüntülenme logu";
-$GLOBALS['strBlockAdviews']			= "Birden fazla log koruması (dk.)";
-$GLOBALS['strLogAdclicks']			= "Tıklanma logu";
-$GLOBALS['strBlockAdclicks']			= "Birden fazla log koruması (dk.)";
-
-$GLOBALS['strEmailWarnings']			= "E-mail uyarıları";
-$GLOBALS['strAdminEmailHeaders']		= "Günlük raporlar için gönderici tanımlama mail başlığı";
-$GLOBALS['strWarnLimit']			= "Uyarı Sınırı";
-$GLOBALS['strWarnLimitErr']			= "Uyarı limiti pozitif tamsayı olmalıdır";
-$GLOBALS['strWarnAdmin']			= "Uyarı Yöneticisi";
-$GLOBALS['strWarnClient']			= "Reklamcıya uyarı";
-$GLOBALS['strQmailPatch']			= "qmail patchini kullanın";
-
-$GLOBALS['strRemoteHosts']			= "Uzak sunucu";
-$GLOBALS['strIgnoreHosts']			= "Sunuculara önem verme";
-$GLOBALS['strReverseLookup']			= "DNS geri besleme";
-$GLOBALS['strProxyLookup']			= "Proxy izleme";
-
-$GLOBALS['strAutoCleanTables']			= "Veritabanı budama";
-$GLOBALS['strAutoCleanStats']			= "Budama istatistikleri";
-$GLOBALS['strAutoCleanUserlog']			= "Kullanıcı loglarını buda";
-$GLOBALS['strAutoCleanStatsWeeks']		= "En fazla istatistik süresi<br>(en az 3 hafta)";
-$GLOBALS['strAutoCleanUserlogWeeks']		= "En fazla kullanıcı logları süresi<br>(en az 3 hafta)";
-$GLOBALS['strAutoCleanErr']			= "En fazla süre en az 3 hafta olmalıdır";
-$GLOBALS['strAutoCleanVacuum']			= "Her gece tabloları VACUUM ANALYZE yap"; // only Pg
-
-
-// Administrator settings
-$GLOBALS['strAdministratorSettings']		= "Yönetici Ayarları";
-
-$GLOBALS['strLoginCredentials']			= "Giriş güvenliği";
-$GLOBALS['strAdminUsername']			= "Yönetici ismi";
-$GLOBALS['strOldPassword']			= "Eski Parola";
-$GLOBALS['strNewPassword']			= "Yeni Parola";
-$GLOBALS['strInvalidUsername']			= "Geçersiz Kullanıcı Adı";
-$GLOBALS['strInvalidPassword']			= "Girdiğiniz yeni parola geçersizdir. Lütfen başka bir parola kullanınız.";
-
-$GLOBALS['strBasicInformation']			= "Temel Bilgiler";
-$GLOBALS['strAdminFullName']			= "Yönetici Tam ismi";
-$GLOBALS['strAdminEmail']			= "Yönetici e-mail adresi";
-$GLOBALS['strCompanyName']			= "Firma İsmi";
-
-$GLOBALS['strAdminCheckUpdates']		= "Güncellemeleri kontrol et";
-$GLOBALS['strAdminCheckEveryLogin']		= "Her girişte";
-$GLOBALS['strAdminCheckDaily']			= "Günlük";
-$GLOBALS['strAdminCheckWeekly']			= "Haftalık";
-$GLOBALS['strAdminCheckMonthly']		= "Aylık";
-$GLOBALS['strAdminCheckNever']			= "Asla";
-
-$GLOBALS['strAdminNovice']			= "Yöneticinin silme hareketi güvenlik açısından onaya tabi olsun";
-$GLOBALS['strUserlogEmail']			= "Tüm giden e-mailleri logla";
-$GLOBALS['strUserlogPriority']			= "Öncelik hesalarını saatlik logla";
-$GLOBALS['strUserlogAutoClean']			= "Veritabanından otomatik silmeleri logla";
-
-
-// User interface settings
-$GLOBALS['strGuiSettings']			= "Kullanıcı arabirimi ayarları";
-
-$GLOBALS['strGeneralSettings']			= "Genel Ayarlar";
-$GLOBALS['strAppName']				= "Uygulama Adı";
-$GLOBALS['strMyHeader']				= "Altbilgi";
-$GLOBALS['strMyFooter']				= "Altbilgi";
-$GLOBALS['strGzipContentCompression']		= "Sıkıştırma için GZIP içeriğini kullan";
-
-$GLOBALS['strClientInterface']			= "Reklamcı arayüzü ayarları";
-$GLOBALS['strClientWelcomeEnabled']		= "Reklamcıya hoşgeldiniz mesajı";
-$GLOBALS['strClientWelcomeText']		= "Hoşgeldiniz mesajı<br>(HTML taglarına izin veriliyor)";
-
-
-
-// Interface defaults
-$GLOBALS['strInterfaceDefaults']		= "Öntanımlı arabirim";
-
-$GLOBALS['strInventory']			= "Envanter";
-$GLOBALS['strShowCampaignInfo']			= "<i>Kampanya önizleme</i> sayfasında ekstra kampanya bigilerini göster";
-$GLOBALS['strShowBannerInfo']			= "<i>Banner önizleme</i> sayfasında ekstra banner bilgilerini göster";
-$GLOBALS['strShowCampaignPreview']		= "<i>Banner önizleme</i> sayfasında tüm bannerları göster";
-$GLOBALS['strShowBannerHTML']			= "HTML banner önizlemede düz HTML kodlu bannerlar haricindeki asıl bannerları göster";
-$GLOBALS['strShowBannerPreview']		= "Sayfanın en üstünde uyan banner önizlemeyi göster";
-$GLOBALS['strHideInactive']			= "Etkin olmayanları gizle";
-$GLOBALS['strGUIShowMatchingBanners']		= "<i>İlişkili Bannerlar</i> sayfalarında uyan bannerları göster";
-$GLOBALS['strGUIShowParentCampaigns']		= "<i>ilişkili Bannerlar</i> sayfasında ebeveyn bannerları göster";
-$GLOBALS['strGUILinkCompactLimit']		= "<i>İlişkili Bannerlar</i> sayfasında ilişkilendirilmemiş kampanyalar veya bannerları ....dan fazla ise gizle";
-
-$GLOBALS['strStatisticsDefaults'] 		= "İstatistikler";
-$GLOBALS['strBeginOfWeek']			= "Haftanın Başlangıcı";
-$GLOBALS['strPercentageDecimals']		= "Yüzdelik Basamağı";
-
-$GLOBALS['strWeightDefaults']			= "öntanımlı ağırlık";
-$GLOBALS['strDefaultBannerWeight']		= "öntanımlı banner ağırlığı";
-$GLOBALS['strDefaultCampaignWeight']		= "öntanımlı kampanya ağırlığı";
-$GLOBALS['strDefaultBannerWErr']		= "öntanımlı banner ağırlığı pozitif tamsayı olmalıdır";
-$GLOBALS['strDefaultCampaignWErr']		= "öntanımlı kampanya ağırlığı pozitif tamsayı olmalıdır";
-
-
-
-// Not used at the moment
-$GLOBALS['strTableBorderColor']			= "Tablo Çerçeve rengi";
-$GLOBALS['strTableBackColor']			= "Tablo Zemin Rengi";
-$GLOBALS['strTableBackColorAlt']		= "Tablo Zemin Rengi (Alternatif)";
-$GLOBALS['strMainBackColor']			= "Ana Zemin Rengi";
-$GLOBALS['strOverrideGD']			= "Override GD Imageformat";
-$GLOBALS['strTimeZone']				= "Zaman Alanı";
-
-
-
-// Note: New translations not found in original lang files but found in CSV
-$GLOBALS['strHasTaxID'] = "Vergi numarası";
-$GLOBALS['strSpecifySyncSettings'] = "Senkronizasyon Ayarları";
 $GLOBALS['strDeliveryUrlPrefix'] = "Teslimat Motoru";
 $GLOBALS['strDeliveryUrlPrefixSSL'] = "Teslimat Motoru";
+$GLOBALS['strImagesUrlPrefix'] = "Resim Mağazası URL'si";
+$GLOBALS['strImagesUrlPrefixSSL'] = "Resim Mağazası URL'si (SSL)";
+
+
+$GLOBALS['strUpgrade'] = "Yükselt";
+
+/* ------------------------------------------------------- */
+/* Configuration translations                            */
+/* ------------------------------------------------------- */
+
+// Global
+$GLOBALS['strChooseSection'] = "Bölüm Seçiniz";
+$GLOBALS['strEditConfigNotPossible'] = "Güvenlik nedeniyle yapılandırma dosyası kilitlendiğinden tüm ayarları düzenlemek mümkün değildir.
+     Değişiklik yapmak istiyorsanız, önce bu kurulum için yapılandırma dosyasının kilidini açmanız gerekebilir.";
+$GLOBALS['strEditConfigPossible'] = "Yapılandırma dosyası kilitlenmediğinden tüm ayarları düzenlemek mümkündür, ancak bu güvenlik sorunlarına neden olabilir.
+     Sisteminizi güvence altına almak istiyorsanız, bu yükleme için yapılandırma dosyasını kilitlemeniz gerekir.";
+$GLOBALS['strUnableToWriteConfig'] = "Yapılandırma dosyasına değişiklik yazılamadı";
+$GLOBALS['strUnableToWritePrefs'] = "Veritabanına tercihler konması yapılamıyor";
+
+// Configuration Settings
+$GLOBALS['strConfigurationSettings'] = "Yapılandırma Ayarları";
+
+// Administrator Settings
+$GLOBALS['strAdminUsername'] = "Yönetici ismi";
+$GLOBALS['strAdminPassword'] = "Yönetici parolası";
+$GLOBALS['strInvalidUsername'] = "Geçersiz Kullanıcı Adı";
+$GLOBALS['strBasicInformation'] = "Temel Bilgiler";
+$GLOBALS['strAdministratorEmail'] = "Yönetici e-posta adresi";
+$GLOBALS['strAdminCheckUpdates'] = "Güncellemeleri kontrol et";
+$GLOBALS['strAdminShareStack'] = "Geliştirme ve testte yardımcı olması için {$PRODUCT_NAME} Ekibi ile teknik bilgi paylaşın.";
+$GLOBALS['strNovice'] = "Sil eylemleri, güvenlik için onay gerektirir";
+$GLOBALS['strUserlogEmail'] = "Tüm giden e-mailleri logla";
+$GLOBALS['strEnableDashboard'] = "Gösterge tablosunu etkinleştir";
+$GLOBALS['strTimezone'] = "Zaman Dilimi";
+$GLOBALS['strEnableAutoMaintenance'] = "Planlanan bakım kurulmamışsa, teslimat sırasında otomatik olarak bakım gerçekleştirin";
+
+// Database Settings
+$GLOBALS['strDatabaseSettings'] = "Veritabanı ayarları";
+$GLOBALS['strDatabaseServer'] = "Veritabanı server";
+$GLOBALS['strDbLocal'] = "Yerel soket bağlantısını kullan";
 $GLOBALS['strDbType'] = "Veritabanı adı";
-$GLOBALS['strModesOfPayment'] = "Ödeme tipi";
-$GLOBALS['strHelpFiles'] = "Yardım dosyası";
-$GLOBALS['strWarnAgency'] = "Reklamcıya uyarı";
-$GLOBALS['strEnableQmailPatch'] = "qmail patchini kullanın";
+$GLOBALS['strDbHost'] = "Veritabanı sunucu";
+$GLOBALS['strDbSocket'] = "Veritabanı Soketi";
+$GLOBALS['strDbPort'] = "Veritabanı Bağlantı Noktası Numarası";
+$GLOBALS['strDbUser'] = "Veritabanı kullanıcı adı";
+$GLOBALS['strDbPassword'] = "Veritabanı parolası";
+$GLOBALS['strDbName'] = "Veritabanı adı";
+$GLOBALS['strDbNameHint'] = "Veritabanı yoksa oluşturulacak";
+$GLOBALS['strDatabaseOptimalisations'] = "Veritabanı Uygunluğu";
+$GLOBALS['strPersistentConnections'] = "Israrlı bağlantıları kullan";
+$GLOBALS['strCantConnectToDb'] = "Veritabanına bağlanılamıyor";
+$GLOBALS['strCantConnectToDbDelivery'] = 'Teslimat için Veritabanına Bağlanılamıyor';
+
+// Email Settings
 $GLOBALS['strEmailSettings'] = "Ana Ayarlar";
-$GLOBALS['strDefaultConversionStatus'] = "Varsayılan dönüştürme kuralları";
-$GLOBALS['strDefaultConversionType'] = "Varsayılan dönüştürme kuralları";
-?>
+$GLOBALS['strEmailAddresses'] = "E-posta 'Kimden' adresi";
+$GLOBALS['strUseManagerDetails'] = 'Raporları Reklamverene veya Web sitesi hesaplarına e-postayla gönderirken, sahibi olduğunuz hesabın yukarıdaki Adı, E-posta Adresi ve Şirket adı yerine Kişi, E-posta ve Adı\'nı kullanın.';
+$GLOBALS['strQmailPatch'] = "qmail patchini kullanın";
+$GLOBALS['strEnableQmailPatch'] = "qmail patchini kullanın";
+$GLOBALS['strEmailHeader'] = "E-posta başlıkları";
+
+// Audit Trail Settings
+$GLOBALS['strEnableAuditForZoneLinking'] = "Bölge bağlama ekranında Denetim İznini etkinleştirin (büyük miktarda bölgeyi bağlamak büyük performans gerektirir)";
+
+// Debug Logging Settings
+$GLOBALS['strDebugMethodNames'] = "Hata ayıklama günlüğüne yöntem adları ekleyin";
+$GLOBALS['strDebugLineNumbers'] = "Satır numaralarını hata ayıklama günlüğüne ekle";
+$GLOBALS['strDebugType'] = "Hata Ayıklama Günlüğü Türü";
+$GLOBALS['strDebugTypeFile'] = "Dosya";
+
+// Delivery Settings
+$GLOBALS['strTypeWebSettings'] = "Yerel banner (Webserver) ayarları";
+$GLOBALS['strTypeWebMode'] = "Depolama metodu";
+$GLOBALS['strTypeWebModeLocal'] = "Yerel Klasörler";
+$GLOBALS['strTypeDirError'] = "Yerel dizine web sunucusu tarafından yazılamaz";
+$GLOBALS['strTypeWebModeFtp'] = "Harici FTP sunucu";
+$GLOBALS['strTypeWebDir'] = "Yerel Klasörler";
+$GLOBALS['strTypeFTPHost'] = "FTP Sunucu";
+$GLOBALS['strTypeFTPDirectory'] = "Sunucu klasörü";
+$GLOBALS['strTypeFTPUsername'] = "Giriş";
+$GLOBALS['strTypeFTPPassword'] = "Parola";
+$GLOBALS['strTypeFTPPassive'] = "Pasif FTP kullan";
+$GLOBALS['strTypeFTPErrorConnect'] = "FTP Sunucusuna bağlanılamadı, Giriş veya Parola doğru değil";
+$GLOBALS['strTypeFTPErrorNoSupport'] = "PHP kurulumunuz FTP'yi desteklemez.";
+$GLOBALS['strTypeFTPErrorUpload'] = "FTP Sunucusuna dosya yüklenemedi, Ana Dizin için uygun hakları ayarlayın kontrol edin";
+$GLOBALS['strDeliveryFilenamesAdClick'] = "Reklam Tıklaması";
+$GLOBALS['strDeliveryFilenamesAdConversionVars'] = "Reklam Dönüştürme Değişkenleri";
+$GLOBALS['strDeliveryFilenamesAdContent'] = "Reklam İçeriği";
+$GLOBALS['strDeliveryFilenamesAdConversion'] = "Reklam Dönüştürme";
+$GLOBALS['strDeliveryFilenamesAdConversionJS'] = "Reklam Dönüştürme (JavaScript)";
+$GLOBALS['strDeliveryFilenamesAdFrame'] = "Reklam Çerçevesi";
+$GLOBALS['strDeliveryFilenamesAdImage'] = "Reklam Resmi";
+$GLOBALS['strDeliveryFilenamesAdJS'] = "Reklam (JavaScript)";
+$GLOBALS['strDeliveryFilenamesAdLayer'] = "Reklam Katmanı";
+$GLOBALS['strDeliveryFilenamesAdLog'] = "Reklam Günlüğü";
+$GLOBALS['strDeliveryFilenamesAdPopup'] = "Reklam Açılır Penceresi";
+$GLOBALS['strDeliveryFilenamesAdView'] = "Reklam Görünümü";
+$GLOBALS['strDeliveryFilenamesXMLRPC'] = "XML RPC Çağrısı";
+$GLOBALS['strDeliveryFilenamesLocal'] = "Yerel Çağrı";
+$GLOBALS['strDeliveryExecPhp'] = "Reklamlarda PHP kodunun çalıştırılmasına izin ver<br/>(Uyarı: Güvenlik riski)";
+$GLOBALS['strP3PSettings'] = "P3P Gizlilik Politikaları";
+$GLOBALS['strUseP3P'] = "P3P Politikalarını kullan";
+$GLOBALS['strP3PCompactPolicy'] = "P3P Yoğunlaştırılmış politika";
+$GLOBALS['strP3PPolicyLocation'] = "P3P Politika yeri";
+
+// General Settings
+$GLOBALS['generalSettings'] = "Global Genel Sistem Ayarları";
+$GLOBALS['uiEnabled'] = "Kullanıcı Arayüzü Etkin";
+$GLOBALS['defaultLanguage'] = "Varsayılan Sistem Dili<br/>(Her kullanıcı kendi dilini seçebilir)";
+
+// Geotargeting Settings
+
+// Interface Settings
+$GLOBALS['strInventory'] = "Envanter";
+$GLOBALS['strShowCampaignInfo'] = "<i>Kampanya önizleme</i> sayfasında ekstra kampanya bigilerini göster";
+$GLOBALS['strShowBannerInfo'] = "<i>Banner önizleme</i> sayfasında ekstra banner bilgilerini göster";
+$GLOBALS['strShowCampaignPreview'] = "<i>Banner önizleme</i> sayfasında tüm bannerları göster";
+$GLOBALS['strShowBannerHTML'] = "HTML banner önizlemede düz HTML kodlu bannerlar haricindeki asıl bannerları göster";
+$GLOBALS['strShowBannerPreview'] = "Sayfanın en üstünde uyan banner önizlemeyi göster";
+$GLOBALS['strHideInactive'] = "Etkin olmayanları gizle";
+$GLOBALS['strGUIShowMatchingBanners'] = "<i>İlişkili Bannerlar</i> sayfalarında uyan bannerları göster";
+$GLOBALS['strGUIShowParentCampaigns'] = "<i>ilişkili Bannerlar</i> sayfasında ebeveyn bannerları göster";
+$GLOBALS['strShowEntityId'] = "Varlık tanımlayıcılarını göster";
+$GLOBALS['strStatisticsDefaults'] = "İstatistikler";
+$GLOBALS['strBeginOfWeek'] = "Haftanın Başlangıcı";
+$GLOBALS['strPercentageDecimals'] = "Yüzdelik Basamağı";
+$GLOBALS['strWeightDefaults'] = "öntanımlı ağırlık";
+$GLOBALS['strDefaultBannerWeight'] = "öntanımlı banner ağırlığı";
+$GLOBALS['strDefaultCampaignWeight'] = "öntanımlı kampanya ağırlığı";
+$GLOBALS['strConfirmationUI'] = "Kullanıcı Arayüzünde Onaylama";
+
+// Invocation Settings
+
+// Banner Delivery Settings
+
+// Banner Logging Settings
+$GLOBALS['strReverseLookup'] = "DNS geri besleme";
+$GLOBALS['strProxyLookup'] = "Proxy izleme";
+$GLOBALS['strIgnoreHosts'] = "Sunuculara önem verme";
+
+// Banner Storage Settings
+
+// Campaign ECPM settings
+
+// Statistics & Maintenance Settings
+$GLOBALS['strAdminEmailHeaders'] = "Günlük raporlar için gönderici tanımlama mail başlığı";
+$GLOBALS['strWarnLimit'] = "Uyarı Sınırı";
+$GLOBALS['strWarnLimitDays'] = "Günler burada belirtilenden az olduğunda uyarı gönder";
+$GLOBALS['strWarnAdmin'] = "Uyarı Yöneticisi";
+$GLOBALS['strWarnClient'] = "Reklamcıya uyarı";
+$GLOBALS['strWarnAgency'] = "Reklamcıya uyarı";
+
+// UI Settings
+$GLOBALS['strGuiSettings'] = "Kullanıcı arabirimi ayarları";
+$GLOBALS['strGeneralSettings'] = "Genel Ayarlar";
+$GLOBALS['strAppName'] = "Uygulama Adı";
+$GLOBALS['strMyHeader'] = "Altbilgi";
+$GLOBALS['strMyFooter'] = "Altbilgi";
+$GLOBALS['requireSSL'] = "Kullanıcı Arabiriminde SSL Erişimini Zorla";
+$GLOBALS['strGuiHeaderBackgroundColor'] = "Başlık arka planının rengi";
+$GLOBALS['strGuiActiveTabColor'] = "Etkin sekmenin rengi";
+$GLOBALS['strGuiHeaderTextColor'] = "Başlıktaki metnin rengi";
+$GLOBALS['strGzipContentCompression'] = "Sıkıştırma için GZIP içeriğini kullan";
+
+// Regenerate Platfor Hash script
+
+// Plugin Settings

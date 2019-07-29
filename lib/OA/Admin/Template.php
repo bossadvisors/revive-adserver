@@ -13,6 +13,7 @@
 define('SMARTY_DIR', MAX_PATH . '/lib/smarty/');
 
 require_once MAX_PATH . '/lib/smarty/Smarty.class.php';
+require_once MAX_PATH . '/lib/smarty/plugins/modifier.escape.php';
 require_once MAX_PATH . '/lib/OA/Dll.php';
 require_once MAX_PATH . '/lib/pear/Date.php';
 require_once MAX_PATH . '/lib/OX/Translation.php';
@@ -40,7 +41,7 @@ class OA_Admin_Template extends Smarty
      */
     var $_tabIndex = 0;
 
-    function OA_Admin_Template($templateName)
+    function __construct($templateName)
     {
         $this->init($templateName);
     }
@@ -63,6 +64,8 @@ class OA_Admin_Template extends Smarty
 
         $this->register_function('ox_column_title', array('OA_Admin_Template',  '_function_ox_column_title'));
         $this->register_function('ox_column_class', array('OA_Admin_Template',  '_function_ox_column_class'));
+        $this->register_function('ox_column_updated', array('OA_Admin_Template',  '_function_ox_column_updated'));
+
         $this->register_function('ox_campaign_type', array('OA_Admin_Template',  '_function_ox_campaign_type'));
         $this->register_function('ox_campaign_status', array('OA_Admin_Template',  '_function_ox_campaign_status'));
         $this->register_function('ox_campaign_icon', array('OA_Admin_Template',  '_function_ox_campaign_icon'));
@@ -71,6 +74,7 @@ class OA_Admin_Template extends Smarty
         $this->register_function('ox_zone_size', array('OA_Admin_Template',  '_function_ox_zone_size'));
         $this->register_function('ox_zone_icon', array('OA_Admin_Template',  '_function_ox_zone_icon'));
         $this->register_function('ox_tracker_type', array('OA_Admin_Template',  '_function_ox_tracker_type'));
+
         $this->register_function('ox_entity_id', array('OA_Admin_Template',  '_function_ox_entity_id'));
 
         $this->register_function('boldSearchPhrase', array('OA_Admin_Template', '_function_boldSearchPhrase'));
@@ -118,6 +122,8 @@ class OA_Admin_Template extends Smarty
          */
         $this->register_function('rv_add_session_token', array('OA_Admin_Template', '_add_session_token'));
 
+        // Also assign a template variable for other usages
+        $this->assign("csrfToken", phpAds_SessionGetToken());
     }
 
     /**
@@ -176,13 +182,13 @@ class OA_Admin_Template extends Smarty
         $this->caching = 2;
     }
 
-    function is_cached()
+    function is_cached($tpl_file = null, $cache_id = null, $compile_id = null)
     {
         return parent::is_cached($this->templateName, $this->cacheId);
     }
 
 
-    function display()
+    function display($resource_name = null, $cache_id = null, $compile_id = null)
     {
         parent::display($this->templateName, $this->cacheId);
     }
@@ -204,11 +210,19 @@ class OA_Admin_Template extends Smarty
             } else {
                 $aValues = array();
             }
-            return $oTrans->translate($aParams['str'], $aValues);
-        } else
-        if (!empty($aParams['key'])) {
-            return $oTrans->translate($aParams['key']);
+            $t = $oTrans->translate($aParams['str'], $aValues);
+        } elseif (!empty($aParams['key'])) {
+            $t = $oTrans->translate($aParams['key']);
         }
+
+        if (isset($t)) {
+            if (empty($aParams['escape'])) {
+                return $t;
+            }
+
+            return smarty_modifier_escape($t, $aParams['escape']);
+        }
+
         // If nothing found in global scope, return the value unchanged
         if (!empty($aParams['str'])) {
             return $aParams['str'];
@@ -216,6 +230,7 @@ class OA_Admin_Template extends Smarty
         if (!empty($aParams['key'])) {
             return $aParams['key'];
         }
+
         $smarty->trigger_error("t: missing 'str' or 'key' parameters: ".$aParams['str']);
     }
 
@@ -428,6 +443,16 @@ class OA_Admin_Template extends Smarty
         }
     }
 
+    function _function_ox_column_updated($aParams, &$smarty)
+    {
+        if (isset($aParams['updated'])) {
+            $updated = $aParams['updated'];
+            return "<span class='updated'>".trim($updated). "</span>";
+        } else {
+            $smarty->trigger_error("t: missing 'updated' parameter");
+        }
+    }
+
     function _function_ox_banner_size($aParams, &$smarty)
     {
         global $phpAds_IAB;
@@ -546,30 +571,30 @@ class OA_Admin_Template extends Smarty
         }
     }
 
-		function _function_ox_campaign_type($aParams, &$smarty)
-		{
-			if (isset($aParams['type'])) {
-				$type = $aParams['type'];
-				$translation = new OX_Translation ();
+    function _function_ox_campaign_type($aParams, &$smarty)
+    {
+        if (isset($aParams['type'])) {
+            $type = $aParams['type'];
+            $translation = new OX_Translation();
 
-                if ($type == OX_CAMPAIGN_TYPE_OVERRIDE) {
-					return "<span class='campaign-type campaign-override'>" . $translation->translate('Override') . "</span>";
-                } elseif ($type == OX_CAMPAIGN_TYPE_CONTRACT_NORMAL) {
-					return "<span class='campaign-type campaign-contract'>" . $translation->translate('Contract') . "</span>";
-				} elseif ($type == OX_CAMPAIGN_TYPE_REMNANT || $type == OX_CAMPAIGN_TYPE_ECPM){
-					return "<span class='campaign-type campaign-remnant'>" . $translation->translate('Remnant') . "</span>";
-                }
-                return "<span class='campaign-type campaign-contract'>".$type. "</span>";
-			} else {
-				$smarty->trigger_error("t: missing 'type' parameter");
-			}
-		}
+            if ($type == OX_CAMPAIGN_TYPE_OVERRIDE) {
+                return "<span class='campaign-type campaign-override'>" . $translation->translate('Override') . "</span>";
+            } elseif ($type == OX_CAMPAIGN_TYPE_CONTRACT_NORMAL) {
+                return "<span class='campaign-type campaign-contract'>" . $translation->translate('Contract') . "</span>";
+            } elseif ($type == OX_CAMPAIGN_TYPE_REMNANT || $type == OX_CAMPAIGN_TYPE_ECPM){
+                return "<span class='campaign-type campaign-remnant'>" . $translation->translate('Remnant') . "</span>";
+            }
+            return "<span class='campaign-type campaign-contract'>".$type. "</span>";
+        } else {
+            $smarty->trigger_error("t: missing 'type' parameter");
+        }
+    }
 
     function _function_ox_campaign_status($aParams, &$smarty)
     {
         if (isset($aParams['status'])) {
             $status = $aParams['status'];
-            $translation = new OX_Translation ();
+            $translation = new OX_Translation();
 
             switch ($status) {
                 case OA_ENTITY_STATUS_PENDING:

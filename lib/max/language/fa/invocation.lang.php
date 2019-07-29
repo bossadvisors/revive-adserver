@@ -1,152 +1,79 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
-
-/**
- * A file for holding the "invocation code" English translation information.
- *
- * @package    MaxUI
- * @subpackage Languages
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
  */
 
 // Other
-$GLOBALS['strCopyToClipboard']			= "کپی کردن به حافظه";
-$GLOBALS['strCopy']                                 = "کپی";
+$GLOBALS['strCopyToClipboard'] = "کپی به کلیپ بورد";
+$GLOBALS['strCopy'] = "کپی";
+$GLOBALS['strChooseTypeOfInvocation'] = "لطفا نوع نیایش را انتخاب کنید";
+$GLOBALS['strChooseTypeOfBannerInvocation'] = "لطفا نوع نیایش بنر را انتخاب کنید";
 
 // Measures
-$GLOBALS['strAbbrPixels']			= "px";
-$GLOBALS['strAbbrSeconds']			= "ثانیه";
+$GLOBALS['strAbbrSeconds'] = "ثانیه";
 
 // Common Invocation Parameters
-$GLOBALS['strInvocationWhat']                       = "انتخاب بنر";
-$GLOBALS['strInvocationPreview']                    = "نمایش بنر";
-$GLOBALS['strInvocationClientID']                   = "آگهی دهنده";
-$GLOBALS['strInvocationCampaignID']                 = "داخلی";
-$GLOBALS['strInvocationTarget']                     = "نحوه نمایش";
-$GLOBALS['strInvocationSource']                     = "منشا";
-$GLOBALS['strInvocationWithText']                   = "نمایش متن در زیر بنر";
-$GLOBALS['strInvocationDontShowAgain']              = "نمایش ندادن مجدد بنر در صورتی که یکسان باشد در صفحه";
-$GLOBALS['strInvocationDontShowAgainCampaign']		= "عدم نمایش بنر از  در صفحه مشابه";
-$GLOBALS['strInvocationTemplate'] 		= "ذخیره بنر درون یک متغیر که قابل استفاده در قالب صفحه باشد.";
-$GLOBALS['strInvocationBannerID']                   = "آی دی بنر";
-$GLOBALS['strInvocationComments']                   = "قراردادن توضیحات";
+$GLOBALS['strInvocationWhat'] = "انتخاب بنر";
+$GLOBALS['strInvocationCampaignID'] = "کمپین";
+$GLOBALS['strInvocationTarget'] = "فریم هدف";
+$GLOBALS['strInvocationSource'] = "منبع";
+$GLOBALS['strInvocationWithText'] = "نمایش متن زیر بنر";
+$GLOBALS['strInvocationDontShowAgain'] = "تبلیغ را دوباره در یک صفحه نشان نده ";
+$GLOBALS['strInvocationDontShowAgainCampaign'] = "تبلیغات یک کمپین را دوباره در یک صفحه مشابه نشان نده";
+$GLOBALS['strInvocationTemplate'] = "تبلیغ را در یک متغیر ذخیره کنید تا بیوانید آن را در یک قالب استفاده کنید ";
+$GLOBALS['strInvocationBannerID'] = "تبلیغ ID";
+$GLOBALS['strInvocationComments'] = "مشمول کامنت شدن";
 
 // Iframe
-$GLOBALS['strIFrameRefreshAfter']		= "رفرش بعد از";
-$GLOBALS['strIframeResizeToBanner']		= "تغییر اندازه iframe برای ابعاد بنر";
-$GLOBALS['strIframeMakeTransparent']		= "ساختن شفافیت ( Transparency ) برای iframe";
-$GLOBALS['strIframeIncludeNetscape4']		= "همساز با مرورگر نت اسکپ 4";
-
+$GLOBALS['strIFrameRefreshAfter'] = "تازه سازی بعد از";
+$GLOBALS['strIframeResizeToBanner'] = "تغییر اندازه iframe برای ابعاد بنر";
+$GLOBALS['strIframeMakeTransparent'] = "iframe را شفاف کن";
+$GLOBALS['strIframeIncludeNetscape4'] = "شامل نت اسکیپ 4 به iPlayer سازگار";
+$GLOBALS['strIframeGoogleClickTracking'] = "مشمول کد برای پیگیری کلیک حس تبلیغ گوگل";
 
 // PopUp
-$GLOBALS['strPopUpStyle']			= " نوع Pop-up";
-$GLOBALS['strPopUpStylePopUp']			= "Pop-up";
-$GLOBALS['strPopUpStylePopUnder']		= "Pop-under";
-$GLOBALS['strPopUpCreateInstance']		= "نمونه وقتی که  pop-up ایجاد شد";
-$GLOBALS['strPopUpImmediately']			= "بی درنگ";
-$GLOBALS['strPopUpOnClose']			= "وقتی که این صفحه بسته می شود";
-$GLOBALS['strPopUpAfterSec']			= "بعد از";
-$GLOBALS['strAutoCloseAfter']			= "اتوماتیک بسته شود بعد از";
-$GLOBALS['strPopUpTop']				= "Initial position (top)";
-$GLOBALS['strPopUpLeft']			= "Initial position (left)";
-$GLOBALS['strWindowOptions']			= "گزینه های تنظیم پنجره";
-$GLOBALS['strShowToolbars']			= "نوار ابزار";
-$GLOBALS['strShowLocation']			= "مکان";
-$GLOBALS['strShowMenubar']			= "نوار منو";
-$GLOBALS['strShowStatus']			= "وضعیت";
-$GLOBALS['strWindowResizable']			= "قابلیت عوض کردن اندازه";
-$GLOBALS['strShowScrollbars']			= "اسکرول";
-
+$GLOBALS['strPopUpStyle'] = "نوع پاپ آپ";
+$GLOBALS['strPopUpStylePopUp'] = "پاپ آپ";
+$GLOBALS['strPopUpStylePopUnder'] = "پاپ تحت";
+$GLOBALS['strPopUpCreateInstance'] = "به عنوان مثال زمانی که پاپ آپ ایجاد شده است";
+$GLOBALS['strPopUpImmediately'] = "بلافاصله";
+$GLOBALS['strPopUpOnClose'] = "زمانی که صفحه بسته است";
+$GLOBALS['strPopUpAfterSec'] = "بعد از";
+$GLOBALS['strAutoCloseAfter'] = "بسته شود به صورت خودکار بعد از";
+$GLOBALS['strPopUpTop'] = "موقعیت اولیه(بالا(";
+$GLOBALS['strPopUpLeft'] = "موقعیت اولیه (سمت چپ)";
+$GLOBALS['strWindowOptions'] = "گزینه های پنجره";
+$GLOBALS['strShowToolbars'] = "نوار ابزار";
+$GLOBALS['strShowLocation'] = "محل";
+$GLOBALS['strShowMenubar'] = "نوار منو";
+$GLOBALS['strShowStatus'] = "وضعیت";
+$GLOBALS['strWindowResizable'] = "قابل اندازه بندی مجدد";
+$GLOBALS['strShowScrollbars'] = "پیمایش";
 
 // XML-RPC
-$GLOBALS['strXmlRpcLanguage']       = "زبان هاست";
-$GLOBALS['strXmlRpcProtocol']       = "Use HTTPS to contact XML-RPC Server";
-$GLOBALS['strXmlRpcTimeout']        = "XML-RPC Timeout (Seconds)";
-
-
-// AdLayer
-$GLOBALS['strAdLayerStyle']			= "استایل";
-
-$GLOBALS['strAlignment']			= "تراز";
-$GLOBALS['strHAlignment']			= "تراز افقی";
-$GLOBALS['strLeft']				= "چپ";
-$GLOBALS['strCenter']				= "مرکز";
-$GLOBALS['strRight']				= "راست";
-
-$GLOBALS['strVAlignment']			= "تراز عمودی";
-$GLOBALS['strTop']				= "بالا";
-$GLOBALS['strMiddle']				= "میانی";
-$GLOBALS['strBottom']				= "دکمه";
-
-$GLOBALS['strAutoCollapseAfter']		= "به طور اتوماتیک متلاشی شود بعد از";
-$GLOBALS['strCloseText']			= "متن دکمه بستن";
-$GLOBALS['strClose']				= "[بستن]";
-$GLOBALS['strBannerPadding']			= "لایه گذاری بنر";
-
-$GLOBALS['strHShift']				= "انتقال افقی";
-$GLOBALS['strVShift']				= "انتقال عمودی";
-
-$GLOBALS['strShowCloseButton']			= "نشان دادن دکمه [بستن]";
-$GLOBALS['strBackgroundColor']			= "رنگ پس زمینه";
-$GLOBALS['strBorderColor']			= "رنگ حاشیه";
-
-$GLOBALS['strDirection']			= "جهت";
-$GLOBALS['strLeftToRight']			= "چپ به راست";
-$GLOBALS['strRightToLeft']			= "راست به چپ";
-$GLOBALS['strLooping']				= "به صورت چرخشی";
-$GLOBALS['strAlwaysActive']			= "همیشه فعال";
-$GLOBALS['strSpeed']				= "سرعت";
-$GLOBALS['strPause']				= "توقف";
-$GLOBALS['strLimited']				= "محدود";
-$GLOBALS['strLeftMargin']			= "حاشیه سمت چپمح";
-$GLOBALS['strRightMargin']			= "حاشیه سمت راست";
-$GLOBALS['strTransparentBackground']		= "پس زمینه شفاف";
-
-$GLOBALS['strSmoothMovement']		= "حرکت صاف";
-$GLOBALS['strHideNotMoving']		= "مخفی کردن بنر وقتی که مکان نما در حال حرکت نیست";
-$GLOBALS['strHideDelay']			= "تاخیر قبل از مخفی شدن بنر";
-$GLOBALS['strHideTransparancy']		= "شفافیت بنر مخفی شده";
-
-
-$GLOBALS['strAdLayerStyleName']['geocities'] = "Geocitiesسادهمکان نماشناور";
-$GLOBALS['strAdLayerStyleName']['simple'] = "ساده";
-$GLOBALS['strAdLayerStyleName']['cursor'] = "مکان نما";
-$GLOBALS['strAdLayerStyleName']['floater'] = "شناور";
-
+$GLOBALS['strXmlRpcLanguage'] = "زبان میزبانe";
+$GLOBALS['strXmlRpcProtocol'] = "استفاده از HTTPS برای تماس با XML-RPC سرور";
+$GLOBALS['strXmlRpcTimeout'] = "XML-RPC اتمام مهلت (ثانیه)";
 
 // Support for 3rd party server clicktracking
-$GLOBALS['str3rdPartyTrack']		 = "Support 3rd Party Server Clicktracking";
+$GLOBALS['str3rdPartyTrack'] = "حمایت از سرور های 3rd party  برای ردیابی کلیک";
 
 // Support for cachebusting code
-$GLOBALS['strCacheBuster']		    = "قراردادن کد Cache-Busting";
-
-// Non-Img creatives Warning for zone image-only invocation
-$GLOBALS['strNonImgWarningZone']	= "Warning: There are banners attached to this zone which are not images. These banners will not be rotated using this tag.";
-$GLOBALS['strNonImgWarning']        = "Warning: This tag will not work because this banner is not an image.";
-
-// unkown HTML tag type Warning for zone invocation
-$GLOBALS['strUnknHtmlWarning']      = "Warning: This banner is an unkown HTML ad format.";
-
-// sql/web banner-type warning for clickonly zone invocation
-$GLOBALS['strWebBannerWarning']     = "Warning: This banner must be downloaded and you must notify us the correct URL for the banner.\n<br /> 1) Download the banner:";
-$GLOBALS['strDwnldWebBanner']       = "Right-click here and choose Save Target As";
-$GLOBALS['strWebBannerWarning2']    = "<br /> 2) Upload the banner to your webserver and write its location here: ";
+$GLOBALS['strCacheBuster'] = "کد کش-باستیگ را وارد کنید";
 
 // IMG invocation selected for tracker with appended code
-$GLOBALS['strWarning'] = "Warning";
-$GLOBALS['strImgWithAppendWarning'] = "This tracker has appended code, appended code will <strong>only</strong> work with JavaScript tags";
+$GLOBALS['strWarning'] = "هشدار";
+$GLOBALS['strImgWithAppendWarning'] = "این ردیاب کداضافی دارد ,این کد اضافی  <strong>فقط</strong> با برچسب جاوا اسکریپت کار می کند";
 
+// Local Invocation
+$GLOBALS['strWarningLocalInvocation'] = "<span class='tab-s'><strong>هشدار :</strong> حالت نیایش محلی تنها زمانی کار خواهد کرد اگر سایت خواستار کد در سرور تبلیغاتی دستگاه فیزیکی باشد</span><br />
+بررسی کنید که MAX_PATH در کد زیر تعریف شده به پایه دایرکتوری نصب و راه اندازی حداکثر اشاره می کند . <br />
+و که شما یک فایل پیکربندی برای دامنه از سایت با نشان دادن تبلیغات دارید(در MAX_PATH/var)";
 
-
-// Note: New translations not found in original lang files but found in CSV
-$GLOBALS['strChooseTypeOfInvocation'] = "لطفا پسوند خروجی را انتخاب کنید";
-$GLOBALS['strChooseTypeOfBannerInvocation'] = "لطفا پسوند خروجی را انتخاب کنید";
-?>

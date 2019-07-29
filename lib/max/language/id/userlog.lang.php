@@ -1,39 +1,52 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
+ */
 
 // Set translation strings
+$GLOBALS['strDeliveryEngine'] = "Mesin Penyampaian";
+$GLOBALS['strMaintenance'] = "Pemeliharaan";
+$GLOBALS['strAdministrator'] = "Administrator";
 
-$GLOBALS['strDeliveryEngine']				= "Mesin Penyampaian";
-$GLOBALS['strMaintenance']				= "Pemeliharaan";
-$GLOBALS['strAdministrator']				= "Administrator";
-
-
-$GLOBALS['strUserlog'][phpAds_actionAdvertiserReportMailed] = "Pengiriman laporan kepada Pemasang Iklan {id} melalui E-mail telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionPublisherReportMailed] = "Pengiriman laporan kepada Penerbit {id} melalui E-mail telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionWarningMailed] = "Pengiriman laporan tentang pemberhentian untuk kampanye {id} melalui E-mail telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionDeactivationMailed] = "Pengiriman notifikasi tentang pemberhentian untuk kampanye {id} melalui E-mail telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionPriorityCalculation] = "Rekalkulasi prioritas telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionPriorityAutoTargeting] = "Rekalkulasi target kampanye telah dilakukan.";
-$GLOBALS['strUserlog'][phpAds_actionDeactiveCampaign] = "Kampanye {id} telah dihentikan.";
-$GLOBALS['strUserlog'][phpAds_actionActiveCampaign] = "Kampanye {id} telah diaktifkan.";
-$GLOBALS['strUserlog'][phpAds_actionAutoClean] = "Pembersihan database secara otomatis.";
-
-
-
-
-// Note: New translations not found in original lang files but found in CSV
+// Audit
+$GLOBALS['strDeleted'] = "Hapus";
+$GLOBALS['strInserted'] = "dimasukkan";
+$GLOBALS['strUpdated'] = "diperbarui";
+$GLOBALS['strDelete'] = "Hapus";
+$GLOBALS['strHas'] = "telah";
+$GLOBALS['strFilters'] = "Filter";
 $GLOBALS['strAdvertiser'] = "Pemasang Iklan";
 $GLOBALS['strPublisher'] = "Penerbit";
+$GLOBALS['strCampaign'] = "Kampanye";
+$GLOBALS['strZone'] = "Zona";
 $GLOBALS['strType'] = "Jenis";
-$GLOBALS['strDeleted'] = "Hapus";
-$GLOBALS['strUserlog'][phpAds_actionActivationMailed] = "Pengiriman notifikasi tentang pemberhentian untuk kampanye {id} melalui E-mail telah dilakukan.";
-?>
+$GLOBALS['strAction'] = "Aksi";
+$GLOBALS['strParameter'] = "Parameter";
+$GLOBALS['strValue'] = "Nilai";
+$GLOBALS['strReturnAuditTrail'] = "Kembali ke Audit Trail";
+$GLOBALS['strAuditTrail'] = "Jejak audit";
+$GLOBALS['strMaintenanceLog'] = "Log pemeliharaan";
+$GLOBALS['strAuditResultsNotFound'] = "Tidak ada acara yang sesuai dengan kriteria yang dipilih";
+$GLOBALS['strCollectedAllEvents'] = "Semua acara";
+$GLOBALS['strClear'] = "Bersih";
+
+if (!isset($GLOBALS['strUserlog'])) {
+    $GLOBALS['strUserlog'] = array();
+}
+$GLOBALS['strUserlog'][phpAds_actionAdvertiserReportMailed] = "Laporkan pengiklan {id} kirim melalui email";
+$GLOBALS['strUserlog'][phpAds_actionActiveCampaign] = "Campaign {id} diaktifkan";
+$GLOBALS['strUserlog'][phpAds_actionAutoClean] = "Otomatis bersih dari database";
+$GLOBALS['strUserlog'][phpAds_actionBatchStatistics] = "Statistik disusun";
+$GLOBALS['strUserlog'][phpAds_actionDeactivationMailed] = "Pemberitahuan Deaktivasi untuk kampanye {id} dikirim melalui email";
+$GLOBALS['strUserlog'][phpAds_actionDeactiveCampaign] = "Kampanye {id} dinonaktifkan";
+$GLOBALS['strUserlog'][phpAds_actionPriorityCalculation] = "Prioritas dihitung ulang";
+$GLOBALS['strUserlog'][phpAds_actionPublisherReportMailed] = "Laporan untuk situs web {id} dikirim melalui email";
+$GLOBALS['strUserlog'][phpAds_actionWarningMailed] = "Peringatan Deaktivasi untuk kampanye {id} dikirim melalui email";
+$GLOBALS['strUserlog'][phpAds_actionActivationMailed] = "Pembersihan database secara otomatis.";

@@ -32,9 +32,9 @@ class Test_OA_Maintenance_Priority_AdServer_Task_ECPMforContract extends UnitTes
     /**
      * The constructor method.
      */
-    function Test_OA_Maintenance_Priority_AdServer_Task_ECPMforContract()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         Mock::generate(
             'OA_Dal_Maintenance_Priority',
             $this->mockDal = 'MockOA_Dal_Maintenance_Priority'.rand()
@@ -131,7 +131,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_ECPMforContract extends UnitTes
 
         $oEcpm = new PartialMock_OA_Maintenance_Priority_AdServer_Task_ECPMforContract($this);
         $oEcpm->setReturnReference('_getDal', $oDal);
-        $oEcpm->OA_Maintenance_Priority_AdServer_Task();
+        $oEcpm->__construct();
         foreach ($aEcpm as $campId => $ecpm) {
             $oEcpm->setReturnValue('calculateCampaignEcpm', $ecpm, array($campId, '*'));
         }
@@ -255,7 +255,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_ECPMforContract extends UnitTes
             $oEcpm->setReturnValue('calculateCampaignEcpm', $ecpm, array($campId, '*'));
         }
         $oEcpm->setReturnReference('_getDal', $oDal);
-        $oEcpm->OA_Maintenance_Priority_AdServer_Task();
+        $oEcpm->__construct();
         $oEcpm->aZonesAvailableImpressions = $aZonesAvailableImpressions;
         $oEcpm->prepareCampaignsParameters($aCampaignsInfo);
 

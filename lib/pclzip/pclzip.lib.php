@@ -192,7 +192,7 @@
   //   Note that no real action is taken, if the archive does not exist it is not
   //   created. Use create() for that.
   // --------------------------------------------------------------------------------
-  function PclZip($p_zipname)
+  function __construct($p_zipname)
   {
     //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::PclZip', "zipname=$p_zipname");
 
@@ -1050,9 +1050,6 @@
       }
     }
 
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
-
     // ----- Call the delete fct
     $v_list = array();
     if (($v_result = $this->privDeleteByRule($v_list, $v_options)) != 1) {
@@ -1109,9 +1106,6 @@
 
     // ----- Reset the error handler
     $this->privErrorReset();
-
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
 
     // ----- Check archive
     if (!$this->privCheckFormat()) {
@@ -2131,9 +2125,6 @@
     $v_result=1;
     $v_list_detail = array();
 
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
-
     // ----- Open the file in write mode
     if (($v_result = $this->privOpenFd('wb')) != 1)
     {
@@ -2181,9 +2172,6 @@
       //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
       return $v_result;
     }
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
-
     // ----- Open the zip file
     //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
     if (($v_result=$this->privOpenFd('rb')) != 1)
@@ -3098,9 +3086,6 @@
     //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::privList", "list");
     $v_result=1;
 
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
-
     // ----- Open the zip file
     //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Open file in binary read mode");
     if (($this->zip_fd = @fopen($this->zipname, 'rb')) == 0)
@@ -3235,9 +3220,6 @@
     //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, "PclZip::privExtractByRule", "path='$p_path', remove_path='$p_remove_path', remove_all_path='".($p_remove_all_path?'true':'false')."'");
     $v_result=1;
 
-    // ----- Magic quotes trick
-    $this->privDisableMagicQuotes();
-
     // ----- Check the path
     if (   ($p_path == "")
 	    || (   (substr($p_path, 0, 1) != "/")
@@ -3359,17 +3341,6 @@
                   //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "The file is the right one.");
                   $v_extract = true;
               }
-          }
-      }
-
-      // ----- Look for extract by ereg rule
-      else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
-               && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
-
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header['stored_filename'])) {
-              //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
-              $v_extract = true;
           }
       }
 
@@ -4807,17 +4778,6 @@
           }
       }
 
-      // ----- Look for extract by ereg rule
-      else if (   (isset($p_options[PCLZIP_OPT_BY_EREG]))
-               && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
-          //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
-
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
-              //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
-              $v_found = true;
-          }
-      }
-
       // ----- Look for extract by preg rule
       else if (   (isset($p_options[PCLZIP_OPT_BY_PREG]))
                && ($p_options[PCLZIP_OPT_BY_PREG] != "")) {
@@ -5445,48 +5405,6 @@
 
     $p_buffer = PclZipUtilZipDecrypt($p_buffer, $p_size, $p_encryption_header,
 	                                 $p_crc, $v_pwd);
-
-    // ----- Return
-    //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
-    return $v_result;
-  }
-  // --------------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------------
-  // Function : privDisableMagicQuotes()
-  // Description :
-  // Parameters :
-  // Return Values :
-  // --------------------------------------------------------------------------------
-  function privDisableMagicQuotes()
-  {
-    //--(MAGIC-PclTrace)--//PclTraceFctStart(__FILE__, __LINE__, 'PclZip::privDisableMagicQuotes', "");
-    $v_result=1;
-
-    // ----- Look if function exists
-    if (   (!function_exists("get_magic_quotes_runtime"))
-	    || (!function_exists("set_magic_quotes_runtime"))) {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Functions *et_magic_quotes_runtime are not supported");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
-      return $v_result;
-	}
-
-    // ----- Look if already done
-    if ($this->magic_quotes_status != -1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "magic_quote already disabled");
-      //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
-      return $v_result;
-	}
-
-	// ----- Get and memorize the magic_quote value
-	$this->magic_quotes_status = @get_magic_quotes_runtime();
-    //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Current magic_quotes_runtime status is '".($this->magic_quotes_status==0?'disable':'enable')."'");
-
-	// ----- Disable magic_quotes
-	if ($this->magic_quotes_status == 1) {
-      //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Disable magic_quotes");
-	  @set_magic_quotes_runtime(0);
-	}
 
     // ----- Return
     //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);

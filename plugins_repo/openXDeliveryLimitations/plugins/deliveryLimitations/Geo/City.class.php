@@ -32,9 +32,9 @@ require_once MAX_PATH . '/lib/max/Delivery/limitations.delivery.php';
  */
 class Plugins_DeliveryLimitations_Geo_City extends Plugins_DeliveryLimitations
 {
-    function Plugins_DeliveryLimitations_Geo_City()
+    function __construct()
     {
-        parent::Plugins_DeliveryLimitations();
+        parent::__construct();
         $this->nameEnglish = 'Geo - Country / City';
     }
 
@@ -51,7 +51,7 @@ class Plugins_DeliveryLimitations_Geo_City extends Plugins_DeliveryLimitations
      *
      * @return boolean
      */
-    function isAllowed()
+    function isAllowed($page = false)
     {
         return ((isset($GLOBALS['_MAX']['GEO_DATA']['city']))
             || $GLOBALS['_MAX']['CONF']['geotargeting']['showUnavailable']);

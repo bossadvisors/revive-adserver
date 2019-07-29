@@ -91,7 +91,7 @@ class HTML_Template_Flexy_Translator {
     * @access   public
     */
 
-    function HTML_Template_Flexy_Translator($options= array()) {
+    function __construct($options= array()) {
         foreach($options as $k=>$v) {
             $this->options[$k]  = $v;
         }
@@ -327,7 +327,7 @@ class HTML_Template_Flexy_Translator {
         while (($name = readdir($dh)) !== false) {
             $fname = $d ? $d .'/'. $name : $name;
 
-            if ($name{0} == '.') {
+            if ($name[0] == '.') {
                 continue;
             }
 
@@ -378,7 +378,7 @@ class HTML_Template_Flexy_Translator {
         while (($name = readdir($dh)) !== false) {
             $fname = $d ? $d .'/'. $name : $name;
 
-            if ($name{0} == '.') {
+            if ($name[0] == '.') {
                 continue;
             }
 

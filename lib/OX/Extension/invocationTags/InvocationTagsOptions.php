@@ -21,7 +21,7 @@ class Plugins_InvocationTagsOptions
     var $maxInvocation;
 
     var $defaultValues = array();
-    function Plugins_InvocationTagsOptions()
+    function __construct()
     {
         $conf = $GLOBALS['_MAX']['CONF'];
         $this->defaultValues = array(
@@ -45,7 +45,7 @@ class Plugins_InvocationTagsOptions
             'hostlanguage'      => '',
             'thirdPartyServer'  => $conf['delivery']['clicktracking'],
             'cachebuster'       => 1,
-            'comments'          => 1,
+            'comments'          => 0,
             'charset'           => '',
         );
     }

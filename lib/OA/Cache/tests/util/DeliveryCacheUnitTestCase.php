@@ -19,14 +19,14 @@ require_once MAX_PATH . '/lib/max/Delivery/cache.php';
  * @package    OpenXCache
  * @subpackage TestSuite
  */
-class DeliveryCacheUnitTestCase extends UnitTestCase
+abstract class DeliveryCacheUnitTestCase extends UnitTestCase
 {
     /**
      * The constructor method.
      */
-    function DeliveryCacheUnitTestCase()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
     }
 
     /**
@@ -133,7 +133,6 @@ class DeliveryCacheUnitTestCase extends UnitTestCase
         // Create cache files not related to DB Objects
         MAX_cacheGetAccountTZs();
         MAX_cacheCheckIfMaintenanceShouldRun();
-        MAX_cacheGetGoogleJavaScript();
 
         // Create cache files for banners and images
         foreach ($aIds['banners'] as $bannerId) {

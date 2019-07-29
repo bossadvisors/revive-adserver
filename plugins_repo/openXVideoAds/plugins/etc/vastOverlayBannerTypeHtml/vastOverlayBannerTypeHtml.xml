@@ -4,14 +4,14 @@
 <plugin>
     <name>vastOverlayBannerTypeHtml</name>
     <displayName>IAB VAST Overlay Banner Type Plugin</displayName>
-    <creationDate>2014-11-21</creationDate>
+    <creationDate>2018-01-31</creationDate>
     <author>Revive Adserver</author>
     <authorEmail>revive@revive-adserver.com</authorEmail>
     <authorUrl>http://www.revive-adserver.com</authorUrl>
-    <license>GNU Gneral Public License v2</license>
+    <license>LICENSE.txt</license>
     <description>Plugin that provides IAB VAST video ad support.</description>
-    <version>1.10.8</version>
-    <oxversion>3.1-dev</oxversion>
+    <version>1.11.9</version>
+    <oxversion>3.2.0-beta-rc3</oxversion>
     <extends>bannerTypeHtml</extends>
 
     <install>

@@ -51,7 +51,7 @@ class Migration
 
     var $prefix;
 
-    function Migration()
+    function __construct()
     {
         $this->_setupSQLStatements();
         //$this->__construct();
@@ -119,6 +119,7 @@ class Migration
         switch ($this->oDBH->dbsyntax)
         {
             case 'mysql':
+            case 'mysqli':
                 $engine = $this->oDBH->getOption('default_table_type');
                 $this->aSQLStatements['table_copy_all']     = "INSERT IGNORE INTO %s SELECT * FROM %s";
                 //$this->aSQLStatements['table_copy_cols'] = "INSERT IGNORE INTO (%s %s) VALUES (SELECT %s FROM %s)";

@@ -247,23 +247,22 @@ function MAX_cacheGetAccountTZs($cached = true)
  *                   The array containg zone information with nested arrays of linked ads
  *                   or false on failure. Note that:
  *                      - Override ads are in "xAds"
- *                      - Normal (paid) ads are in "ads"
- *                      - Low-priority ads are in "lAds"
+ *                      - Contract campaign ads are in "ads"
+ *                      - Remnant campaign ads are in "lAds"
  *                      - Companion ads, in addition to being in one of the above, are
  *                        also in "cAds" and "clAds"
- *                      - Override and low-priority ads have had their priorities
- *                        calculated on the basis of the placement and advertisement
- *                        weight
+ *                      - Override and Remnant ads have had their priorities
+ *                        calculated on the basis of the campaign and creative
+ *                        weights
  */
 function MAX_cacheGetZoneLinkedAds($zoneId, $cached = true)
 {
-    $sName  = OA_Delivery_Cache_getName(__FUNCTION__, $zoneId);
+    $sName = OA_Delivery_Cache_getName(__FUNCTION__, $zoneId);
     if (!$cached || ($aRows = OA_Delivery_Cache_fetch($sName)) === false) {
         MAX_Dal_Delivery_Include();
         $aRows = OA_Dal_Delivery_getZoneLinkedAds($zoneId);
         $aRows = OA_Delivery_Cache_store_return($sName, $aRows);
     }
-
     return $aRows;
 }
 
@@ -515,30 +514,6 @@ function MAX_cacheGetChannelLimitations($channelid, $cached = true)
     }
 
     return $limitations;
-}
-
-/**
- * Cache-wrapper for MAX_googleGetJavaScript()
- *
- * The function to get and return Google Adsense click tracking code
- *
- * @param boolean  $cached    Should a cache lookup be performed?
- * @return string  $output    The Google Adsense click tracking code
- *
- */
-function MAX_cacheGetGoogleJavaScript($cached = true)
-{
-    $sName  = OA_Delivery_Cache_getName(__FUNCTION__);
-    if (!$cached || ($output = OA_Delivery_Cache_fetch($sName)) === false) {
-        $file = '/lib/max/Delivery/google.php';
-        if(!isset($GLOBALS['_MAX']['FILES'][$file])) {
-            include MAX_PATH . $file;
-        }
-        $output = MAX_googleGetJavaScript();
-        $output = OA_Delivery_Cache_store_return($sName, $output);
-    }
-
-    return $output;
 }
 
 

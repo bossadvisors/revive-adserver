@@ -147,7 +147,7 @@ function OA_setTimeZoneUTC()
  */
 function OA_setTimeZoneLocal()
 {
-    $tz = !empty($GLOBALS['_MAX']['PREF']['timezone']) ? $GLOBALS['_MAX']['PREF']['timezone'] : 'GMT';
+    $tz = !empty($GLOBALS['_MAX']['PREF']['timezone']) ? $GLOBALS['_MAX']['PREF']['timezone'] : 'UTC';
     OA_setTimeZone($tz);
 }
 
@@ -201,4 +201,10 @@ function setupIncludePath()
     set_include_path($oxPearPath . PATH_SEPARATOR . $oxZendPath . PATH_SEPARATOR . get_include_path());
 }
 
-?>
+/**
+ * @return \Psr\Container\ContainerInterface
+ */
+function RV_getContainer()
+{
+    return $GLOBALS['_MAX']['DI'];
+}

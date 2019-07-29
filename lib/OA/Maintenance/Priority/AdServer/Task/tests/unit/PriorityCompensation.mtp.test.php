@@ -24,9 +24,9 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
     /**
      * The constructor method.
      */
-    function Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         Mock::generate(
             'OA_Dal_Maintenance_Priority',
             $this->mockDal = 'MockOA_Dal_Maintenance_Priority'.rand()
@@ -61,7 +61,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
         $oPriorityCompensation = new PartialMock_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation($this);
         $oPriorityCompensation->setReturnReference('_getDal', $oDal);
         $oPriorityCompensation->setReturnReference('_getOperationIntUtils', $oOperationInterval);
-        $oPriorityCompensation->OA_Maintenance_Priority_AdServer_Task();
+        $oPriorityCompensation->__construct();
 
         // Test 1
         $returnGetAllZonesImpInv = array(
@@ -168,19 +168,19 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
         for ($i=0;$i<5;$i++)
         {
             $oAdObject = new PartialOA_Maintenance_Priority_Ad($this);
-            $oAdObject->OA_Maintenance_Priority_Ad(array('ad_id' => 1));
+            $oAdObject->__construct(array('ad_id' => 1));
             //$oAdObject->setReturnValue('isActiveHighPriority', true);
             $oPriorityCompensation->setReturnValueAt($i, '_getMaxEntityAdObject', $oAdObject);
         }
         for ($i=5;$i<10;$i++)
         {
             $oAdObject = new PartialOA_Maintenance_Priority_Ad($this);
-            $oAdObject->OA_Maintenance_Priority_Ad(array('ad_id' => 2));
+            $oAdObject->__construct(array('ad_id' => 2));
             //$oAdObject->setReturnValue('isActiveHighPriority', true);
             $oPriorityCompensation->setReturnValueAt($i, '_getMaxEntityAdObject', $oAdObject);
         }
         $oAdObject = new PartialOA_Maintenance_Priority_Ad($this);
-        $oAdObject->OA_Maintenance_Priority_Ad(array('ad_id' => 3));
+        $oAdObject->__construct(array('ad_id' => 3));
         //$oAdObject->setReturnValue('isActiveHighPriority', true);
         $oPriorityCompensation->setReturnValueAt(10, '_getMaxEntityAdObject', $oAdObject);
 
@@ -349,7 +349,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
         $oPriorityCompensation = new PartialMock_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation($this);
         $oPriorityCompensation->setReturnReference('_getDal', $oDal);
         $oPriorityCompensation->setReturnReference('_getOperationIntUtils', $oOperationInterval);
-        $oPriorityCompensation->OA_Maintenance_Priority_AdServer_Task();
+        $oPriorityCompensation->__construct();
 
         // Test 1
         $aData = array(
@@ -452,7 +452,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
         $oPriorityCompensation = new PartialMock_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation($this);
         $oPriorityCompensation->setReturnReference('_getDal', $oDal);
         $oPriorityCompensation->setReturnReference('_getOperationIntUtils', $oOperationInterval);
-        $oPriorityCompensation->OA_Maintenance_Priority_AdServer_Task();
+        $oPriorityCompensation->__construct();
 
         // Test 1
         $oZone = new OX_Maintenance_Priority_Zone(array('zoneid' => 1));
@@ -797,7 +797,7 @@ class Test_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation extends Un
         $oPriorityCompensation = new PartialMock_OA_Maintenance_Priority_AdServer_Task_PriorityCompensation($this);
         $oPriorityCompensation->setReturnReference('_getDal', $oDal);
         $oPriorityCompensation->setReturnReference('_getOperationIntUtils', $oOperationInterval);
-        $oPriorityCompensation->OA_Maintenance_Priority_AdServer_Task();
+        $oPriorityCompensation->__construct();
 
         // Test 1
         $oZone = new OX_Maintenance_Priority_Zone(array('zoneid' => 1));

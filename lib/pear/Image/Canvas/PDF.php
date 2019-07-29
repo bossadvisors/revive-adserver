@@ -145,7 +145,7 @@ class Image_Canvas_PDF extends Image_Canvas
      *
      * @param array $param Parameter array
      */
-    function Image_Canvas_PDF($param)
+    function __construct($param)
     {
         if (isset($param['page'])) {
             switch (strtoupper($param['page'])) {
@@ -232,7 +232,7 @@ class Image_Canvas_PDF extends Image_Canvas
             $this->_pageHeight = $w;
         }
 
-        parent::Image_Canvas($param);
+        parent::__construct($param);
 
         if (!$this->_pageWidth) {
             $this->_pageWidth = $this->_width;
@@ -987,14 +987,14 @@ class Image_Canvas_PDF extends Image_Canvas
             $php_info = ob_get_contents();
             ob_end_clean();
 
-            if (ereg("<td[^>]*>PDFlib GmbH Version *<\/td><td[^>]*>([^<]*)<\/td>",
+            if (preg_match("#<td[^>]*>PDFlib GmbH Version *<\/td><td[^>]*>([^<]*)<\/td>#D",
                 $php_info, $result))
             {
                 $version = $result[1];
             }
         }
 
-        if (ereg('([0-9]{1,2})\.[0-9]{1,2}(\.[0-9]{1,2})?', trim($version), $result)) {
+        if (preg_match('/([0-9]{1,2})\.[0-9]{1,2}(\.[0-9]{1,2})?/D', trim($version), $result)) {
             return $result[1];
         } else {
             return 0;

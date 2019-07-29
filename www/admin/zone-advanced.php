@@ -73,7 +73,7 @@ else {
     $aZone['appendtype'] = phpAds_ZoneAppendRaw;
 }
 //extract chainzone
-if (ereg("^zone:([0-9]+)$", $aZone['chain'], $regs)) {
+if (preg_match("/^zone:([0-9]+)$/D", $aZone['chain'], $regs)) {
     $aZone['chainzone'] = $regs[1];
 }
 else {
@@ -316,10 +316,10 @@ function _getChainZones($aZone)
     $allowothersizes = $aZone['delivery'] == phpAds_ZoneInterstitial
         || $aZone['delivery'] == phpAds_ZonePopup;
     if ($aZone['width'] != -1 && !$allowothersizes) {
-        $doZones->width = $aZone['width'];
+        $doZones->whereAdd('width = ' . $aZone['width'] . " OR width=-1");
     }
     if ($aZone['height'] != -1 && !$allowothersizes) {
-        $doZones->height = $aZone['height'];
+        $doZones->whereAdd('height = ' . $aZone['height'] . " OR height=-1");
     }
     $doZones->delivery = $aZone['delivery'];
     $doZones->whereAdd('zoneid <> '.$aZone['zoneid']);

@@ -22,21 +22,16 @@
 function setupConstants()
 {
     // Define this version of Revive Adserver's constants
-    define('VERSION',           '3.1.1-dev');
-    define('PRODUCT_NAME',      'Revive Adserver');
-    define('PRODUCT_URL',       'www.revive-adserver.com');
-    define('PRODUCT_DOCSURL',   'http://documentation.revive-adserver.com');
+    define('VERSION', '4.2.2-dev');
+    define('PRODUCT_NAME', 'Revive Adserver');
+    define('PRODUCT_URL', 'www.revive-adserver.com');
+    define('PRODUCT_DOCSURL', 'http://documentation.revive-adserver.com');
 
     // Deprecated constants for backwards compatibility. Please use the ones above
-    define('OA_VERSION',         VERSION);
-    define('MAX_PRODUCT_NAME',   PRODUCT_NAME);
-    define('MAX_PRODUCT_URL',    PRODUCT_URL);
+    define('OA_VERSION', VERSION);
+    define('MAX_PRODUCT_NAME', PRODUCT_NAME);
+    define('MAX_PRODUCT_URL', PRODUCT_URL);
     define('OX_PRODUCT_DOCSURL', PRODUCT_DOCSURL);
-
-    // PHP <5.3 compatibility
-    if (!defined('E_DEPRECATED')) {
-        define('E_DEPRECATED', 0);
-    }
 
     define('OA_INSTALLATION_STATUS_NOTINSTALLED' ,   -1);
     define('OA_INSTALLATION_STATUS_UPGRADING'    ,    0);
@@ -44,7 +39,7 @@ function setupConstants()
 
     define('OA_AD_DIRECT_ENABLED', false);
 
-    //campaign types
+    // Campaign types
     define('OX_CAMPAIGN_TYPE_REMNANT', 1);
     define('OX_CAMPAIGN_TYPE_CONTRACT_NORMAL', 2);
     define('OX_CAMPAIGN_TYPE_OVERRIDE', 3);
@@ -176,11 +171,6 @@ function setupConstants()
     // data, before pruning, where a fixed retention value is appriopriate
     define('OA_MAINTENANCE_FIXED_PRUNING', 30);
 
-    // LegalAgreement Plugin Types
-    define('LEGALAGREEMENT_PLUGIN_PRE',         0);
-    define('LEGALAGREEMENT_PLUGIN_POST_DENY',   1);
-    define('LEGALAGREEMENT_PLUGIN_POST_ACCEPT', 2);
-
     define('MAX_LIMITATION_EQUAL', 0);
     define('MAX_LIMITATION_NOT_EQUAL', 1);
     define('MAX_LIMITATION_BITWISE', 2);
@@ -238,7 +228,7 @@ function setupConstants()
         }
         // Set the dbms type
         if (isset($GLOBALS['_MAX']['CONF']['database'])
-            && $GLOBALS['_MAX']['CONF']['database']['type'] == 'mysql')
+            && ($GLOBALS['_MAX']['CONF']['database']['type'] == 'mysql' || $GLOBALS['_MAX']['CONF']['database']['type'] == 'mysqli'))
         {
             define('phpAds_dbmsname', 'MySQL');
         }

@@ -7,9 +7,9 @@
     <author>Revive Adserver</author>
     <authorEmail>revive@revive-adserver.com</authorEmail>
     <authorUrl>http://www.revive-adserver.com</authorUrl>
-    <license>GNU GPL v2</license>
-    <description>Additional Banner Type Plugins for OpenX</description>
-    <version>1.1.0</version>
+    <license>LICENSE.txt</license>
+    <description>Additional Banner Type Plugins for Revive Aserver</description>
+    <version>1.1.3</version>
     <type>package</type>
 
     <install>

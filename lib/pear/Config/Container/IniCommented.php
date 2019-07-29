@@ -37,7 +37,7 @@ class Config_Container_IniCommented {
     * @access public
     * @param    string  $options    (optional)Options to be used by renderer
     */
-    function Config_Container_IniCommented($options = array())
+    function __construct($options = array())
     {
         $this->options = $options;
     } // end constructor
@@ -146,7 +146,7 @@ class Config_Container_IniCommented {
         $pos = 0; // position in $text
 
         do {
-            $char = $text{$pos};
+            $char = $text[$pos];
             $state = $this->_getQACEvent($stack);
 
             if ($tokens[$state]) {

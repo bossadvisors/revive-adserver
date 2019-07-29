@@ -27,12 +27,12 @@ class Plugins_DeliveryLimitations_Site_Pageurl extends Plugins_DeliveryLimitatio
 {
     var $defaultComparison = '=~';
 
-    function Plugins_DeliveryLimitations_Site_Pageurl()
+    function __construct()
     {
-        $this->Plugins_DeliveryLimitations();
+        parent::__construct();
 
         $aConf = $GLOBALS['_MAX']['CONF'];
-        if ($aConf['database']['type'] == 'mysql') {
+        if ($aConf['database']['type'] == 'mysql' || $aConf['database']['type'] == 'mysqli') {
             $this->columnName = 'CONCAT(IF(https=1, \'https://\', \'http://\'), domain, page, IF(query<>\'\', \'?\', \'\'),query)';
         } else {
             $this->columnName = 'IF(https=1, \'https://\', \'http://\') || domain || page || IF(query<>\'\', \'?\', \'\') || query';

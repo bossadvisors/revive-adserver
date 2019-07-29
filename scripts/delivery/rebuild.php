@@ -30,8 +30,19 @@ echo "=> STARTING TO RE-COMPILE THE DELIVERY ENGINE FILES\n";
 define('MAX_PATH', dirname(dirname(dirname(__FILE__))));
 define('OX_PATH',  dirname(dirname(dirname(__FILE__))));
 define('LIB_PATH', MAX_PATH.'/lib/OX');
+define('RV_PATH', MAX_PATH);
 
-$ignored_files = array('template.php');
+$ignored_files = [
+    'template.php',
+];
+
+$renamed_files = [
+    'axmlrpc.php' => 'axmlrpc.txt',
+];
+
+$blacklist = [
+    'asyncjs.php',
+];
 
 /**
  * Function to get values for timing the compilation
@@ -71,28 +82,41 @@ while (false !== ($file = readdir($DIR_INPUT))) {
     ) {
         continue;
     }
+
     $ext = substr($file, strrpos($file, '.'));
 
-    // Switching on extension may be useful if we want to do other things
-    // (e.g. recompress the fl.js file?)
-    switch ($ext) {
-        case '.php':
-            $FILE_OUT = @fopen($output_dir . $file, 'w');
-            if (!is_resource($FILE_OUT)) {
-                echo "  => Unable to open output file for writing: {$output_dir}{$file}\n";
-                continue;
-            }
-            echo "  => Processing php file: {$file}\n";
-            $oCodeMunger->resetCounters();
-            $code = $oCodeMunger->finalCleanup($oCodeMunger->flattenFile($input_dir . $file));
-            fwrite($FILE_OUT, $code);
-            fclose($FILE_OUT);
-        break;
-        default:
-            echo "  => {$file} is not a php file, leaving untouched\n";
-            continue;
-        break;
+    if ($ext == '.js') {
+        echo "  => {$file} is a javascript file, leaving untouched\n";
+        @touch($output_dir . $file);
+        continue;
     }
+
+    $destfile = isset($renamed_files[$file]) ? $renamed_files[$file] : $file;
+
+    $FILE_OUT = @fopen($output_dir . $destfile, 'w');
+    if (!is_resource($FILE_OUT)) {
+        echo "  => Unable to open output file for writing: {$output_dir}{$file}\n";
+        continue;
+    }
+
+    $munge = false;
+    if ($ext != '.php') {
+        echo "  => {$file} is not a php file, copying as-is\n";
+    } elseif (in_array($file, $blacklist)) {
+        echo "  => {$file} blacklisted, copying as-is\n";
+    } else {
+        echo "  => Processing php file: {$destfile}\n";
+        $munge = true;
+    }
+
+    if ($munge) {
+        $oCodeMunger->resetCounters();
+        $code = $oCodeMunger->finalCleanup($oCodeMunger->flattenFile($input_dir . $file));
+    } else {
+        $code = file_get_contents($input_dir . $file);
+    }
+    fwrite($FILE_OUT, $code);
+    fclose($FILE_OUT);
 }
 $end_time = get_microtime();
 

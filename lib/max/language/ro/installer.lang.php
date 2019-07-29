@@ -1,15 +1,35 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
+ */
 
-// Note: New translations not found in original lang files but found in CSV
-$GLOBALS['strContinue'] = "Continuă »";
-?>
+/** status messages * */
+
+/** welcome step * */
+
+/** check step * */
+
+
+$GLOBALS['strWarning'] = "Avertisment";
+$GLOBALS['strSyscheckStatus'] = "Stare";
+
+/** admin login step * */
+
+/** database step * */
+
+
+/** config step * */
+
+/** jobs step * */
+
+
+/** finish step * */
+
+

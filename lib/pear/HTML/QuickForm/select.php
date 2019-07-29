@@ -74,9 +74,9 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_select($elementName=null, $elementLabel=null, $options=null, $attributes=null)
+    function __construct($elementName=null, $elementLabel=null, $options=null, $attributes=null)
     {
-        HTML_QuickForm_element::HTML_QuickForm_element($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $elementLabel, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'select';
         if (isset($options)) {
@@ -113,7 +113,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
     function setSelected($values)
     {
         if (is_string($values) && $this->getMultiple()) {
-            $values = split("[ ]?,[ ]?", $values);
+            $values = preg_split("/[ ]?,[ ]?/D", $values);
         }
         if (is_array($values)) {
             $this->_values = array_values($values);
@@ -587,9 +587,9 @@ class HTML_QuickForm_select extends HTML_QuickForm_element {
     // }}}
     // {{{ onQuickFormEvent()
 
-    function onQuickFormEvent($event, $arg, &$caller)
+    function onQuickFormEvent($event, $arg, $caller = null)
     {
-        if ('updateValue' == $event) {
+        if ($caller && 'updateValue' == $event) {
             $value = $this->_findValue($caller->_constantValues);
             if (null === $value) {
                 $value = $this->_findValue($caller->_submitValues);

@@ -3,40 +3,44 @@
 
 <plugin>
     <name>Site</name>
-    <displayName>Site Delivery Limitation Plugin</displayName>
-    <creationDate>2014-12-02</creationDate>
+    <displayName>Site Delivery Rules Plugin</displayName>
+    <creationDate>2016-09-13</creationDate>
     <author>Revive Adserver</author>
     <authorEmail>revive@revive-adserver.com</authorEmail>
     <authorUrl>http://www.revive-adserver.com</authorUrl>
-    <license>GNU Gneral Public License v2</license>
+    <license>LICENSE.txt</license>
     <description>Plugin that provides the ability to target delivery of ads by site.</description>
-    <version>1.3.0</version>
-    <oxversion>2.7.30-beta-rc11</oxversion>
+    <version>2.2.1</version>
+    <oxversion>4.1.0-dev</oxversion>
     <extends>deliveryLimitations</extends>
 
     <install>
         <files>
+            <file path="{ADMINPATH}/js/">updateList.js</file>
+            <file path="{ADMINPATH}/lib/">updateList.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Channel.class.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Channel.delivery.php</file>
+            <file path="{MODULEPATH}deliveryLimitations/Site/">Hostnamelist.class.php</file>
+            <file path="{MODULEPATH}deliveryLimitations/Site/">Hostnamelist.delivery.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Pageurl.class.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Pageurl.delivery.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Referingpage.class.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Referingpage.delivery.php</file>
+            <file path="{MODULEPATH}deliveryLimitations/Site/">Registerabledomainlist.class.php</file>
+            <file path="{MODULEPATH}deliveryLimitations/Site/">Registerabledomainlist.delivery.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Source.class.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Source.delivery.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Variable.class.php</file>
             <file path="{MODULEPATH}deliveryLimitations/Site/">Variable.delivery.php</file>
 
-            <file path="{GROUPPATH}/_lang/">en.mo</file>
-            <file path="{GROUPPATH}/_lang/">zh_CN.mo</file>
-            <file path="{GROUPPATH}/_lang/po/">en.po</file>
-            <file path="{GROUPPATH}/_lang/po/">zh_CN.po</file>
         </files>
 
         <components>
             <component><name>Channel</name></component>
+            <component><name>Hostname</name></component>
             <component><name>Pageurl</name></component>
             <component><name>Referingpage</name></component>
+            <component><name>Registerabledomainlist</name></component>
             <component><name>Source</name></component>
             <component><name>Variable</name></component>
         </components>

@@ -558,10 +558,10 @@ class PEAR_Config extends PEAR
      *
      * @see PEAR_Config::singleton
      */
-    function PEAR_Config($user_file = '', $system_file = '', $ftp_file = false,
+    function __construct($user_file = '', $system_file = '', $ftp_file = false,
                          $strict = true)
     {
-        $this->PEAR();
+        parent::__construct();
         PEAR_Installer_Role::initializeConfig($this);
         $sl = DIRECTORY_SEPARATOR;
         if (empty($user_file)) {
@@ -2092,7 +2092,7 @@ class PEAR_Config extends PEAR
                     continue;
                 }
                 $this->_registry[$layer] =
-                    &new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
+                    new PEAR_Registry($this->get('php_dir', $layer, 'pear.php.net'));
                 $this->_registry[$layer]->setConfig($this);
                 $this->_regInitialized[$layer] = false;
             }

@@ -21,12 +21,12 @@ class DataObjects_Images extends DB_DataObjectCommon
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'images';                          // table name
-    public $filename;                        // VARCHAR(128) => openads_varchar => 130 
-    public $contents;                        // blob() => blob => 194 
-    public $t_stamp;                         // DATETIME() => openads_datetime => 14 
+    public $filename;                        // VARCHAR(128) => openads_varchar => 130
+    public $contents;                        // blob() => blob => 194
+    public $t_stamp;                         // DATETIME() => openads_datetime => 14
 
     /* Static get */
-    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Images',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGetFromClassName('DataObjects_Images',$k,$v); }
 
     var $defaultValues = array(
                 'filename' => '',
@@ -89,10 +89,10 @@ class DataObjects_Images extends DB_DataObjectCommon
     function delete($useWhere = false, $cascadeDelete = true, $parentid = null)
     {
         // Contents cause problems in pgsql when retrieving current values for auditing
-        $this->contents = null; 
+        $this->contents = null;
         parent::delete($useWhere,$cascadeDelete,$parentid);
     }
-    
+
     /**
      * Table has no autoincrement/sequence so we override sequenceKey().
      *
@@ -107,7 +107,7 @@ class DataObjects_Images extends DB_DataObjectCommon
         $extension = substr($this->filename, strrpos($this->filename, ".") + 1);
 	    $base	   = substr($this->filename, 0, strrpos($this->filename, "."));
 
-        if (eregi("^(.*)_([0-9]+)$", $base, $matches)) {
+        if (preg_match("/^(.*)_([0-9]+)$/Di", $base, $matches)) {
 			$base = $matches[1];
 			$i = $matches[2];
         }
@@ -171,7 +171,7 @@ class DataObjects_Images extends DB_DataObjectCommon
      *                      that needs to be able to see the audit trail
      *                      entry, if such an account exists.
      */
-    function getOwningAccountIds()
+    public function getOwningAccountIds($resetCache = false)
     {
         // Find the banner that contains this image, if possible
         $doBanners = OA_Dal::factoryDO('banners');

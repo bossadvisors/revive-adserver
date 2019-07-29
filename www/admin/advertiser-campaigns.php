@@ -26,6 +26,8 @@ require_once MAX_PATH . '/lib/pear/Date.php';
 require_once MAX_PATH . '/lib/max/other/html.php';
 require_once MAX_PATH . '/lib/OX/Admin/UI/ViewHooks.php';
 
+require_once RV_PATH . '/lib/RV/Admin/DateTimeFormat.php';
+
 phpAds_registerGlobalUnslashed('hideinactive', 'listorder', 'orderdirection');
 
 // Security check
@@ -111,33 +113,27 @@ $oTpl = new OA_Admin_Template('campaign-index.html');
 
 // Get clients & campaign and build the tree
 $dalCampaigns = OA_Dal::factoryDAL('campaigns');
-$aCampaigns = $dalCampaigns->getClientCampaigns($clientid, $listorder, $orderdirection, array(DataObjects_Campaigns::CAMPAIGN_TYPE_MARKET_CONTRACT));
+$aCampaigns = $dalCampaigns->getClientCampaigns($clientid, $listorder, $orderdirection);
 foreach ($aCampaigns as $campaignId => $aCampaign) {
     $aCampaign['impressions']  = phpAds_formatNumber($aCampaign['views']);
     $aCampaign['clicks']       = phpAds_formatNumber($aCampaign['clicks']);
     $aCampaign['conversions']  = phpAds_formatNumber($aCampaign['conversions']);
 
     if (!empty($aCampaign['activate_time'])) {
-        $oActivateDate = new Date($aCampaign['activate_time']);
-        $oTz = $oActivateDate->tz;
-        $oActivateDate->setTZbyID('UTC');
-        $oActivateDate->convertTZ($oTz);
-        $aCampaign['activate']  = $oActivateDate->format($date_format);
-    }
-    else {
-        $aCampaign['activate']  = '-';
+        $aCampaign['activate'] = RV_Admin_DateTimeFormat::formatUTCDate($aCampaign['activate_time']);
+    } else {
+        $aCampaign['activate'] = '-';
     }
 
     if (!empty($aCampaign['expire_time'])) {
-        $oExpireDate = new Date($aCampaign['expire_time']);
-        $oTz = $oExpireDate->tz;
-        $oExpireDate->setTZbyID('UTC');
-        $oExpireDate->convertTZ($oTz);
-        $aCampaign['expire']    = $oExpireDate->format($date_format);
+        $aCampaign['expire'] = RV_Admin_DateTimeFormat::formatUTCDate($aCampaign['expire_time']);
+    } else {
+        $aCampaign['expire'] = '-';
     }
-    else {
-        $aCampaign['expire']    = '-';
-    }
+    
+    if (!empty($aCampaign['updated'])) {
+        $aCampaign['updated'] = RV_Admin_DateTimeFormat::formatUTCDateTime($aCampaign['updated']);
+    }    
 
     if ($aCampaign['type'] == DataObjects_Campaigns::CAMPAIGN_TYPE_MARKET_CONTRACT) {
         $aCampaign['system'] = true;
@@ -168,16 +164,45 @@ $aCount = array(
     'campaigns_hidden' => 0,
 );
 
-$campaignshidden = 0;
+$dalBanners = OA_Dal::factoryDAL('banners');
 if (isset($aCampaigns) && is_array($aCampaigns) && count($aCampaigns) > 0) {
 	reset ($aCampaigns);
-	while (list ($key, $campaign) = each ($aCampaigns)) {
+	foreach ($aCampaigns as $campaignId => $campaign) {
 		$aCount['campaigns']++;
-		if ($hideinactive == true && ($campaign['status'] != OA_ENTITY_STATUS_RUNNING || $campaign['status'] == OA_ENTITY_STATUS_RUNNING &&
-			count($campaign['banners']) == 0 && count($campaign['banners']) < $campaign['count'])) {
-			$aCount['campaigns_hidden']++;
-			unset($aCampaigns[$key]);
-		}
+		if ($hideinactive) {
+		    // Inactive Campaigns should be hidden
+            if ($campaign['status'] != OA_ENTITY_STATUS_RUNNING && $campaign['status'] != OA_ENTITY_STATUS_AWAITING) {
+                // The Campaign is not in the Running or Awaiting state - hide it
+                $aCount['campaigns_hidden']++;
+                unset($aCampaigns[$campaignId]);
+            }
+            if (isset($aCampaigns[$campaignId])) {
+                // The Campaign is in the Running or Awaiting state - check if it should be hidden due to banners
+                $aBanners = array();
+                $aBanners = $dalBanners->getAllBannersUnderCampaign($campaignId, $listorder, $orderdirection);
+                if (empty($aBanners)) {
+                    // The Campaign has no banners - hide it
+                    $aCount['campaigns_hidden']++;
+                    unset($aCampaigns[$campaignId]);
+                } else {
+                    // Does the Campaign have any Banners in the Running or Awaiting state?
+                    $activeBanners = false;
+                    foreach ($aBanners as $bannerId => $banner) {
+                        if (OA_ENTITY_STATUS_RUNNING == $banner['status'] || OA_ENTITY_STATUS_AWAITING == $banner['status']) {
+                            // This Banner is in the Running or Awaiting state - don't hide the campaign
+                            $activeBanners = true;
+                            // No need to test any more banners - one Running or Awaiting banner is enough
+                            break;
+                        }
+                    }
+                    if (!$activeBanners) {
+                        // No Banners in the Running or Awaiting state were found - hide the campaign
+                        $aCount['campaigns_hidden']++;
+                        unset($aCampaigns[$campaignId]);
+                    }
+                }
+            }
+        }
 	}
 }
 

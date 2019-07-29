@@ -50,9 +50,9 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressionsLifetime ext
      *
      * @return OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressionsLifetime
      */
-    function OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressionsLifetime()
+    function __construct()
     {
-        parent::OA_Maintenance_Priority_Common_Task_GetRequiredAdImpressions();
+        parent::__construct();
         $this->type = 'campaign lifetime target(s) and end date are set';
     }
 
@@ -76,7 +76,7 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressionsLifetime ext
         $oDate = new Date($this->_getDate());
         $oDate->toUTC();
         $dateYMD = $oDate->getDate(DATE_FORMAT_ISO);
-        $oDbh = OA_DB::singleton();
+        $oDbh = $this->oDal->_getDbConnection();
         $table = $oDbh->quoteIdentifier($conf['table']['prefix'] . $conf['table']['campaigns'],true);
 
         $aWheres = array(
@@ -100,7 +100,7 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressionsLifetime ext
      *
      * @param OX_Maintenance_Priority_Campaign $oCampaign
      */
-    function getCampaignImpressionInventoryRequirement(&$oCampaign)
+    function getCampaignImpressionInventoryRequirement($oCampaign, $type = 'total', $ignorePast = false)
     {
         parent::getCampaignImpressionInventoryRequirement($oCampaign, 'total');
     }

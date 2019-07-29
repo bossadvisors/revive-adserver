@@ -168,9 +168,9 @@ class DB_ifx extends DB_common
      *
      * @return void
      */
-    function DB_ifx()
+    function __construct()
     {
-        $this->DB_common();
+        parent::__construct();
     }
 
     // }}}
@@ -191,7 +191,7 @@ class DB_ifx extends DB_common
         if (!PEAR::loadExtension('informix') &&
             !PEAR::loadExtension('Informix'))
         {
-            return $this->raiseError(DB_ERROR_EXTENSION_NOT_FOUND);
+            return $this->customRaiseError(DB_ERROR_EXTENSION_NOT_FOUND);
         }
 
         $this->dsn = $dsn;
@@ -501,7 +501,7 @@ class DB_ifx extends DB_common
         if ($errno === null) {
             $errno = $this->errorCode(ifx_error());
         }
-        return $this->raiseError($errno, null, null, null,
+        return $this->customRaiseError($errno, null, null, null,
                                  $this->errorNative());
     }
 
@@ -533,7 +533,7 @@ class DB_ifx extends DB_common
      */
     function errorCode($nativecode)
     {
-        if (ereg('SQLCODE=(.*)]', $nativecode, $match)) {
+        if (preg_match('/SQLCODE=(.*)]/D', $nativecode, $match)) {
             $code = $match[1];
             if (isset($this->errorcode_map[$code])) {
                 return $this->errorcode_map[$code];
@@ -601,7 +601,7 @@ class DB_ifx extends DB_common
         $count = @ifx_num_fields($id);
 
         if (count($flds) != $count) {
-            return $this->raiseError("can't distinguish duplicate field names");
+            return $this->customRaiseError("can't distinguish duplicate field names");
         }
 
         if ($this->options['portability'] & DB_PORTABILITY_LOWERCASE) {

@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/Max.php';
 
 require_once LIB_PATH . '/Maintenance/Statistics/Task.php';
@@ -32,9 +34,9 @@ class OX_Maintenance_Statistics_Task_DeDuplicateConversions extends OX_Maintenan
      *
      * @return OX_Maintenance_Statistics_Task_DeDuplicateConversions
      */
-    function OX_Maintenance_Statistics_Task_DeDuplicateConversions()
+    function __construct()
     {
-        parent::OX_Maintenance_Statistics_Task();
+        parent::__construct();
     }
 
     /**

@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once LIB_PATH . '/Extension/bannerTypeHtml/bannerTypeHtml.php';
 require_once MAX_PATH . '/lib/max/Plugin/Common.php';
@@ -33,7 +35,7 @@ class Plugins_BannerTypeHTML_oxHtml_genericHtml extends Plugins_BannerTypeHTML
         return $this->translate("Generic HTML Banner");
     }
 
-    function buildForm(&$form, $row)
+    function buildForm(&$form, &$row)
     {
         parent::buildForm($form, $row);
     }

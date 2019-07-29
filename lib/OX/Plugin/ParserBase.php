@@ -45,12 +45,7 @@ class OX_ParserBase extends XML_Parser
     {
         // force ISO-8859-1 due to different defaults for PHP4 and PHP5
         // todo: this probably needs to be investigated some more andcleaned up
-        parent::XML_Parser('ISO-8859-1');
-    }
-
-    function OX_ParserBase()
-    {
-        $this->__construct();
+        parent::__construct('ISO-8859-1');
     }
 
     private function _initArray()
@@ -254,7 +249,7 @@ class OX_ParserBase extends XML_Parser
         }
     }
 
-    function raiseError($msg = null, $xmlecode = 0, $xp = null, $ecode = OX_PLUGIN_ERROR_PARSE)
+    function customRaiseError($msg = null, $xmlecode = 0, $xp = null, $ecode = OX_PLUGIN_ERROR_PARSE)
     {
 		if (is_null($this->error))
         {

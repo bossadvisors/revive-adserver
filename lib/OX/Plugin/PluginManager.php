@@ -235,11 +235,6 @@ class OX_PluginManager extends OX_Plugin_ComponentGroupManager
         //OA::logMem('enter unpackPlugin');
         $this->_switchToPluginLog();
         try {
-            phpAds_registerGlobalUnslashed('token');
-            if ((OA_INSTALLATION_STATUS == OA_INSTALLATION_STATUS_INSTALLED) && !phpAds_SessionValidateToken($GLOBALS['token']))
-            {
-                throw new Exception('Invalid request token');
-            }
             if ($this->configLocked) {
                 throw new Exception('Configuration file is locked unable to unpack'.$aFile['name']);
             }
@@ -611,7 +606,7 @@ class OX_PluginManager extends OX_Plugin_ComponentGroupManager
     {
         if (substr($file,0,strlen($name))!=$name)
         {
-            $this->_logError('Filename mismatch: name/file'. $name.' / '.$file);
+            $this->_logError('Filename mismatch: name / file '. $name.' / '.$file);
             return false;
         }
         return $this->_parsePackageFilename($file);
@@ -766,7 +761,7 @@ class OX_PluginManager extends OX_Plugin_ComponentGroupManager
             }
 
         }
-        if (count($aGroupsOld))
+        if (!empty($aGroupsOld))
         {
             return $this->_uninstallComponentGroups($aGroupsOld);
         }
@@ -1393,7 +1388,14 @@ class OX_PluginManager extends OX_Plugin_ComponentGroupManager
             return false;
         }
         // are there any files in the zip that are not declared in the definitions?
-        $aDiffStored = array_diff($aFilesStored, $aFilesExpected);
+        // but please ignore lang files
+        $aDiffStored = array_filter(array_diff($aFilesStored, $aFilesExpected), function ($file) {
+            if (preg_match('#^/plugins/etc/[^/]+/_lang/(?:po/)?[a-z][a-z](?:_[A-Z][A-Z])?\.(?:mo|pot?)$#D', $file)) {
+                return false;
+            }
+
+            return true;
+        });
         if (count($aDiffStored) > 0)
         {
             $this->_logError(count($aDiffStored).' unexpected files found');

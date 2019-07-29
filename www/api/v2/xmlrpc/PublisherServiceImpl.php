@@ -37,9 +37,9 @@ class PublisherServiceImpl extends BaseServiceImpl
      *
      * The PublisherServiceImpl method is the constructor for the PublisherServiceImpl class.
      */
-    function PublisherServiceImpl()
+    function __construct()
     {
-        $this->BaseServiceImpl();
+        parent::__construct();
         $this->_dllPublisher = new OA_Dll_Publisher();
     }
 
@@ -166,6 +166,34 @@ class PublisherServiceImpl extends BaseServiceImpl
 
             return $this->_validateResult(
                 $this->_dllPublisher->getPublisherDailyStatistics(
+                    $publisherId, $oStartDate, $oEndDate, $localTZ, $aData));
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * The getPublisherHourlyStatistics method returns hourly statistics for a
+     * publisher for a specified period.
+     *
+     * @access public
+     *
+     * @param string $sessionId
+     * @param integer $publisherId
+     * @param date $oStartDate
+     * @param date $oEndDate
+     * @param bool $localTZ
+     * @param array &$aData  return data
+     *
+     * @return boolean
+     */
+    function getPublisherHourlyStatistics($sessionId, $publisherId, $oStartDate, $oEndDate, $localTZ, &$aData)
+    {
+        if ($this->verifySession($sessionId)) {
+
+            return $this->_validateResult(
+                $this->_dllPublisher->getPublisherHourlyStatistics(
                     $publisherId, $oStartDate, $oEndDate, $localTZ, $aData));
         } else {
 

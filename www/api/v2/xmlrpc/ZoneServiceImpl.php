@@ -37,9 +37,9 @@ class ZoneServiceImpl extends BaseServiceImpl
      *
      * The ZoneServiceImpl method is the constructor for the ZoneServiceImpl class.
      */
-    function ZoneServiceImpl()
+    function __construct()
     {
-        $this->BaseServiceImpl();
+        parent::__construct();
         $this->_dllZone = new OA_Dll_Zone();
     }
 
@@ -168,6 +168,34 @@ class ZoneServiceImpl extends BaseServiceImpl
 
             return $this->_validateResult(
                 $this->_dllZone->getZoneDailyStatistics(
+                    $zoneId, $oStartDate, $oEndDate, $localTZ, $aData));
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * The getZoneHourlyStatistics method returns hourly statistics for a zone
+     * for a specified period.
+     *
+     * @access public
+     *
+     * @param string $sessionId
+     * @param integer $zoneId
+     * @param date $oStartDate
+     * @param date $oEndDate
+     * @param bool $localTZ
+     * @param array &$aData  return data
+     *
+     * @return boolean
+     */
+    function getZoneHourlyStatistics($sessionId, $zoneId, $oStartDate, $oEndDate, $localTZ, &$aData)
+    {
+        if ($this->verifySession($sessionId)) {
+
+            return $this->_validateResult(
+                $this->_dllZone->getZoneHourlyStatistics(
                     $zoneId, $oStartDate, $oEndDate, $localTZ, $aData));
         } else {
 

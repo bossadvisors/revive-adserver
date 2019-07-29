@@ -1,212 +1,328 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
-
-/**
- * A file for holding the "settings help" English translation information.
- *
- * @package    MaxUI
- * @subpackage Languages
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
  */
 
 // Settings help translation strings
-$GLOBALS['phpAds_hlp_dbhost'] = "\n            نام هاست پایگاه داده".$phpAds_dbmsname."  را که می خواهید به آن متصل شوید را مشخص نمایید.\n		";
+$GLOBALS['phpAds_hlp_dbhost'] = "نام میزبانی که {$phpAds_dbmsname} پایگاه داده که می خواهید به آن وارد شوید را وارد کنید .";
 
-$GLOBALS['phpAds_hlp_dbport'] = "\n        Specify the number of the port of the ".$phpAds_dbmsname." database server to which you are trying to\n		connect. The default port number for a ".$phpAds_dbmsname." database is <i>" . ($phpAds_dbmsname == 'MySQL' ? '3306' : '5432')."</i>.\n		";
+$GLOBALS['phpAds_hlp_dbport'] = "تعیین تعداد پورت از {$phpAds_dbmsname} سرور پایگاه داده که شما در حال تلاش برای اتصال هستید. ";
 
-$GLOBALS['phpAds_hlp_dbuser'] = "\n        Specify the username which ".MAX_PRODUCT_NAME." must use to gain access to the ".phpAds_dbmsname." database server.\n		";
+$GLOBALS['phpAds_hlp_dbuser'] = "نام کاربری که {$PRODUCT_NAME} باید برای به دست آوردن دسترسی به {$phpAds_dbmsname} سرور پایگاه داده استفاده کنید را مشخص کنید.";
 
-$GLOBALS['phpAds_hlp_dbpassword'] = "\n        Specify the password which ".MAX_PRODUCT_NAME." must use to gain access to the ".phpAds_dbmsname." database server.\n		";
+$GLOBALS['phpAds_hlp_dbpassword'] = "مشخص کنید رمز عبوری را که {$PRODUCT_NAME} باید برای به دست آوردن دسترسی به {$phpAds_dbmsname} سرور پایگاه داده استفاده کنید.";
 
-$GLOBALS['phpAds_hlp_dbname'] = "\n        Specify the name of the database on the database server where ".MAX_PRODUCT_NAME." must store its data.\n		Important the database must already be created on the database server. ".MAX_PRODUCT_NAME." will <b>not</b> create\n		this database if it does not exist yet.\n		";
+$GLOBALS['phpAds_hlp_dbname'] = "مشخص کردن نام پایگاه داده در سرور پایگاه داده که در آن {$PRODUCT_NAME} باید اطلاعات خود را ذخیره کنید.
+مهم است که پایگاه داده در حال حاضر باید بر روی سرور پایگاه داده ایجاد شود. {$PRODUCT_NAME} ایجاد نخواهد شد
+این پایگاه داده اگر هنوز وجود ندارد.";
 
-$GLOBALS['phpAds_hlp_persistent_connections'] = "\n        The use of persistent connection can speed up ".MAX_PRODUCT_NAME." considerably\n		and may even decrease the load on the server. There is a drawback however, on sites with\n		a lot of visitors the load on the server can increase and become larger then when using normal\n		connections. Whether you should use regular connections or persistant connections depends on the\n		number of visitors and the hardware your are using. If ".MAX_PRODUCT_NAME." is using too many resources,\n		you should take a look at this setting first.\n		";
+$GLOBALS['phpAds_hlp_persistent_connections'] = "استفاده از اتصال مداوم می تواند سرعت {$PRODUCT_NAME}، بطور قابل توجهی
+و حتی ممکن است باعث کاهش بار بر روی سرور شود. 
+یکی از مشکلات این حالت ، در سایت های با بازدید کننده زیاد ،بار گذاری بر روی سرور ممکن است افزایش یابد و بزرگتر شود در حالی که از اتصال معمولی استفاده می کنید .این که آیا شما باید اتصالات به طور منظم و یا اتصالات مداوم استفاده کنید بستگی به
+تعداد بازدید کنندگان و سخت افزاری است که شما استفاده می کنید . اگر {$PRODUCT_NAME} از منابع بسیار زیادی استفاده می کند،
+شما باید نگاهی به این تنظیمات بیندازید";
 
-$GLOBALS['phpAds_hlp_compatibility_mode'] = "\n        If you are having problem integrating ".MAX_PRODUCT_NAME." with another thirth-party product it\n		might help to turn on the database compatibility mode. If you are using local mode\n		invocation and the database compatibility is turned on ".MAX_PRODUCT_NAME." should leave\n		the state of the database connection exectly the same as it was before ".MAX_PRODUCT_NAME." ran.\n		This option is a bit slower (only slightly) and therefore turned off by default.\n		";
+$GLOBALS['phpAds_hlp_compatibility_mode'] = "اگر شما با داشتن مشکل یکپارچه سازی {$PRODUCT_NAME} با یک محصول 3rd party 
+دارید
+این ممکن است به نوبه خود کمکی در حالت سازگاری پایگاه داده باشد. اگر شما از از حالت محلی{$PRODUCT_NAME}
+نیایش استفاده می کنید و سازگاری پایگاه
+{$PRODUCT_NAME} روشن باشد باید حالت اتصال پایگاه داده بید دقیقا همان قبلی باشد که {$PRODUCT_NAME} اجرا می شد . 
+این گزینه مقداری کندتر ،فقط کمی کندتر ،
+.و در نتیجه در پیش فرض خاموش است
+";
 
-$GLOBALS['phpAds_hlp_table_prefix'] = "\n        If the database ".MAX_PRODUCT_NAME." is using is shared by multiple software products, it is wise\n		to add a prefix to names of the tables. If you are using multiple installations of ".MAX_PRODUCT_NAME."\n		in the same database, you need to make sure this prefix is unique for all installations.\n		";
+$GLOBALS['phpAds_hlp_table_prefix'] = "اگر پایگاه داده {$PRODUCT_NAME} در حال استفاده توسط محصولات نرم افزاری مختلف به اشتراک گذاشته است، عاقلانه است که
+اضافه کردن یک پیشوند به نام جدول. اگر شما با استفاده از تاسیسات متعدد {$PRODUCT_NAME}
+در همان پایگاه داده، باید مطمئن شوید که این پیشوند منحصر به فرد برای تمام نصب است.";
 
-$GLOBALS['phpAds_hlp_table_type'] = "\n        ".phpAds_dbmsname." supports multiple table types. Each type of table has unique properties and some\n		can speed up ".MAX_PRODUCT_NAME." considerable. MyISAM is the default table type and is available\n		in all installations of ".phpAds_dbmsname.". Other table types may not be available on your server.\n		";
+$GLOBALS['phpAds_hlp_table_type'] = "mySQL از انواع جدول متعددی پشتیبانی می کند .هر نوع از جدول ویزگی های منحصربهفرد دارد ومی تواند سرعت {$PRODUCT_NAME}  را به طور قابل توجهی زیاد کند .MyISAM جدول پیش فرض است و در دسترس است.
+در تمام نسخه های MySQL است. جدول های دیگر ممکن است در دسترس نباشد";
 
-$GLOBALS['phpAds_hlp_url_prefix'] = "\n        ".MAX_PRODUCT_NAME." needs to know where it is located on the web server in order\n        to work correctly. You must specify the URL to the directory where ".MAX_PRODUCT_NAME."\n        is installed, for example: <i>http://www.your-url.com/".MAX_PRODUCT_NAME."</i>.\n		";
+$GLOBALS['phpAds_hlp_url_prefix'] = "{$PRODUCT_NAME} نیاز به دانستن محل نصب بر روی وب سرور است تا به درستی کار کند . شما دایرکتوری URL مشخصی را در محل نصب {$PRODUCT_NAME} تعریف کنید ، به عنوان مثال  <i>http://www.your-url.com/ads</i>.";
 
-$GLOBALS['phpAds_hlp_ssl_url_prefix'] = "\n        ".MAX_PRODUCT_NAME." needs to know where it is located on the web server in order\n        to work correctly. Sometimes the SSL prefix is different than the regular URL prefix.\n		You must specify the URL to the directory where ".MAX_PRODUCT_NAME."\n        is installed, for example: <i>https://www.your-url.com/".MAX_PRODUCT_NAME."</i>.\n		";
+$GLOBALS['phpAds_hlp_ssl_url_prefix'] = "{$PRODUCT_NAME} نیاز به دانستن این است که کجا ذخیره شده است تا به درستی کار کند . گاهی اوقات پیشوند SSL با استفاده از پیشوند URL منطم متفاوت است . شما باید URL ای را به دایرکتوری جایی که needs to know where it is located on the web server in order
+to work correctly. Sometimes the SSL prefix is different than the regular URL prefix.
+You must specify the URL to the directory where {$PRODUCT_NAME}
+is installed, for example: نصب شده است مشخص کنید، به عنوان مثال :  <i>https://www.your-url.com/ads</i>.";
 
-$GLOBALS['phpAds_hlp_my_header'] =
-$GLOBALS['phpAds_hlp_my_footer'] = "\n        You should put here the path to the header files (e.g.: /home/login/www/header.htm)\n        to have a header and/or footer on each page in the admin interface. You\n        can put either text or html in these files (if you want to use html in\n        one or both of these files do not use tags like &lt;body> or &lt;html>).\n		";
+$GLOBALS['phpAds_hlp_my_header'] = $GLOBALS['phpAds_hlp_my_footer'] = "شما باید آدرس فایل سر در را اینجا وارد کنید(به عنوان مثال: /home/login/www/header.htm)
+برای داشتن هدر و/یا فوتر در هر صفحه در رابط مدیریتی شما ، می توانید هر متن و یا html  را در این فایل ها قرار دهید(اگر می خواهید html  در یک یا هر دو از این فایل ها استفاده کنید از برچسب های مانند <html> یا <body> استفاده کنید).";
 
-$GLOBALS['phpAds_hlp_my_logo'] = "\n        You should put here the name of the custom logo file that you wish to display instead\n        of the default logo.  The logo must be placed in the admin/images directory before\n        setting the file name here.\n               ";
+$GLOBALS['phpAds_hlp_my_logo'] = "در این قسمت باید نام فایل لوگویی کع می خواهید تا به جای لوگو پیش فرض نشان داده شود وارد کنید . لوگو باید در دایرکتوری مدیریت / تصاویر ، قبل تعیین اسم فایل جاگذاری شود . ";
 
-$GLOBALS['phpAds_hlp_gui_header_foreground_color'] = "\n        You should put here a custom color which will be used for tabs, the search bar, and\n        some bold text.\n               ";
+$GLOBALS['phpAds_hlp_gui_header_foreground_color'] = "در اینجا باید یک رنگ سفارشی که در زبانه ها ، نوار جستجو و بعضی از متون پر رنگ شده قرار دهید ";
 
-$GLOBALS['phpAds_hlp_gui_header_background_color'] = "\n        You should put here a custom color which will be used for the header background.\n               ";
+$GLOBALS['phpAds_hlp_gui_header_background_color'] = "شما باید در اینجا یک رنگ سفارشی برای هدر پس زمینه خواهد شد قرار دهید";
 
-$GLOBALS['phpAds_hlp_gui_header_active_tab_color'] = "\n        You should put here a custom color which will be used for the currently selected main tab.\n               ";
+$GLOBALS['phpAds_hlp_gui_header_active_tab_color'] = "شما باید در اینجا یک رنگ سفارشی که برای برگه اصلی در حال حاضر انتخاب شده استفاده می شود قرار دهید";
 
-$GLOBALS['phpAds_hlp_gui_header_text_color'] = "\n        You should put here a custom color which will be used for the text in the header.\n               ";
+$GLOBALS['phpAds_hlp_gui_header_text_color'] = "شما باید در اینجا یک رنگ سفارشی که برای متن در هدر قرار دهید";
 
-$GLOBALS['phpAds_hlp_content_gzip_compression'] = "\n		By enabling GZIP content compression you will get a big decrease of the data which\n		is sent to the browser each time a page of the administrator interface is opened.\n		To enable this feature you need to have at least PHP 4.0.5 with the GZIP extention installed.\n		";
+$GLOBALS['phpAds_hlp_content_gzip_compression'] = "با فعال کردن فشرده سازی محتوای GZIP شما یک کاهش بزرگ از داده ها که
+به مرورگر هر بار یک صفحه از رابط مدیر باز است ارسال می شود.
+برای فعال کردن این ویژگی شما نیاز به وسعت GZIP نصب شده است.";
 
-$GLOBALS['phpAds_hlp_language'] = "\n        Specify the default language ".MAX_PRODUCT_NAME." should use. This language will\n        be used as a default for the admin and advertiser interface. Please note:\n        you can set a different language for each advertiser from the admin interface\n        and allow advertisers to change their language themselves.\n		";
+$GLOBALS['phpAds_hlp_language'] = "مشخص کنید زبان پیش فرض {$PRODUCT_NAME} باید استفاده کنید. این زبان
+به عنوان یک پیش فرض برای مدیریت و تبلیغ رابط استفاده می شود. توجه کنید که:
+شما می توانید زبان های مختلف تنظیم برای هر تبلیغ از رابط مدیریت
+و اجازه به تبلیغ برای تغییر دادن زبان خود داده می شود.";
 
-$GLOBALS['phpAds_hlp_name'] = "\n        Specify the name you want to use for this application. This string will\n        be displayed on all pages in the admin and advertiser interface. If you leave\n        this setting empty (default) a logo of ".MAX_PRODUCT_NAME." will be displayed instead.\n		";
+$GLOBALS['phpAds_hlp_name'] = "اسمی را که مخواهید برای این نرم افزار استفاده کنید مشخص کنید .این رشته بر روی هر صفحه در رابط مدیریتی و تبلیغاتی نمایش داده می شود . اگر این تنظیمات را خالی قرار دهید (پیشفرض)
+لوگویی از {$PRODUCT_NAME} نمایش داده می شود .";
 
-$GLOBALS['phpAds_hlp_company_name'] = "\n        This name is used in the e-mail sent by ".MAX_PRODUCT_NAME.".\n		";
+$GLOBALS['phpAds_hlp_company_name'] = "این نام در ایمیل فرستاده شده توسط {$PRODUCT_NAME} استفاده شده است ";
 
-$GLOBALS['phpAds_hlp_override_gd_imageformat'] = "\n        ".MAX_PRODUCT_NAME." usually detects if the GD library is installed and which image\n        format is supported by the installed version of GD. However it is possible\n        the detection is not accurate or false, some versions of PHP do not allow\n        the detection of the supported image formats. If ".MAX_PRODUCT_NAME." fails to auto-detect\n        the right image format you can specify the right image format. Possible\n        values are: none, png, jpeg, gif.\n		";
+$GLOBALS['phpAds_hlp_override_gd_imageformat'] = "{$PRODUCT_NAME} معمولا تشخیص اگر کتابخانه GD نصب شده است و تصویر
+فرمت توسط نسخه نصب شده از GD پشتیبانی می شود. با این حال ممکن است
+تشخیص دقیق و یا نادرست نیست، برخی از نسخه های پی اچ پی اجازه نمی دهد
+تشخیص از فرمت های تصویری پشتیبانی می کند. اگر {$PRODUCT_NAME} نتواند به شناسایی خودکار
+فرمت تصویر سمت راست شما می توانید فرمت تصویر سمت راست را مشخص کنید. ممکن
+ارزش ها: هیچ کدام، PNG، JPEG، GIF.";
 
-$GLOBALS['phpAds_hlp_p3p_policies'] = "\n        If you want to enable ".MAX_PRODUCT_NAME."' P3P Privacy Policies you must turn this\n        option on.\n		";
+$GLOBALS['phpAds_hlp_p3p_policies'] = "اگر مخواهید سیاسیت حفظ تحریم شخصی p3p {$PRODUCT_NAME} باید این گزینه را فعال کنید";
 
-$GLOBALS['phpAds_hlp_p3p_compact_policy'] = "\n        The compact policy which is sent together with cookies. The default setting\n        is: 'CUR ADM OUR NOR STA NID', which will allow Internet Explorer 6 to\n        accept the cookies used by ".MAX_PRODUCT_NAME.". If you want you can alter these\n        settings to match your own privacy statement.\n		";
+$GLOBALS['phpAds_hlp_p3p_compact_policy'] = "سیاست جمع و جور است که همراه با کوکی ها ارسال می شود. تنظیم پیش فرض
+است: «CUR ADM OUR , NOR STA NID، که اجازه می دهد اینترنت اکسپلورر 6 به
+کوکی ها استفاده شده توسط {$PRODUCT_NAME} را بپذیرید. اگر می خواهید شما می توانید این
+تنظیمات برای مطابقت با بیانیه حفظ حریم خصوصی خود را تغییر دهید. ";
 
-$GLOBALS['phpAds_hlp_p3p_policy_location'] = "\n        If you want to use a full privacy policy, you can specify the location\n        of the policy.\n		";
+$GLOBALS['phpAds_hlp_p3p_policy_location'] = "اگر شما می خواهید به استفاده از یک سیاست حفظ حریم خصوصی کامل، شما می توانید محل
+از سیاست را مشخص کنید.";
 
-$GLOBALS['phpAds_hlp_compact_stats'] = "\n        Traditionally ".MAX_PRODUCT_NAME." used rather extensive logging, which was very\n        detailed but was also very demanding on the database server. This could\n        be a big problem on sites with a lot of visitors. To overcome this problem\n		".MAX_PRODUCT_NAME." also supports a new kind of statistics, the compact statistics,\n		which is less demanding on the database server, but also less detailed.\n		The compact statistics collects AdViews, AdClicks, and AdConversions for each hour, if you need\n		more detail you can turn the compact statistics off.\n		";
+$GLOBALS['phpAds_hlp_compact_stats'] = "به طور سنتی  {$PRODUCT_NAME} از سیستم ورود نسبتا گسترده ، که بسیار دقیق بود ولی به سرور پایگاه داده وابسته بود استفاده می کند . این ممکن مشکل بزرگی در سایت هایی با بازدید کننده بسیار زیاد باشد . تا بر این مشکل غلبه کنیم  {$PRODUCT_NAME} از یک نوع پشتیبانی جدید ،آمار جمع و جور ، که کمتر به سرور پایگاه داده وابسته است ولی جزییات کمتری دارد .آمار جمع وجور تبلیغات کلیکی و مشاهداتی و تبدیل برای هر  ساعتی جمع آوری می کند . اگر جزییات بیشتری می خواهید ، می توانید آمار جمع و جور را خاموش کنید ";
 
-$GLOBALS['phpAds_hlp_log_adviews'] = "\n        Normally all AdViews are logged, if you don't want to gather statistics\n        about AdViews you can turn this off.\n		";
+$GLOBALS['phpAds_hlp_log_adviews'] = "به طور معمول تمام Adviews، اگر شما نمی خواهید به جمع آوری آمار
+در مورد AdViews شما می توانید این را خاموش کنید.";
 
-$GLOBALS['phpAds_hlp_block_adviews'] = "\n		If a visitor reloads a page an AdView will be logged by ".MAX_PRODUCT_NAME." every time.\n		This feature is used to make sure that only one AdView is logged for each unique\n		banner for the number of seconds you specify. For example: if you set this value\n		to 300 seconds, ".MAX_PRODUCT_NAME." will only log AdViews if the same banner isn�t already\n		shown to the same visitor in the last 5 minutes. This feature only works the browser accepts cookies.\n		";
+$GLOBALS['phpAds_hlp_block_adviews'] = "اگر بازدید کننده صفحه مجدد AdView خواهد شد {$PRODUCT_NAME} هر بار وارد سایت شوید.
+این ویژگی استفاده می کنید تا مطمئن شوید که تنها یک AdView برای هر منحصر به فرد وارد
+بنر برای تعدادی از ثانیه شما را مشخص کنید. به عنوان مثال: اگر شما از این ارزش
+به 300 ثانیه، {$PRODUCT_NAME} تنها AdViews ورود اگر نیازی بنر یکسان
+در 5 دقیقه گذشته به بازدید کننده نشان داده شده است همان. این ویژگی فقط با مرورگر کوکی کار می کند.";
 
-$GLOBALS['phpAds_hlp_log_adclicks'] = "\n        Normally all AdClicks are logged, if you don't want to gather statistics\n        about AdClicks you can turn this off.\n		";
+$GLOBALS['phpAds_hlp_log_adclicks'] = "به طور معمول تمام آگهی کلیک به سیستم وارد شده است، اگر شما نمی خواهید به جمع آوری آمار
+در مورد آگهی کلیک شما می توانید خاموشش کنید";
 
-$GLOBALS['phpAds_hlp_block_adclicks'] = "\n		If a visitor clicks multiple times on a banner an AdClick will be logged by ".MAX_PRODUCT_NAME."\n		every time. This feature is used to make sure that only one AdClick is logged for each\n		unique banner for the number of seconds you specify. For example: if you set this value\n		to 300 seconds, ".MAX_PRODUCT_NAME." will only log AdClicks if the visitor didn�t click on the same\n		banner in the last 5 minutes. This feature only works when the browser accepts cookies.\n		";
+$GLOBALS['phpAds_hlp_block_adclicks'] = "اگر یک بازدید کننده کلیک چند بار در یک بنر AdClick خواهد شد وارد {$PRODUCT_NAME}
+هر زمان. این ویژگی استفاده می کنید تا مطمئن شوید که تنها یک AdClick برای هر سیستم وارد
+بنر منحصر به فرد برای تعدادی از ثانیه شما را مشخص کنید. به عنوان مثال: اگر شما از این ارزش
+به 300 ثانیه، {$PRODUCT_NAME} تنها AdClicks ورود اگر بازدید کننده کی با کلیک بر روی همان
+بنر در 5 دقیقه گذشته. این قابلیت تنها در زمانی که مرورگر کوکی را قبول کند.";
 
-$GLOBALS['phpAds_hlp_log_adconversions'] = "\n        Normally all AdConversions are logged, if you don't want to gather statistics\n        about AdConversions you can turn this off.\n		";
+$GLOBALS['phpAds_hlp_log_adconversions'] = "به طور معمول همه تبلیغات تبدیل به سیستم وارد شده است، اگر شما نمی خواهید به جمع آوری آمار
+در مورد تبدیل شما می توانید این را خاموش کنید.";
 
-$GLOBALS['phpAds_hlp_block_adconversions'] = "\n		If a visitor reloads a page with an AdConversion beacon, ".MAX_PRODUCT_NAME." will log the AdConversion\n		every time. This feature is used to make sure that only one AdConversion is logged for each\n		unique conversion for the number of seconds you specify. For example: if you set this value\n		to 300 seconds, ".MAX_PRODUCT_NAME." will only log AdConversions if the visitor didn�t load the same\n		page with the AdConversion beacon in the last 5 minutes. This feature only works when the browser accepts cookies.\n		";
+$GLOBALS['phpAds_hlp_block_adconversions'] = "اگر بازدید کننده یک صفحه با یک فانوس دریایی تبدیل آگهی مجدد، {$PRODUCT_NAME} خواهد تبدیل آگهی وارد شوید
+هر زمان. این ویژگی استفاده می کنید تا مطمئن شوید که تنها یک تبدیل آگهی برای هر سیستم وارد
+تبدیل منحصر به فرد برای تعدادی از ثانیه شما را مشخص کنید. به عنوان مثال: اگر شما از این ارزش
+به 300 ثانیه، {$PRODUCT_NAME} تنها ورود آگهی تبدیل اگر بازدید کننده نمی همان بار
+صفحه با چراغ AdConversion در 5 دقیقه گذشته. این قابلیت تنها در زمانی که مرورگر کوکی را قبول کند.";
+
+$GLOBALS['phpAds_hlp_geotracking_stats'] = "اگر شما با استفاده از یک جغرافیایی هدف قرار دادن پایگاه داده شما همچنین می توانید اطلاعات جغرافیایی ذخیره
+در پایگاه داده. اگر این گزینه را فعال کرده اند شما قادر به دیدن آمار در مورد خواهد بود
+محل بازدید کنندگان خود را و چگونه هر یک بنر در کشورهای مختلف انجام شده است.
+این گزینه فقط در دسترس شما اگر شما با استفاده از آمار دراز باشد.";
 
-$GLOBALS['phpAds_hlp_geotracking_stats'] = "\n		If you are using a geotargeting database you can also store the geographical information\n		in the database. If you have enabled this option you will be able to see statistics about the\n		location of your visitors and how each banner is performing in the different countries.\n		This option will only be available to you if you are using verbose statistics.\n		";
 
-$GLOBALS['phpAds_hlp_reverse_lookup'] = "\n		The hostname is usually determined by the web server, but in some cases this might be\n		turned off. If you want to use the visitors hostname inside delivery limitations and/or\n		keep statistics about this and the server doesn't provide this information you will need to\n		turn this option on. Determining the hostname of the visitor does take some time; it will\n		slow the delivery of banners down.\n		";
+$GLOBALS['phpAds_hlp_proxy_lookup'] = "برخی از بازدید کنندگان با استفاده از یک پروکسی سرور برای دسترسی به اینترنت. در این صورت {$PRODUCT_NAME} خواهد شد
+ورود به سیستم آدرس IP یا نام میزبان سرور پروکسی را به جای کاربر. اگر شما را قادر می سازد
+این ویژگی {$PRODUCT_NAME} سعی خواهد کرد برای پیدا کردن آدرس IP یا نام میزبان از کامپیوتر بازدید کننده
+پشت پروکسی سرور. اگر ممکن است برای پیدا کردن آدرس دقیق از بازدید کننده
+آن را به آدرس سرور پروکسی را استفاده کنید. این گزینه به طور پیش فرض فعال نیست،
+به دلیل آن را تحویل آگهی ها بطور قابل توجهی پایین است.";
 
-$GLOBALS['phpAds_hlp_proxy_lookup'] = "\n		Some visitors are using a proxy server to access the internet. In that case ".MAX_PRODUCT_NAME." will\n		log the IP address or the hostname of the proxy server instead of the user. If you enable\n		this feature ".MAX_PRODUCT_NAME." will try to find the IP address or hostname of the visitor's computer\n		behind the proxy server. If it is not possible to find the exact address of the visitor\n		it will use the address of the proxy server instead. This option is not enabled by default,\n		because it will slow the delivery of banners down considerably.\n		";
+$GLOBALS['phpAds_hlp_obfuscate'] = "هیچی اینجا نیست ...";
 
-$GLOBALS['phpAds_hlp_obfuscate'] = "Nothing here....";
+$GLOBALS['phpAds_hlp_auto_clean_tables'] = $GLOBALS['phpAds_hlp_auto_clean_tables_interval'] = "اگر شما این ویژگی را فعال، آمار جمع آوری خواهد شد به طور خودکار پس از حذف
+دوره شما در زیر این چک باکس مشخص منتقل می شود. برای مثال، اگر شما این مجموعه تا 5 هفته،
+آمار قدیمی تر از 5 هفته به طور خودکار حذف خواهد شد.";
 
-$GLOBALS['phpAds_hlp_auto_clean_tables'] =
-$GLOBALS['phpAds_hlp_auto_clean_tables_interval'] = "\n		If you enable this feature, the gathered statistics will be automatically deleted after the\n		period you specify below this checkbox is passed. For example, if you set this to 5 weeks,\n		statistics older than 5 weeks will be automatically deleted.\n		";
+$GLOBALS['phpAds_hlp_auto_clean_userlog'] = $GLOBALS['phpAds_hlp_auto_clean_userlog_interval'] = "این ویژگی به طور خودکار ورودی های کاربر را که قدیمی تر از تعداد هفته هایی که این زیر در چک باکس تعیین شده است را پاک می کند";
 
-$GLOBALS['phpAds_hlp_auto_clean_userlog'] =
-$GLOBALS['phpAds_hlp_auto_clean_userlog_interval'] = "\n		This feature will automatically delete entries from the userlog which are older than the\n		number of weeks specified below this checkbox.\n		";
 
-$GLOBALS['phpAds_hlp_geotracking_type'] = "\n		Geotargeting allows ".MAX_PRODUCT_NAME." to convert the IP address of the visitor to geographical\n		information. Based on this information you can set delivery limitations or you could store\n		this information to see which country is generation the most impressions or click-thrus.\n		If you want to enable geotargeting you need to choose which type of database you have.\n		".MAX_PRODUCT_NAME." currently supports the <a href='http://hop.clickbank.net/?phpadsnew/ip2country' target='_blank'>IP2Country</a>\n		and <a href='http://www.maxmind.com/?rId=phpadsnew' target='_blank'>GeoIP</a> database.\n		";
+$GLOBALS['phpAds_hlp_geotracking_location'] = "مگر اینکه ماژول آپاچی ، شما باید به{$PRODUCT_NAME} محل 
+پایگاه داده geotargeting  را بدهید . همیشه پیشنهاد داده می می شود کخ پایگاه داده را خارج از وب سرور های ریشه سند قرار دهید ، چون در غیر این صورت  ، مردم قادر خواهند بود که پایگاه داده را دانلو کنند . ";
 
-$GLOBALS['phpAds_hlp_geotracking_location'] = "\n		Unless you are the GeoIP Apache module, you should tell ".MAX_PRODUCT_NAME." the location of the\n		geotargeting database. It is always recommended to place the database outside of the web\n		servers document root, because otherwise people are able to download the database.\n		";
+$GLOBALS['phpAds_hlp_geotracking_cookie'] = "تبدیل آدرس IP در اطلاعات جغرافیایی طول می کشد. برای جلوگیری از
+{$PRODUCT_NAME} از نیاز به انجام این هر بار که یک بنر تحویل داده شده است در نتیجه می تواند
+ذخیره شده در یک کوکی. اگر این کوکی موجود است {$PRODUCT_NAME} این اطلاعات به جای
+تبدیل آدرس IP را استفاده میکنند .";
 
-$GLOBALS['phpAds_hlp_geotracking_cookie'] = "\n		Converting the IP address in geographical information takes time. To prevent\n		".MAX_PRODUCT_NAME." from having to do this every time a banner is delivered the result can be\n		stored in a cookie. If this cookie is present ".MAX_PRODUCT_NAME." will use this information instead\n		of converting the IP address.\n		";
+$GLOBALS['phpAds_hlp_ignore_hosts'] = "اگر شما نمی خواهید به حساب دیدگاه ها، کلیک و جذب از کامپیوتر خاص شما
+می توانید از این به این لیست اضافه کنید. اگر شما مراجعه معکوس را فعال کنید شما می توانید
+اضافه کردن هر دو نام دامنه و آدرس IP، در غیر این صورت شما فقط می توانید استفاده از IP
+آدرس. شما همچنین می توانید نویسه عام استفاده کنید (i.e. '*.altavista.com' or '192.168.*').";
 
-$GLOBALS['phpAds_hlp_ignore_hosts'] = "\n        If you don't want to count views, clicks, and conversions from certain computer you\n        can add these to this list. If you have enabled reverse lookup you can\n        add both domain names and IP addresses, otherwise you can only use IP\n        addresses. You can also use wildcards (i.e. '*.altavista.com' or '192.168.*').\n		";
+$GLOBALS['phpAds_hlp_begin_of_week'] = "برای بیشتر مردم هفته از دو شنبه شروع می شود ولی اگر می خواهید می توانید از شنبه شروع کنید";
 
-$GLOBALS['phpAds_hlp_begin_of_week'] = "\n        For most people a week starts on a Monday, but if you want to start each\n        week on a Sunday you can.\n		";
+$GLOBALS['phpAds_hlp_percentage_decimals'] = "مشخص کنید چند رقم اعشار می توانید می خواهید در صفحه آمار نشان دهید .";
 
-$GLOBALS['phpAds_hlp_percentage_decimals'] = "\n        Specifies how many decimal places to display on statistics pages.\n		";
+$GLOBALS['phpAds_hlp_warn_admin'] = "{$PRODUCT_NAME} می تواند به شما ایمیل ارسال کند اگر از یک کمپین تنها تعداد محدودی از
+دیدگاه ها، کلیک، و یا تبدیل را باقی مانده باشد. این به طور پیش فرض تبدیل شده است.";
 
-$GLOBALS['phpAds_hlp_warn_admin'] = "\n        ".MAX_PRODUCT_NAME." can sent you e-mail if a campaign has only a limited number of\n        views, clicks, or conversions left. This is turned on by default.\n		";
+$GLOBALS['phpAds_hlp_warn_client'] = "{$PRODUCT_NAME} می تواند ایمیل تبلیغ کننده را ارسال کند اگر یکی از کمپین های خود را تنها یک
+تعداد محدودی از دیدگاه ها، کلیک، و یا تبدیل را باقی مانده باشد. این به طور پیش فرض تبدیل شده است.";
 
-$GLOBALS['phpAds_hlp_warn_client'] = "\n        ".MAX_PRODUCT_NAME." can sent the advertiser e-mail if one of his campaigns has only a\n		limited number of views, clicks, or conversions left. This is turned on by default.\n		";
+$GLOBALS['phpAds_hlp_qmail_patch'] = "برخی از نسخه های کیومیل توسط یک اشکال، که باعث می شود ایمیل ارسال شده توسط تحت تاثیر قرار
+{$PRODUCT_NAME} برای هدر در داخل بدن از ایمیل نشان داده شود. اگر شما فعال کنید
+این تنظیم، {$PRODUCT_NAME} ایمیل را در یک فرمت سازگار کیومیل ارسال می کند.";
 
-$GLOBALS['phpAds_hlp_qmail_patch'] = "\n		Some versions of qmail are affected by a bug, which causes e-mail sent by\n		".MAX_PRODUCT_NAME." to show the headers inside the body of the e-mail. If you enable\n		this setting, ".MAX_PRODUCT_NAME." will send e-mail in a qmail compatible format.\n		";
+$GLOBALS['phpAds_hlp_warn_limit'] = "حد اینکه کدام {$PRODUCT_NAME}  شروع به فرستادن ایمیل مشکلات کند . این حد به صورت پیشفرض 100 است";
 
-$GLOBALS['phpAds_hlp_warn_limit'] = "\n        The limit on which ".MAX_PRODUCT_NAME." starts sending warning e-mails. This is 100\n        by default.\n		";
 
-$GLOBALS['phpAds_hlp_allow_invocation_plain'] =
-$GLOBALS['phpAds_hlp_allow_invocation_plain_nocookies'] =
-$GLOBALS['phpAds_hlp_allow_invocation_js'] =
-$GLOBALS['phpAds_hlp_allow_invocation_frame'] =
-$GLOBALS['phpAds_hlp_allow_invocation_xmlrpc'] =
-$GLOBALS['phpAds_hlp_allow_invocation_local'] =
-$GLOBALS['phpAds_hlp_allow_invocation_interstitial'] =
-$GLOBALS['phpAds_hlp_allow_invocation_popup'] = "\n		These settings allows you to control which invocation types are allowed.\n		If one of these invocation types are disabled they will not be available\n		in the invocationcode / bannercode generator. Important: the invocation methods\n		will still work if disabled, but they are not available for generation.\n		";
+$GLOBALS['phpAds_hlp_default_banner_url'] = $GLOBALS['phpAds_hlp_default_banner_target'] = "اگر {$PRODUCT_NAME} نمی تواند به سرور پایگاه داده اتصال، و یا می توانید هر تطبیق پیدا کنید
+آگهی ها در همه، برای مثال زمانی که پایگاه داده سقوط کرد و یا حذف شده است،
+دارید هر چیزی را نشان نمی دهد. برخی از کاربران ممکن است بخواهید برای مشخص کردن یک بنر پیش فرض،
+که در این شرایط نمایش داده شود. بنر پیش فرض مشخص
+در اینجا نمی خواهد وارد سیستم شوید و استفاده نخواهد شد اگر هنوز هم آگهی ها فعال وجود دارد
+در سمت چپ در پایگاه داده باشد. توسط پیش فرض خاموش شده است .";
 
-$GLOBALS['phpAds_hlp_acl'] = "\n        If you are not using delivery limitations you can disable this option with this parameter,\n        this will speed up ".MAX_PRODUCT_NAME." a bit.\n		";
+$GLOBALS['phpAds_hlp_delivery_caching'] = "برای کمک به سرعت بخشیدن به تحویل {$PRODUCT_NAME} با استفاده از یک کش که شامل همه
+اطلاعات مورد نیاز برای تحویل پرچم به بازدید کننده از وب سایت خود را. تحویل
+کش به طور پیش فرض در پایگاه داده ذخیره می شود، اما برای افزایش سرعت و حتی بیشتر از آن نیز
+ممکن است برای ذخیره کردن کش در داخل یک فایل و یا در داخل حافظه مشترک. حافظه مشترک است سریع ترین،
+فایل های نیز بسیار سریع می باشد. توصیه می شود که به نوبه خود کش تحویل، چرا که این باعث
+تاثیر به طور جدی بر عملکرد خواهد شد.";
 
-$GLOBALS['phpAds_hlp_default_banner_url'] =
-$GLOBALS['phpAds_hlp_default_banner_target'] = "\n        If ".MAX_PRODUCT_NAME." can't connect to the database server, or can't find any matching\n        banners at all, for example when the database crashed or was deleted,\n        it won't display anything. Some users may want to specify a default banner,\n        which will be displayed in these situations. The default banner specified\n        here will not be logged and won't be used if there are still active banners\n        left in the database. This is turned off by default.\n		";
+$GLOBALS['phpAds_hlp_type_web_mode'] = "اگر شما می خواهید استفاده کنید از آگهی های ذخیره شده بر روی وب سرور، شما نیاز به پیکربندی
+این تنظیم هستید. اگر شما می خواهید برای ذخیره آگهی ها در یک مجموعه دایرکتوری محلی تعیین کنید
+از این گزینه برای <i>دایرکتوری محلی</i>. اگر شما می خواهید برای ذخیره بنر در
+سرور FTP خارجی تنظیم این گزینه برای<i>سرور FTP خارجی</i>. در برخی از
+وب سرور شما ممکن است بخواهید به استفاده از گزینه FTP حتی در وب سرور محلی باشید.";
 
-$GLOBALS['phpAds_hlp_delivery_caching'] = "\n		To help speed up the delivery ".MAX_PRODUCT_NAME." uses a cache which includes all\n		the information needed to delivery the banner to the visitor of your website. The delivery\n		cache is stored by default in the database, but to increase the speed even more it is also\n		possible to store the cache inside a file or inside shared memory. Shared memory is fastest,\n		Files is also very fast. It is not recommended to turn the delivery cache off, because this\n		will seriously affect the performance.\n		";
+$GLOBALS['phpAds_hlp_type_web_dir'] = "مشخص کنید دایرکتوری که در آن {$PRODUCT_NAME} نیاز به کپی کردن آگهی های آپلود
+به. این شاخه باید قابل نوشتن PHP، این می تواند به معنای شما نیاز
+به تغییر مجوز یونیکس برای این دایرکتوری (سطح دسترسی). دایرکتوری
+در اینجا مشخص باید در ریشه سند وب سرور باشد، در وب
+سرور باید قادر به خدمت به فایل به طور مستقیم باشد. آیا یک دنباله مشخص نیست
+اسلش (/). شما فقط نیاز به پیکربندی این گزینه اگر شما ذخیره سازی را تعیین کرده اند
+روش برای از <i> دایرکتوری محلی است </ i>.";
 
-$GLOBALS['phpAds_hlp_type_sql_allow'] =
-$GLOBALS['phpAds_hlp_type_web_allow'] =
-$GLOBALS['phpAds_hlp_type_url_allow'] =
-$GLOBALS['phpAds_hlp_type_html_allow'] =
-$GLOBALS['phpAds_hlp_type_txt_allow'] = "\n        ".MAX_PRODUCT_NAME." can use different types of banners and store them in different\n        ways. The first two options are used for local storage of banners. You\n        can use the admin interface to upload a banner and ".MAX_PRODUCT_NAME." will store\n        the banner in the SQL database or on a web server. You can also use a banner\n		stored on an external web server, or use HTML or a simple text to generate a banner.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_host'] = "اگر شما مجموعه ای از روش ذخیره سازی به <I> سرور خارجی FTP است </ i> شما نیاز به
+تعیین آدرس IP و یا نام دامنه از سرور FTP که در آن {$PRODUCT_NAME} نیازهای
+برای کپی کردن آگهی های بارگذاری می شوند.";
 
-$GLOBALS['phpAds_hlp_type_web_mode'] = "\n        If you want to use banners stored on the web server, you need to configure\n        this setting. If you want to store the banners in a local directory set\n        this option to <i>Local directory</i>. If you want to store the banner on an\n		external FTP server set this option to <i>External FTP server</i>. On certain\n		web servers you may want to use the FTP option even on the local web server.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_path'] = "اگر شما مجموعه ای از روش ذخیره سازی به <I> سرور خارجی FTP است </ i> شما نیاز به
+مشخص دایرکتوری بر روی سرور FTP خارجی که در آن {$PRODUCT_NAME} نیازهای
+برای کپی کردن آگهی های بارگذاری می شوند.";
 
-$GLOBALS['phpAds_hlp_type_web_dir'] = "\n        Specify the directory where ".MAX_PRODUCT_NAME." needs to copy the uploaded banners\n        to. This directory needs to be writable by PHP, this could mean you need\n        to modify the UNIX permissions for this directory (chmod). The directory\n        you specify here needs to be in the web server' document root, the web\n        server must be able to serve the files directly. Do not specify a trailing\n        slash (/). You only need to configure this option if you have set the storing\n		method to <i>Local directory</i>.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_user'] = "اگر شما مجموعه ای از روش ذخیره سازی به <I> سرور خارجی FTP است </ i> شما نیاز به
+مشخص نام کاربری که {$PRODUCT_NAME} باید به منظور استفاده کنید برای اتصال به
+سرور FTP خارجی.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_host'] = "\n		If you set the storing method to <i>External FTP server</i> you need to\n        specify the IP address or domain name of the FTP server where ".MAX_PRODUCT_NAME." needs\n		to copy the uploaded banners to.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_password'] = "اگر شما مجموعه ای از روش ذخیره سازی به <I> سرور خارجی FTP است </ i> شما نیاز به
+مشخص رمز عبوری را که {$PRODUCT_NAME} باید به منظور استفاده کنید برای اتصال به
+سرور FTP خارجی.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_path'] = "\n		If you set the storing method to <i>External FTP server</i> you need to\n        specify the directory on the external FTP server where ".MAX_PRODUCT_NAME." needs\n		to copy the uploaded banners to.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_passive'] = "برخی از سرویس دهنده FTP و فایروال نیاز نقل و انتقالات به استفاده از حالت منفعل (PASV).
+اگر {$PRODUCT_NAME} نیاز به استفاده از حالت منفعل برای اتصال به شما
+سرور FTP، سپس این گزینه را فعال کنید.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_user'] = "\n		If you set the storing method to <i>External FTP server</i> you need to\n        specify the username which ".MAX_PRODUCT_NAME." must use in order to connect to the\n		external FTP server.\n		";
+$GLOBALS['phpAds_hlp_type_web_url'] = "اگر شما تبلیغات را بر روی سرور تبلیغاتی ذخیره کنید ، {$PRODUCT_NAME} لازم است بداند کدام URL عمومی مربوط دایرکتوری که زیر مشخص کردید می شود . از یک علامت (/) 
+مشخص نکنید";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_password'] = "\n		If you set the storing method to <i>External FTP server</i> you need to\n        specify the password which ".MAX_PRODUCT_NAME." must use in order to connect to the\n		external FTP server.\n		";
+$GLOBALS['phpAds_hlp_type_web_ssl_url'] = "اگر شما ذخیره آگهی های در یک وب سرور، {$PRODUCT_NAME} نیاز به دانستن است که عمومی
+URL (SSL) مطابق با راهنمای شما در زیر مشخص شده است. هنوز مشخص نیست
+یک علامت (/).";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_passive'] = " \n 	    Some FTP servers and firewalls require transfers to use Passive Mode (PASV). \n 	    If " . MAX_PRODUCT_NAME . " will need to use Passive Mode to connect to your \n 	    FTP server, then enable this option. \n 	    ";
+$GLOBALS['phpAds_hlp_type_html_auto'] = "اگر این گزینه در {$PRODUCT_NAME} روشن شد به طور خودکار تغییر می دهند آگهی HTML
+به منظور اجازه می دهد تا کلیک به سیستم وارد شود. با این حال حتی در حالی که این گزینه
+روشن است، آن را هنوز هم ممکن خواهد بود برای غیر فعال کردن این ویژگی در هر بنر
+اساس.";
 
-$GLOBALS['phpAds_hlp_type_web_url'] = "\n        If you store banners on a web server, ".MAX_PRODUCT_NAME." needs to know which public\n        URL corresponds with the directory you specified below. Do not specify\n        a trailing slash (/).\n		";
+$GLOBALS['phpAds_hlp_type_html_php'] = "این ممکن است تا اجازه {$PRODUCT_NAME} کد PHP جاسازی شده در داخل HTML
+آگهی ها اجرا کند. این ویژگی است که توسط پیش فرض خاموش شده است .";
 
-$GLOBALS['phpAds_hlp_type_web_ssl_url'] = "\n        If you store banners on a web server, ".MAX_PRODUCT_NAME." needs to know which public\n        URL (SSL) corresponds with the directory you specified below. Do not specify\n        a trailing slash (/).\n		";
+$GLOBALS['phpAds_hlp_admin'] = "لطفا نام کاربری مدیر را وارد کنید. با این نام کاربری شما می توانید به سیستم وارد شوید
+رابط مدیر.";
 
-$GLOBALS['phpAds_hlp_type_html_auto'] = "\n        If this option is turned on ".MAX_PRODUCT_NAME." will automatically alter HTML banners\n        in order to allow the clicks to be logged. However even while this option\n        is turned on, it will still be possible to disable this feature on a per banner\n        basis.\n		";
+$GLOBALS['phpAds_hlp_admin_pw'] = $GLOBALS['phpAds_hlp_admin_pw2'] = "لطفا رمز عبوری که شما می خواهید استفاده کنید از آن برای ورود به رابط مدیر را وارد کنید.
+شما نیاز دارید تا آن را 2 بار وارد کنید برای جلوگیری از اشتباهات تایپی.";
 
-$GLOBALS['phpAds_hlp_type_html_php'] = "\n        It is possible to let ".MAX_PRODUCT_NAME." execute PHP code embedded inside HTML\n        banners. This feature is turned off by default.\n		";
+$GLOBALS['phpAds_hlp_pwold'] = $GLOBALS['phpAds_hlp_pw'] = $GLOBALS['phpAds_hlp_pw2'] = "برای تغییر رمز مدیریتی شما باید رمز عبور قبلی را بالا مشخص کنید .
+همچنین شما باید رمز جدید را دو بار وارد کنید تا از اشتباهات تایپی جلوگیری شود";
 
-$GLOBALS['phpAds_hlp_admin'] = "\n        Please enter the username of the administrator. With this username you can log into\n		the administrator interface.\n		";
+$GLOBALS['phpAds_hlp_admin_fullname'] = "مشخص کنید نام و نام خانوادگی مدیر . از این استفاده می شود که آمار را ارسال کند
+از طریق ایمیل.";
 
-$GLOBALS['phpAds_hlp_admin_pw'] =
-$GLOBALS['phpAds_hlp_admin_pw2'] = "\n        Please enter the password you want to use to log into the administrator interface.\n		You need to enter it twice to prevent typing errors.\n		";
+$GLOBALS['phpAds_hlp_admin_email'] = "Tآدرس ایمیل مدیر. این را به عنوان از آدرس استفاده می شود که
+آمار را ارسال کند از طریق ایمیل.";
 
-$GLOBALS['phpAds_hlp_pwold'] =
-$GLOBALS['phpAds_hlp_pw'] =
-$GLOBALS['phpAds_hlp_pw2'] = "\n        To change the administrator password, you can need to specify the old\n		password above. Also you need to specify the new password twice, to\n		prevent typing errors.\n		";
+$GLOBALS['phpAds_hlp_admin_novice'] = "اگر می خواهید قبل از پاک کردن تبلیغات،کمپین،آگهی ها ، وب سایت،مناطق هشداری دریافت کنید این تنظیمات را در حات صحیح قرار دهید";
 
-$GLOBALS['phpAds_hlp_admin_fullname'] = "\n        Specify the administrator's full name. This used when sending statistics\n        via email.\n		";
+$GLOBALS['phpAds_hlp_client_welcome'] = "اگر شما به نوبه خود این ویژگی را در یک پیام خوش آمد باشد در صفحه اول نمایش داده می
+تبلیغ کننده را خواهد شد پس از loggin در را مشاهده کنید. شما می توانید این ارسال با ویرایش فرد
+محل فایل welcome.html در مدیریت / قالب دایرکتوری. چیزهایی که شما ممکن است بخواهید
+برای مثال شامل: نام شما شرکت، اطلاعات تماس، آرم شرکت خود را، یک
+یک صفحه با نرخ تبلیغات، و غیره پیوند ..";
 
-$GLOBALS['phpAds_hlp_admin_email'] = "\n        The administrator's e-mail address. This is used as from-address when\n        sending statistics via email.\n		";
+$GLOBALS['phpAds_hlp_client_welcome_msg'] = "به جای ویرایش فایل welcome.html شما همچنین می توانید یک متن کوچک در اینجا مشخص کنید. اگر شما وارد
+یک متن در اینجا، فایل welcome.html نادیده گرفته می شود. آن را مجاز به استفاده کنید تگ های HTML.";
 
-$GLOBALS['phpAds_hlp_admin_email_headers'] = "\n        You can alter the e-mail headers used by the e-mails which ".MAX_PRODUCT_NAME." sends.\n		";
+$GLOBALS['phpAds_hlp_updates_frequency'] = "اگر می خواهید برای نسخه های جدید {$PRODUCT_NAME} بررسی شما می توانید این ویژگی را فعال کنید.
+این امکان است که فاصله که در آن {$PRODUCT_NAME} تابع یک ارتباط مشخص
+سرور به روز رسانی. اگر یک نسخه جدید پیدا شده است یک جعبه محاوره ای با اضافی پاپ تا
+اطلاعات در مورد به روز رسانی.";
 
-$GLOBALS['phpAds_hlp_admin_novice'] = "\n        If you want to recieve a warning before deleting advertisers, campaigns, banners,\n		publishers and zones; set this option to true.\n		";
+$GLOBALS['phpAds_hlp_userlog_email'] = "Iاگر شما می خواهید برای نگه داشتن یک کپی از تمام پیام های ایمیل های خروجی ارسال شده توسط {$PRODUCT_NAME}
+می توانید این ویژگی را فعال کنید. پیام های ایمیل در ورود به سیستم کاربران ذخیره می شود.";
 
-$GLOBALS['phpAds_hlp_client_welcome'] = "\n		If you turn this feature on a welcome message will be displayed on the first page an\n		advertiser will see after loggin in. You can personalize this message by editing the\n		welcome.html file location in the admin/templates directory. Things you might want to\n		include are for example: Your company name, contact information, your company logo, a\n		link a page with advertising rates, etc..\n		";
+$GLOBALS['phpAds_hlp_userlog_inventory'] = "برای اطمینان از موجودی محاسبه درستی زد، شما می توانید یک گزارش در مورد صرفه جویی در
+محاسبه موجودی ساعتی. این گزارش شامل مشخصات پیش بینی و چه مقدار
+اولویت را به تمام آگهی ها اختصاص داده است. این اطلاعات ممکن است اگر از شما مفید
+می خواهید برای ارسال یک گزارش اشکال در مورد محاسبات اولویت. گزارش ها
+ذخیره شده در داخل userlog.";
 
-$GLOBALS['phpAds_hlp_client_welcome_msg'] = "\n		Instead of editing the welcome.html file you can also specify a small text here. If you enter\n		a text here, the welcome.html file will be ignored. It is allowed to use html tags.\n		";
+$GLOBALS['phpAds_hlp_userlog_autoclean'] = "برای اطمینان از پایگاه داده به درستی هرس شد، شما می توانید یک گزارش در مورد صرفه جویی در
+دقیقا همان چیزی در طول هرس اتفاق افتاده است. این اطلاعات ذخیره شده خواهد شد
+در userlog.";
 
-$GLOBALS['phpAds_hlp_updates_frequency'] = "\n		If you want to check for new versions of ".MAX_PRODUCT_NAME." you can enable this feature.\n		It is possible the specify the interval in which ".MAX_PRODUCT_NAME." makes a connection to\n		the update server. If a new version is found a dialog box will pop up with additional\n		information about the update.\n		";
+$GLOBALS['phpAds_hlp_default_banner_weight'] = "اگر شما می خواهید به استفاده از یک وزن بنر پیش فرض بالاتر شما می توانید به وزن مورد نظر در اینجا مشخص کنید.
+این تنظیمات به طور پیش فرض 1 است.";
 
-$GLOBALS['phpAds_hlp_userlog_email'] = "\n		If you want to keep a copy of all outgoing e-mail messages send by ".MAX_PRODUCT_NAME." you\n		can enable this feature. The e-mail messages are stored in the userlog.\n		";
+$GLOBALS['phpAds_hlp_default_campaign_weight'] = "اگر شما می خواهید به استفاده از یک وزن کمپین به طور پیش فرض بالاتر شما می توانید به وزن مورد نظر در اینجا مشخص کنید.
+این تنظیمات به طور پیش فرض 1 است .";
 
-$GLOBALS['phpAds_hlp_userlog_inventory'] = "\n		To ensure the inventory calculation ran correctly, you can save a report about\n		the hourly inventory calculation. This report includes the predicted profile and how much\n		priority is assigned to all banners. This information might be useful if you\n		want to submit a bugreport about the priority calculations. The reports are\n		stored inside the userlog.\n		";
+$GLOBALS['phpAds_hlp_gui_show_campaign_info'] = "اگر این گزینه فعال باشد اطلاعات اضافی در مورد هر کمپین خواهد شد در نشان داده شده است
+<> مبارزات است </ i> صفحه. اطلاعات اضافی شامل تعداد AdViews باقی مانده،
+تعداد AdClicks باقی مانده، تعداد AdConversions باقی مانده، زمان فعال شدن،
+تاریخ انقضا و تنظیمات اولویت است.";
 
-$GLOBALS['phpAds_hlp_userlog_autoclean'] = "\n		To ensure the database was pruned correctly, you can save a report about\n		what exactly happened during the pruning. This information will be stored\n		in the userlog.\n		";
+$GLOBALS['phpAds_hlp_gui_show_banner_info'] = "اگر این گزینه فعال باشد اطلاعات اضافی در مورد هر بنر خواهد شد در نشان داده شده است
+<> آگهی ها </ I> صفحه. اطلاعات اضافی شامل URL مقصد، کلمات کلیدی،
+اندازه و وزن بنر.";
 
-$GLOBALS['phpAds_hlp_default_banner_weight'] = "\n		If you want to use a higher default banner weight you can specify the desired weight here.\n		This settings is 1 by default.\n		";
+$GLOBALS['phpAds_hlp_gui_show_campaign_preview'] = "اگر این گزینه فعال باشد یک پیش نمایش از تمام آگهی های خواهد شد در نشان داده شده است <i> آگهی ها </ i>
+صفحه اگر این گزینه غیر فعال است هنوز هم ممکن است برای نشان دادن یک پیش نمایش از هر بنر کلیک کنید
+بر روی مثلث کنار هر بنر در <i> آگهی ها </ i> صفحه.";
 
-$GLOBALS['phpAds_hlp_default_campaign_weight'] = "\n		If you want to use a higher default campaign weight you can specify the desired weight here.\n		This settings is 1 by default.\n		";
+$GLOBALS['phpAds_hlp_gui_show_banner_html'] = "اگر این گزینه فعال باشد بنر HTML واقعی خواهد شد به جای کد HTML نشان داده شده است. این
+گزینه به طور پیش فرض فعال است، چرا که آگهی HTML ممکن با رابط کاربری در تضاد است.
+اگر این گزینه غیر فعال است هنوز هم ممکن است برای مشاهده بنر HTML واقعی، با کلیک بر روی
+از <i> نمایش بنر </ i> را فشار دهید بعد به کد HTML.";
 
-$GLOBALS['phpAds_hlp_gui_show_campaign_info'] = "\n		If this option is enabled extra information about each campain will be shown on the\n		<i>Campaign overview</i> page. The extra information includes the number of AdViews remaining,\n		the number of AdClicks remaining, the number of AdConversions remaining, activation date,\n		expiration date and the priority settings.\n		";
+$GLOBALS['phpAds_hlp_gui_show_banner_preview'] = "اگر این گزینه فعال باشد یک پیش نمایش خواهد شد در بالای <i> خواص بنر نشان داده است </ i>،
+<i> گزینه تحویل </ i> و <i> مناطق مرتبط است </ i> صفحات. اگر این گزینه غیر فعال است آن است که هنوز
+ممکن است برای مشاهده بنر، با کلیک بر روی <i> نمایش بنر دکمه </ i> را در بالای صفحات.";
 
-$GLOBALS['phpAds_hlp_gui_show_banner_info'] = "\n		If this option is enabled extra information about each banner will be shown on the\n		<i>Banner overview</i> page. The extra information includes the destination URL, keywords,\n		size and the banner weight.\n		";
+$GLOBALS['phpAds_hlp_gui_hide_inactive'] = "اگر این گزینه فعال باشد تمام آگهی ها غیر فعال، مبارزات و تبلیغ کنندگان خواهد شد از پنهان
+<i> تبلیغات و مبارزات </ i> و <i> مبارزات است </ i> صفحات. اگر این گزینه فعال باشد آن است
+هنوز هم ممکن است برای مشاهده آیتم های مخفی، با کلیک بر روی <i> نمایش همه دکمه </ i> را در پایین
+صفحه.";
 
-$GLOBALS['phpAds_hlp_gui_show_campaign_preview'] = "\n		If this option is enabled a preview of all banners will be shown on the <i>Banner overview</i>\n		page. If this option is disabled it is still possible to show a preview of each banner by click\n		on the triangle next to each banner on the <i>Banner overview</i> page.\n		";
+$GLOBALS['phpAds_hlp_gui_show_matching'] = "اگر این گزینه فعال باشد بنر تطبیق خواهد شد بر روی <i> آگهی های مرتبط است </ i> صفحه، اگر نشان داده شده است
+از <i> انتخاب کمپین </ i> روش انتخاب شده است. این اجازه می دهد به شما دقیقا ببینید که آگهی ها
+برای تحویل در نظر گرفته اگر کمپین مرتبط است. آن را نیز ممکن شود تا در یک پیش نمایش نگاه کنید
+آگهی ها منطبق.";
 
-$GLOBALS['phpAds_hlp_gui_show_banner_html'] = "\n		If this option is enabled the actual HTML banner will be shown instead of the HTML code. This\n		option is disabled by default, because the HTML banners might conflict with the user interface.\n		If this option is disabled it is still possible to view the actual HTML banner, by clicking on\n		the <i>Show banner</i> button next to the HTML code.\n		";
-
-$GLOBALS['phpAds_hlp_gui_show_banner_preview'] = "\n		If this option is enabled a preview will be shown at the top of the <i>Banner properties</i>,\n		<i>Delivery option</i> and <i>Linked zones</i> pages. If this option is disabled it is still\n		possible to view the banner, by clicking on the <i>Show banner</i> button at the top of the pages.\n		";
-
-$GLOBALS['phpAds_hlp_gui_hide_inactive'] = "\n		If this option is enabled all inactive banners, campaigns and advertisers will be hidden from the\n		<i>Advertisers & Campaigns</i> and <i>Campaign overview</i> pages. If this option is enabled it is\n		still possible to view the hidden items, by clicking on the <i>Show all</i> button on the bottom\n		of the page.\n		";
-
-$GLOBALS['phpAds_hlp_gui_show_matching'] = "\n		If this option is enabled the matching banner will be shown on the <i>Linked banners</i> page, if\n		the <i>Campaign selection</i> method is chosen. This will allow you see exactly which banners are\n		considered for delivery if the campaign is linked. It will also be possible to look at a preview\n		of the matching banners.\n		";
-
-$GLOBALS['phpAds_hlp_gui_show_parents'] = "\n		If this option is enabled the parent campaigns of the banners will be shown on the <i>Linked banners</i>\n		page, if the <i>Banner selection</i> method is chosen. This will allow you to see which banner\n		belongs to which campaign before the banner is linked. This also means that the banners are grouped\n		by the parent campaigns and are no longer sorted alphabetically.\n		";
-?>
+$GLOBALS['phpAds_hlp_gui_show_parents'] = "اگر این گزینه فعال باشد مبارزات پدر و مادر از آگهی های خواهد شد در نشان داده شده است <i> آگهی های مرتبط است </ i>
+صفحه، اگر <i> انتخاب بنر </ i> روش انتخاب شده است. این به شما اجازه ببینید که بنر
+متعلق به کدام کمپین قبل از بنر مرتبط است. این بدین معنی است که آگهی های گروه بندی می شوند
+توسط کمپین های پدر و مادر و دیگر بر اساس حروف الفبا.";

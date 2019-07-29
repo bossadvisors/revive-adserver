@@ -26,7 +26,7 @@ class Test_DeliveryRemotehost extends UnitTestCase
      */
     function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
     }
 
 
@@ -130,6 +130,19 @@ class Test_DeliveryRemotehost extends UnitTestCase
         $this->assertTrue($_SERVER['REMOTE_ADDR'] == '111.111.111.111');
 
         $_SERVER = $serverSave;
+    }
+
+    function test_MAX_remotehostAnonymise()
+    {
+        $GLOBALS['_MAX']['CONF']['privacy']['anonymiseIp'] = false;
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.127';
+        MAX_remotehostAnonymise();
+        $this->assertEqual($_SERVER['REMOTE_ADDR'], '127.0.0.127');
+
+        $GLOBALS['_MAX']['CONF']['privacy']['anonymiseIp'] = true;
+        $_SERVER['REMOTE_ADDR'] = '127.0.0.127';
+        MAX_remotehostAnonymise();
+        $this->assertEqual($_SERVER['REMOTE_ADDR'], '127.0.0.0');
     }
 
     /**

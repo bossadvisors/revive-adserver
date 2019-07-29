@@ -47,9 +47,9 @@ class OA_Dll_BannerTest extends DllUnitTestCase
     /**
      * The constructor method.
      */
-    function OA_Dll_BannerTest()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         Mock::generatePartial(
             'OA_Dll_Banner',
             'PartialMockOA_Dll_Banner',
@@ -169,7 +169,7 @@ class OA_Dll_BannerTest extends DllUnitTestCase
         $doImages = OA_Dal::staticGetDO('images', $doBanners->filename);
         $this->assertEqual($doImages->contents, $this->binarySwf);
 
-        $GLOBALS['_MAX']['CONF']['store']['mode']   = 'local';
+        $GLOBALS['_MAX']['CONF']['store']['mode']   = 0;
         $GLOBALS['_MAX']['CONF']['store']['webDir'] = MAX_PATH . '/var';
 
         // Add gif (Web stored)
@@ -518,6 +518,14 @@ class OA_Dll_BannerTest extends DllUnitTestCase
     function testDailyStatistics()
     {
         $this->_testStatistics('getBannerDailyStatistics');
+    }
+
+    /**
+     * A method to test getBannerHourlyStatistics.
+     */
+    function testHourlyStatistics()
+    {
+        $this->_testStatistics('getBannerHourlyStatistics');
     }
 
     /**

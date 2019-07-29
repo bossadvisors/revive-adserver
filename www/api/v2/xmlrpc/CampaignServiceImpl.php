@@ -37,9 +37,9 @@ class CampaignServiceImpl extends BaseServiceImpl
      *
      * The CampaignServiceImpl method is the constructor for the CampignServiceImpl class.
      */
-    function CampaignServiceImpl()
+    function __construct()
     {
-        $this->BaseServiceImpl();
+        parent::__construct();
         $this->_dllCampaign = new OA_Dll_Campaign();
     }
 
@@ -168,6 +168,34 @@ class CampaignServiceImpl extends BaseServiceImpl
 
             return $this->_validateResult(
                 $this->_dllCampaign->getCampaignDailyStatistics(
+                    $campaignId, $oStartDate, $oEndDate, $localTZ, $rsStatisticsData));
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * The getCampaignHourlyStatistics method returns hourly statistics for a
+     * campaign for a specified period.
+     *
+     * @access public
+     *
+     * @param string $sessionId
+     * @param integer $campaignId
+     * @param date $oStartDate
+     * @param date $oEndDate
+     * @param bool $localTZ
+     * @param recordSet &$rsStatisticsData  return data
+     *
+     * @return boolean
+     */
+    function getCampaignHourlyStatistics($sessionId, $campaignId, $oStartDate, $oEndDate, $localTZ, &$rsStatisticsData)
+    {
+        if ($this->verifySession($sessionId)) {
+
+            return $this->_validateResult(
+                $this->_dllCampaign->getCampaignHourlyStatistics(
                     $campaignId, $oStartDate, $oEndDate, $localTZ, $rsStatisticsData));
         } else {
 

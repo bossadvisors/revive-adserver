@@ -48,20 +48,12 @@ abstract class OX_Dal_Maintenance_Statistics extends MAX_Dal_Common
      *      timestamp_column
      *  VALUES
      *      (
-     *          '2007-04-11 13:49:18'{$this->timestampCastSting}
+     *          '2007-04-11 13:49:18'{$this->timestampCastString}
      *      );
      *
      * @var string
      */
-    var $timestampCastSting;
-
-    /**
-     * The class constructor method.
-     */
-    function OX_Dal_Maintenance_Statistics()
-    {
-        parent::MAX_Dal_Common();
-    }
+    var $timestampCastString;
 
     /**
      * A method to perform the migration of logged bucket-based aggregate statistics
@@ -237,7 +229,7 @@ abstract class OX_Dal_Maintenance_Statistics extends MAX_Dal_Common
         if (!empty($aExtras) && is_array($aExtras)) {
             foreach ($aExtras as $key => $value) {
                 $aDestinationColumns[] = $this->oDbh->quoteIdentifier($key, true);
-                if (is_numeric($value) || preg_match("/^['|\"]\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}['|\"]" . $this->timestampCastSting . "/", $value)) {
+                if (is_numeric($value) || preg_match("/^['|\"]\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}['|\"]" . $this->timestampCastString . "/", $value)) {
                     $aSelectColumns[]  = $value . ' AS ' . $this->oDbh->quoteIdentifier($key, true);
                 } else {
                     $aSelectColumns[]  = $this->oDbh->quoteIdentifier($value, true) . ' AS ' . $this->oDbh->quoteIdentifier($key, true);
@@ -351,7 +343,7 @@ abstract class OX_Dal_Maintenance_Statistics extends MAX_Dal_Common
         // Prepare the select column statements array
         $aSelectColumnStatements = array();
         foreach ($aMigrationDetails['destination'] as $key => $value) {
-            $aSelectColumnStatements[] = $this->oDbh->quoteIdentifier($aMigrationDetails['source'][$key], true) . ' AS ' . $this->oDbh->quoteIdentifier($value, true);
+            $aSelectColumnStatements[] = $this->oDbh->quoteIdentifier($aMigrationDetails['source'][$key]) . ' AS ' . $this->oDbh->quoteIdentifier($value, true);
         }
         foreach ($aMigrationDetails['extrasDestination'] as $key => $value) {
             if (is_numeric($aMigrationDetails['extrasValue'][$key])) {
@@ -521,7 +513,7 @@ abstract class OX_Dal_Maintenance_Statistics extends MAX_Dal_Common
                 $aSelectColumnStatements[] = $this->oDbh->quote($aRow[$value], 'text') . ' AS ' . $this->oDbh->quoteIdentifier($value, true);
             }
             foreach ($aMigrationDetails['destination'] as $key => $value) {
-                $aSelectColumnStatements[] = $this->oDbh->quoteIdentifier($aMigrationDetails['source'][$key], true) . ' AS ' . $this->oDbh->quoteIdentifier($value, true);
+                $aSelectColumnStatements[] = $this->oDbh->quoteIdentifier($aMigrationDetails['source'][$key]) . ' AS ' . $this->oDbh->quoteIdentifier($value, true);
             }
 
             // Prepare the where statementes array
@@ -960,7 +952,7 @@ abstract class OX_Dal_Maintenance_Statistics extends MAX_Dal_Common
         }
 
         $indexHint = '';
-        if($aConf['database']['type'] == 'mysql'
+        if(($aConf['database']['type'] == 'mysql' || $aConf['database']['type'] == 'mysqli')
             && $table == 'data_summary_ad_hourly') {
             $indexHint = ' FORCE INDEX('.$aConf['table']['prefix'].'data_summary_ad_hourly_date_time) ';
         }

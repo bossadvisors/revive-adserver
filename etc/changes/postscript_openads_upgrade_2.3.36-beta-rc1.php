@@ -18,7 +18,7 @@ class OA_UpgradePostscript_2_3_36
     var $oUpgrade;
     var $oSchema;
 
-    function OA_UpgradePostscript_2_3_36()
+    function __construct()
     {
 
     }
@@ -64,7 +64,7 @@ class OA_UpgradePostscript_2_3_36
                     }
                 }
             }
-            if (count($aTask['remove']>0))
+            if (count($aTask['remove']) > 0)
             {
                 $result = $this->oSchema->db->manager->alterTable($prefix.$table, $aTask, false);
             }

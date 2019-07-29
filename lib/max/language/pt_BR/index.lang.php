@@ -11,8 +11,6 @@
 */
 
 // Meta information
-$translation_readable   = "Português";
-$translation_maintainer	= "Lopo de Almeida";
-$translation_contact	= "";
-
-?>
+$translation_readable   = "Português brasileiro";
+$translation_maintainer	= "Revive Adserver Team";
+$translation_contact	= "noreply@revive-adserver.com";

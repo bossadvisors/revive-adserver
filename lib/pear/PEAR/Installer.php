@@ -121,7 +121,7 @@ class PEAR_Installer extends PEAR_Downloader
      *
      * @access public
      */
-    function PEAR_Installer(&$ui)
+    function __construct(&$ui)
     {
         parent::PEAR_Common();
         $this->setFrontendObject($ui);
@@ -221,7 +221,7 @@ class PEAR_Installer extends PEAR_Downloader
             if (empty($os)) {
                 $os = new OS_Guess();
             }
-            if (strlen($atts['platform']) && $atts['platform']{0} == '!') {
+            if (strlen($atts['platform']) && $atts['platform'][0] == '!') {
                 $negate = true;
                 $platform = substr($atts['platform'], 1);
             } else {
@@ -935,7 +935,7 @@ class PEAR_Installer extends PEAR_Downloader
                       &$errors, $installed = false, $willinstall = false, $state = false)
     {
         // trickiness: initialize here
-        parent::PEAR_Downloader($this->ui, $options, $config);
+        parent::__construct($this->ui, $options, $config);
         $ret = parent::download($packages);
         $errors = $this->getErrorMsgs();
         $installpackages = $this->getDownloadedPackages();

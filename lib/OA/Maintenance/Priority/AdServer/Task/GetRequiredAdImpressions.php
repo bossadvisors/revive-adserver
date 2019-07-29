@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/Dal.php';
 require_once MAX_PATH . '/lib/OA/Maintenance/Priority/AdServer/Task.php';
@@ -57,9 +59,9 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressions extends OA_
      *
      * @return OA_Maintenance_Priority_Common_Task_GetRequiredAdImpressions
      */
-    function OA_Maintenance_Priority_Common_Task_GetRequiredAdImpressions()
+    function __construct()
     {
-        parent::OA_Maintenance_Priority_AdServer_Task();
+        parent::__construct();
         $this->oTable =& $this->_getMaxTablePriorityObj();
         $this->currentTz = new Date_TimeZone('UTC');
     }
@@ -157,7 +159,7 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressions extends OA_
      *                            the expected TOTAL lifetime or daily
      *                            impressions required.
      */
-    function getCampaignImpressionInventoryRequirement(&$oCampaign, $type, $ignorePast = false)
+    function getCampaignImpressionInventoryRequirement($oCampaign, $type, $ignorePast = false)
     {
         OA::debug('  - Getting impression inventory requirements for campaign ID: ' . $oCampaign->id, PEAR_LOG_DEBUG);
         $aConf = $GLOBALS['_MAX']['CONF'];
@@ -328,7 +330,7 @@ class OA_Maintenance_Priority_AdServer_Task_GetRequiredAdImpressions extends OA_
                 // of the existance of any activation or expiration dates that
                 // may (or may not) be set for the campaign
                 $oCampaignExpiryDate = new Date($this->_getDate());
-                $oCampaignExpiryDate->setTZ($this->currentTz);
+                $oCampaignExpiryDate->convertTZ($this->currentTz);
                 $oCampaignExpiryDate->setHour(23);
                 $oCampaignExpiryDate->setMinute(59);
                 $oCampaignExpiryDate->setSecond(59);

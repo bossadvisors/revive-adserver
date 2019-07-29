@@ -108,7 +108,7 @@ abstract class Plugins_BannerTypeHTML_vastInlineBannerTypeHtml_vastBase extends 
      * @param array $aFields
      * @return boolean
      */
-    function processForm($insert, $bannerid, $aFields)
+    function processForm($insert, $bannerid, &$aFields, &$aVariables)
     {
         $doBanners = OA_Dal::factoryDO('banner_vast_element');
         $rowId = $aFields['banner_vast_element_id'];
@@ -308,59 +308,6 @@ abstract class Plugins_BannerTypeHTML_vastInlineBannerTypeHtml_vastBase extends 
 
         $this->addVastVideoUrlFields($form, $bannerRow, $isNewBanner);
 
-        $sampleUrls = array(
-            'RTMP - FLV' => array(
-            	"rtmp://cp81850.edgefcs.net/ondemand/",
-                "openx-ad",
-                'FLV',
-                '8',
-            ),
-
-            'RTMP - MP4' => array(
-        		"rtmp://cp81850.edgefcs.net/ondemand/",
-        		"openx-ad.mp4",
-                'MP4',
-                '10',
-            ),
-
-            'HTTP - FLV' => array(
-            	"http://videoads.openx.org.edgesuite.net/openxvideos/openx-ad.flv",
-                'FLV',
-            	'8',
-            ),
-
-            'HTTP - MP4' => array(
-            	"http://videoads.openx.org.edgesuite.net/openxvideos/openx-ad.mp4",
-                'MP4',
-                '10'
-            ),
-
-            'HTTP - WEBM' => array(
-            	"http://video.webmfiles.org/big-buck-bunny_trailer.webm",
-                'WEBM',
-                '32'
-            ),
-
-        );
-
-        $sampleAdsString = 'You can try using any of the following sample ads<br/><br/>';
-        foreach($sampleUrls as $what => $urls) {
-            $sampleAdsString .= "<b>$what sample ads</b><ul style='margin-top:5px'>";
-            if(count($urls) == 3) {
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_filename_http') . ': '. $urls[0];
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_type') . ': '. $urls[1];
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_duration') . ': '. $urls[2];
-            } else {
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_net_connection_url') . ': '. $urls[0];
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_filename') . ': '. $urls[1];
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_type') . ': '. $urls[2];
-               $sampleAdsString .= '<li>'.$this->getFieldLabel('vast_video_duration') . ': '. $urls[3];
-            }
-            $sampleAdsString .= "</ul>";
-        }
-        $sampleAdsString .= '';
-        $form->addElement('html', 'video_status_info_rtmp_mp4', VideoAdsHelper::getWarningMessage($sampleAdsString) );
-
         $advancedUser = false;
         if ( $advancedUser ){
             // Bitrate of encoded video in Kbps
@@ -387,9 +334,9 @@ abstract class Plugins_BannerTypeHTML_vastInlineBannerTypeHtml_vastBase extends 
     {
         $form->addElement('header', 'thirdpartyimp_title', 'Third party impression tracking');
         $form->addElement('html', 'thirdpartyimp_help', '
-        	When a video ad is displayed, OpenX will record the ad impression.
+        	When a video ad is displayed, Revive Adserver will record the ad impression.
         	You can also specify a URL to a third party 1x1 transparent pixel.
-        	The URL can contain any of the supported <a href="http://www.openx.org/en/docs/whitepapers/magic-macros" target="_blank">magic macros</a>.
+        	The URL can contain any of the supported <a href="http://documentation.revive-adserver.com/display/DOCS/Magic+Macros" target="_blank">magic macros</a>.
         					');
 
         $form->addElement(  'text',
@@ -441,10 +388,10 @@ abstract class Plugins_BannerTypeHTML_vastInlineBannerTypeHtml_vastBase extends 
 
         $helpString .= "<br/><br/>To setup your ".$this->getBannerShortName().", you will need to:
         <ul style='list-style-type:decimal;padding-left:20px;padding-top:5px'>
-        <li>Enter the information about your Ad in the form below.</li>
-        <li>Link this ".$this->getBannerShortName()." to the desired zone. The zone must be of the type \"".$this->getZoneToLinkShortName()."\". <a href='".VideoAdsHelper::getHelpLinkOpenXPlugin() ."' target='_blank'>Learn more</a></li>
-        <li>Include the zone in the Ad Schedule of the video player plugin configuration in your webpage. <a href='". VideoAdsHelper::getHelpLinkVideoPlayerConfig() ."' target='_blank'>Learn more</a></li>
-        <li>Make sure that the flash player is allowed to request ads on this adserver. The <a href='$crossdomainUrl' target='_blank'>crossdomain.xml on your adserver</a> should look similar to the <a href='".VideoAdsHelper::getLinkCrossdomainExample()."' target='_blank'>recommended crossdomain.xml</a></li>
+        <li>Enter the information about your ad in the form below.</li>
+        <li><a href='".VideoAdsHelper::getHelpLinkOpenXPlugin() ."' target='_blank'>Link this ".$this->getBannerShortName()." to the desired zone.</a> The zone must be of the type \"".$this->getZoneToLinkShortName()."\".</li>
+        <li><a href='". VideoAdsHelper::getHelpLinkVideoPlayerConfig() ."' target='_blank'>Include the zone in the ad schedule of the video player plugin configuration in your webpage.</a></li>
+        <li>See the <a href='".VideoAdsHelper::getLinkCrossdomainExample()."' target='_blank'>details on how to ensure that Flash-based video players can load ads from ".PRODUCT_NAME.".</a></li>
     	</ul>";
         $form->addElement('html', 'video_status_info1', '<span style="font-size:100%;">'.$helpString.'</span>' );
     }
@@ -532,5 +479,5 @@ VIDEO_FORMAT_OPTION_JS;
                                 VAST_OVERLAY_CLICK_TO_VIDEO);
         $form->addElement('text', 'vast_video_clickthrough_url', "Destination URL (incl. http://) <br />when user clicks on the video");
     }
+    
 }
-

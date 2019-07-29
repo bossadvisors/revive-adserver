@@ -98,7 +98,7 @@ class Date_TimeZone
      * @param string $id the time zone id
      * @return object Date_TimeZone the new Date_TimeZone object
      */
-    function Date_TimeZone($id)
+    function __construct($id)
     {
         global $_DATE_TIMEZONE_DATA;
         if(Date_TimeZone::isValidID($id)) {
@@ -3639,8 +3639,8 @@ if(isset($_DATE_TIMEZONE_DEFAULT)
     Date_TimeZone::setDefault(getenv('PHP_TZ'));
 } elseif (getenv('TZ') && Date_TimeZone::isValidID(getenv('TZ'))) {
     Date_TimeZone::setDefault(getenv('TZ'));
-} elseif (Date_TimeZone::isValidID(date('T'))) {
-    Date_TimeZone::setDefault(date('T'));
+} elseif (Date_TimeZone::isValidID(date('e'))) {
+    Date_TimeZone::setDefault(date('e'));
 } else {
     Date_TimeZone::setDefault('UTC');
 }

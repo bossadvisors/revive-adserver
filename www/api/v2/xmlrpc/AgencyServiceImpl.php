@@ -37,9 +37,9 @@ class AgencyServiceImpl extends BaseServiceImpl
      *
      * The AgencyServiceImpl method is the constructor for the AgencyServiceImpl class.
      */
-    function AgencyServiceImpl()
+    function __construct()
     {
-        $this->BaseServiceImpl();
+        parent::__construct();
         $this->_dllAgency = new OA_Dll_Agency();
     }
 
@@ -167,6 +167,34 @@ class AgencyServiceImpl extends BaseServiceImpl
 
             return $this->_validateResult(
                 $this->_dllAgency->getAgencyDailyStatistics(
+                    $agencyId, $oStartDate, $oEndDate, $localTZ, $aData));
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * The getAgencyHourlyStatistics method returns hourly statistics for an
+     * agency for a specified period.
+     *
+     * @access public
+     *
+     * @param string $sessionId
+     * @param integer $agencyId
+     * @param date $oStartDate
+     * @param date $oEndDate
+     * @param bool $localTZ
+     * @param array &$aData  return data
+     *
+     * @return boolean
+     */
+    function getAgencyHourlyStatistics($sessionId, $agencyId, $oStartDate, $oEndDate, $localTZ, &$aData)
+    {
+        if ($this->verifySession($sessionId)) {
+
+            return $this->_validateResult(
+                $this->_dllAgency->getAgencyHourlyStatistics(
                     $agencyId, $oStartDate, $oEndDate, $localTZ, $aData));
         } else {
 

@@ -15,14 +15,28 @@ require_once MAX_PATH . '/lib/OX/Admin/UI/Storage.php';
 /**
  * @package OX_Admin_UI
  */
-class OX_Admin_UI_SessionStorage
-    implements OX_Admin_UI_Storage
+class OX_Admin_UI_SessionStorage implements OX_Admin_UI_Storage
 {
     private $id;
     private $path;
 
     function __construct($id = null, $path = null)
     {
+        if ('cli' !== PHP_SAPI && 'files' === ini_get('session.save_handler')) {
+            // Gotta make sure we get only the actual path, respecting PHP's M and N options,
+            // for example this var might hold "3;644;/home/session". For full reference:
+            // http://php.net/manual/en/session.configuration.php#ini.session.save-path
+            $s_array = explode(';',session_save_path());
+            $path = end($s_array);
+            if (!empty($path) && !is_writable($path)) {
+                // We can only trust this if open basedir is not enabled
+                if (empty(ini_get('open_basedir'))) {
+                    echo htmlspecialchars("The session save path '{$path}' is not writable.");
+                    exit;
+                }
+            }
+        }
+
         $this->id = isset($id)? $id : 'session_id';
         $this->path = $path;
     }
@@ -57,8 +71,7 @@ class OX_Admin_UI_SessionStorage
 
     protected function initStorage()
     {
-        session_set_cookie_params(0);
-        if ($this->id) {
+        if ($this->id && $this->id !== session_name()) {
             session_name($this->id);
         }
         session_start();
@@ -69,10 +82,7 @@ class OX_Admin_UI_SessionStorage
     {
         $this->initStorage();
         $_SESSION = array();
-        session_set_cookie_params(0);
-        session_name($this->id);
         session_destroy();
-        setcookie($this->id, '');
     }
 }
 

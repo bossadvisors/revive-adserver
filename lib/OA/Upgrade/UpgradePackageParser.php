@@ -44,9 +44,9 @@ class OA_UpgradePackageParser extends XML_Parser
 //        parent::XML_Parser('ISO-8859-1');
 //    }
 
-    function OA_UpgradePackageParser()
+    function __construct()
     {
-        parent::XML_Parser('ISO-8859-1');
+        parent::__construct('ISO-8859-1');
         //$this->__construct();
     }
 
@@ -96,7 +96,7 @@ class OA_UpgradePackageParser extends XML_Parser
         $this->element = implode('-', $this->elements);
     }
 
-    function &raiseError($msg = null, $xmlecode = 0, $xp = null, $ecode = -1)
+    function &customRaiseError($msg = null, $xmlecode = 0, $xp = null, $ecode = -1)
     {
         if (is_null($this->error)) {
             $error = '';

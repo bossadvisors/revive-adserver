@@ -222,7 +222,7 @@ class OA_DB_DataObject_Generator extends DB_DataObject_Generator
                 break;
 
             case 'TIMESTAMP': // do other databases use this???
-                $type = ($dbtype == 'mysql') ?
+                $type = ($dbtype == 'mysql' || $dbtype == 'mysqli') ?
                     DB_DATAOBJECT_MYSQLTIMESTAMP :
                     DB_DATAOBJECT_STR + DB_DATAOBJECT_DATE + DB_DATAOBJECT_TIME;
                 break;
@@ -360,7 +360,7 @@ class OA_DB_DataObject_Generator extends DB_DataObject_Generator
         // simple creation tools ! (static stuff!)
         $body .= "{$n}";
         $body .= "    /* Static get */{$n}";
-        $body .= "    function staticGet(\$k,\$v=NULL) { return DB_DataObject::staticGet('{$this->classname}',\$k,\$v); }{$n}";
+        $body .= "    function staticGet(\$k,\$v=NULL) { return DB_DataObject::staticGetFromClassName('{$this->classname}',\$k,\$v); }{$n}";
 
         // generate getter and setter methods
         $body .= $this->_generateGetters($input);

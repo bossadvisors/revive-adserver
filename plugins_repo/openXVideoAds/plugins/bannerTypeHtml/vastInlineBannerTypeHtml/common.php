@@ -198,16 +198,18 @@ class VideoAdsHelper
 
     static function getHelpLinkVideoPlayerConfig()
     {
-        return 'http://www.openx.org/en/docs/2.8/userguide/video+ads+player+configuration';
+        return 'https://documentation.revive-adserver.com/display/DOCS/Invocation+code:+Zone+level#InvocationCode:ZoneLevel-VideoInvocationcodeforInlineVideoadzoneorOverlayVideoadzone';
     }
 
     static function getHelpLinkOpenXPlugin()
     {
-        return 'http://www.openx.org/en/docs/2.8/userguide/banners+video+ads';
+        return 'http://documentation.revive-adserver.com/display/DOCS/Inline+Video+banners';
     }
 
     static function getLinkCrossdomainExample()
     {
-        return 'https://svn.openx.org/openx/trunk/www/delivery_dev/crossdomain.xml';
+        return 'http://documentation.revive-adserver.com/display/DOCS/Server+Cross+Domain+Policy';
     }
+
+    
 }

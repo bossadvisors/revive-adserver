@@ -196,18 +196,12 @@ phpAds_SessionDataStore();
     MAX_displayPlacementAdSelectionViewForm($publisherId, $zoneId, $view, $pageName, $tabIndex, $aOtherZones);
 
     $aParams = MAX_getLinkedAdParams($zoneId);
-
-    // if the selected campaign is a market campaign, we switch to the Link banner by parent campaign mode
-    // as Market contract campaign don't have banner to be linked individually
-    if(!empty($placementId)) {
-        $doCampaign = OA_Dal::factoryDO('campaigns');
-        $doCampaign->campaignid = $placementId;
-        $doCampaign->find();
-        $doCampaign->fetch();
-        if($doCampaign->type == DataObjects_Campaigns::CAMPAIGN_TYPE_MARKET_CONTRACT) {
-            $view = 'placement';
-        }
-    }
+    if ($aZone['type'] == MAX_ZoneEmail) {
+        // If the zone is an Email/Newsletter zone, change the existing
+        // ad type restriction from !txt to !htmltxt, to also disallow 
+        // HTML banners as well as text banners
+        $aParams['ad_type'] = "!htmltxt";
+    }    
 
     if ($view == 'placement') {
         $aDirectLinkedAds = Admin_DA::getAdZones(array('zone_id' => $zoneId), true, 'ad_id');

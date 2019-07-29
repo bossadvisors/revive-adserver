@@ -146,7 +146,7 @@ function MAX_adSelect($what, $campaignid = '', $target = '', $source = '', $with
     } elseif (strpos($what, 'bannerid:') === 0) {
         $originalBannerId = intval(substr($what,9));
     }
-    $userid = MAX_cookieGetUniqueViewerID();
+    $userid = MAX_cookieGetUniqueViewerId();
     MAX_cookieAdd($conf['var']['viewerId'], $userid, _getTimeYearFromNow());
     $outputbuffer = '';
     // Set flag
@@ -249,7 +249,8 @@ function MAX_adSelect($what, $campaignid = '', $target = '', $source = '', $with
             'bannerContent' => $row['bannerContent'],
             'clickwindow'   => $row['clickwindow'],
             'aRow'          => $row,
-            'context'       => _adSelectBuildContext($row, $context)
+            'context'       => _adSelectBuildContext($row, $context),
+            'iframeFriendly' => (bool)$row['iframe_friendly'],
         );
         // Init block/capping fields to avoid notices below
         $row += array(
@@ -280,15 +281,18 @@ function MAX_adSelect($what, $campaignid = '', $target = '', $source = '', $with
     } else {
 
         if (!empty($zoneId)) {
-            $logUrl = _adRenderBuildLogURL(array(
-                'ad_id' => 0,
-                'placement_id' => 0,
-            ), $zoneId, $source, $loc, $referer, '&');
-            $g_append = str_replace('{random}', MAX_getRandomNumber(), MAX_adRenderImageBeacon($logUrl)).$g_append;
+            // Blank impression beacon as global append
+            $g_append = MAX_adRenderBlankBeacon($zoneId, $source, $loc, $referer).$g_append;
+
+            // Try to fill the impression with a fallback from plugins
+            $outputbuffer = join("\n", OX_Delivery_Common_hook('blankAdSelect', array($zoneId, $context, $source, $richmedia)) ?: []);
         }
 
-        // No banner found
-        if (!empty($row['default'])) {
+        if (!empty($outputbuffer)) {
+            // A fallback was provided by some plugin(s)
+            $outputbuffer = $g_prepend . $outputbuffer . $g_append;
+            $output = array('html' => $outputbuffer, 'bannerid' => '' );
+        } elseif (!empty($row['default'])) {
             // Return the default banner
             if (empty($target)) {
                 $target = '_blank';  // Default
@@ -297,7 +301,7 @@ function MAX_adSelect($what, $campaignid = '', $target = '', $source = '', $with
                             $target . '\'><img src=\'' . $row['default_banner_image_url'] .
                             '\' border=\'0\' alt=\'\'></a>' . $g_append;
             $output = array('html' => $outputbuffer, 'bannerid' => '', 'default_banner_image_url' => $row['default_banner_image_url'] );
-        } else if (!empty($conf['defaultBanner']['imageUrl'])) {
+        } elseif (!empty($conf['defaultBanner']['imageUrl'])) {
             // Return the default banner
             if (empty($target)) {
                 $target = '_blank';  // Default
@@ -930,14 +934,13 @@ function _controlTrafficEnabled (&$aAds)
     return $control_enabled;
 }
 
-
 /**
- * Enter description here...
+ * @param array  $aAd
+ * @param array  $aContext
+ * @param string $source
+ * @param bool   $richMedia
  *
- * @param unknown_type $aAd
- * @param unknown_type $context
- * @param unknown_type $source
- * @param unknown_type $richMedia
+ * @return bool
  */
 function _adSelectCheckCriteria($aAd, $aContext, $source, $richMedia)
 {
@@ -971,13 +974,13 @@ function _adSelectCheckCriteria($aAd, $aContext, $source, $richMedia)
         return false;
     }
 
-    if (sizeof($aContext['banner']['include']) && !isset($aContext['banner']['include'][$aAd['ad_id']])) {
+    if (!empty($aContext['banner']['include']) && !isset($aContext['banner']['include'][$aAd['ad_id']])) {
         // Includelist banners
         OX_Delivery_logMessage('List of included banners does not contain bannerid '.$aAd['ad_id'], 7);
         return false;
     }
 
-    if (sizeof($aContext['campaign']['include']) && !isset($aContext['campaign']['include'][$aAd['placement_id']])) {
+    if (!empty($aContext['campaign']['include']) && !isset($aContext['campaign']['include'][$aAd['placement_id']])) {
         // Includelist campaigns
         OX_Delivery_logMessage('List of included campaigns does not contain bannerid '.$aAd['ad_id'], 7);
         return false;

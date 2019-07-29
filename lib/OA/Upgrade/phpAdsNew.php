@@ -30,7 +30,7 @@ class OA_phpAdsNew
     var $engine     = '';
     var $version    = '';
 
-    function OA_phpAdsNew()
+    function __construct()
     {
 
     }
@@ -72,7 +72,12 @@ class OA_phpAdsNew
     {
         if (file_exists(MAX_PATH.$this->pathCfg.$this->fileCfg))
         {
-            include MAX_PATH.$this->pathCfg.$this->fileCfg;
+            $config = file_get_contents(MAX_PATH.$this->pathCfg.$this->fileCfg);
+            $config = preg_replace('/set_magic_quotes_runtime\s*\(/', '//$1', $config);
+            $tmpFile = tempnam(MAX_PATH.'/var', 'pan_');
+            file_put_contents($tmpFile, $config);
+            include $tmpFile;
+            unlink($tmpFile);
             if (is_array($phpAds_config))
             {
                 $this->detected = true;
@@ -103,7 +108,7 @@ class OA_phpAdsNew
             $aResult['delivery']['execPhp'] = $phpAds_config['type_html_php'];
 
             if (!empty($phpAds_config['table_type'])) {
-                $aResult['database']['type']    = 'mysql';
+                $aResult['database']['type']    = extension_loaded('mysql') ? 'mysql' : 'mysqli';
                 $aResult['table']['type']       = $phpAds_config['table_type'];
             } else {
                 $aResult['database']['type']    = 'pgsql';
@@ -124,7 +129,7 @@ class OA_phpAdsNew
             // pan has a setting dblocal to indicate a socket connection
             // max v0.1 doesn't, just have to detect if the port is a port number or socket path
             $aResult['database']['host']        = ($phpAds_config['dbhost'] ? $phpAds_config['dbhost'] : 'localhost');
-            $aResult['database']['port']        = ($phpAds_config['dbport'] ? $phpAds_config['dbport'] : ($aResult['database']['type'] == 'mysql' ? '3306' : '5432') );
+            $aResult['database']['port']        = ($phpAds_config['dbport'] ? $phpAds_config['dbport'] : ($aResult['database']['type'] == 'mysql' || $aResult['database']['type'] == 'mysqli' ? '3306' : '5432') );
             if (isset($phpAds_config['dblocal']) && $phpAds_config['dblocal']) // must be pan (mysql/pgsql)
             {
                 $aResult['database']['protocol']    = 'unix';
@@ -317,7 +322,7 @@ class OA_phpAdsNew
     				$buf = fread($fp, $SEGMENT_RECORD_LENGTH);
     				for ($j = 0; $j < $SEGMENT_RECORD_LENGTH; $j++)
     				{
-    					$databaseSegments |= (ord($buf{$j}) << ($j << 3));
+    					$databaseSegments |= (ord($buf[$j]) << ($j << 3));
     				}
     				if ($databaseType == $GEOIP_ORG_EDITION ||
     					$databaseType == $GEOIP_ISP_EDITION)

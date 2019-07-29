@@ -4,14 +4,14 @@
 <plugin>
     <name>ox3rdPartyServers</name>
     <displayName>3rd Party Servers Plugin</displayName>
-    <creationDate>2008-08-01</creationDate>
+    <creationDate>2017-09-08</creationDate>
     <author>Revive Adserver</author>
     <authorEmail>revive@revive-adserver.com</authorEmail>
     <authorUrl>http://www.revive-adserver.com</authorUrl>
-    <license>GNU Gneral Public License v2</license>
+    <license>LICENSE.txt</license>
     <description>Plugin that automatically modifies HTML banners to provide 3rd Party Server click tracking.</description>
-    <version>1.2.0</version>
-    <oxversion>2.7.30-beta-rc11</oxversion>
+    <version>1.3.1</version>
+    <oxversion>3.2.0-beta-rc3</oxversion>
     <extends>3rdPartyServers</extends>
 
     <install>
@@ -23,16 +23,14 @@
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">doubleclick.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">eyeblaster.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">falk.class.php</file>
-            <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">google.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">kontera.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">max.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">mediaplex.class.php</file>
+            <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">openadstream.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">tangozebra.class.php</file>
             <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">tradedoubler.class.php</file>
-            <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">ypn.class.php</file>
-            <file path="{MODULEPATH}3rdPartyServers/ox3rdPartyServers/">openadstream.class.php</file>
             <file path="{PLUGINPATH}ox3rdPartyServers/_lang/">en.mo</file>
-            <file path="{PLUGINPATH}ox3rdPartyServers/_lang/po/">en.pot</file>
+            <file path="{PLUGINPATH}ox3rdPartyServers/_lang/po/">en.po</file>
         </files>
 
         <components>
@@ -58,9 +56,6 @@
                 <name>falk</name>
            </component>
            <component>
-                <name>google</name>
-           </component>
-           <component>
                 <name>kontera</name>
            </component>
            <component>
@@ -74,9 +69,6 @@
            </component>
            <component>
                 <name>tradedoubler</name>
-           </component>
-           <component>
-                <name>ypn</name>
            </component>
            <component>
                 <name>openadstream</name>

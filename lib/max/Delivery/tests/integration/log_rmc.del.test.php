@@ -11,6 +11,7 @@
 */
 
 require_once MAX_PATH . '/lib/max/Delivery/log.php';
+require_once MAX_PATH . '/lib/max/Delivery/cache.php';
 require_once LIB_PATH . '/OperationInterval.php';
 
 /**
@@ -26,9 +27,9 @@ class Test_Max_Delivery_Log_RMC extends UnitTestCase
     /**
      * The constructor method.
      */
-    function Test_Max_Delivery_Log_RMC()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
     }
 
     /**

@@ -26,9 +26,9 @@ class Test_OA_Upgrade extends UnitTestCase
     /**
      * The constructor method.
      */
-    function Test_OA_Upgrade()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         $this->prefix  = $GLOBALS['_MAX']['CONF']['table']['prefix'];
     }
 
@@ -287,7 +287,7 @@ class Test_OA_Upgrade extends UnitTestCase
         $oUpgrade = new OA_Upgrade_for_detectPAN($this);
         $oUpgrade->setReturnValue('initDatabaseConnection', true);
         $oUpgrade->expectCallCount('initDatabaseConnection', 2);
-        $oUpgrade->OA_Upgrade();
+        $oUpgrade->__construct();
 
         Mock::generatePartial(
             'OA_phpAdsNew',
@@ -349,7 +349,7 @@ class Test_OA_Upgrade extends UnitTestCase
         $oUpgrade = new OA_Upgrade_for_detectM01($this);
         $oUpgrade->setReturnValue('initDatabaseConnection', true);
         $oUpgrade->expectCallCount('initDatabaseConnection', 3);
-        $oUpgrade->OA_Upgrade();
+        $oUpgrade->__construct();
 
         Mock::generatePartial(
             'OA_phpAdsNew',
@@ -472,9 +472,9 @@ class Test_OA_Upgrade extends UnitTestCase
         $this->_deleteTestAppVarRecordAllNames('oa_version');
 
         // testing installation is up to date, no upgrade required
-        $this->_createTestAppVarRecord('oa_version',OA_VERSION);
+        $this->_createTestAppVarRecord('oa_version',VERSION);
         $this->assertFalse($oUpgrade->detectOpenads(true),'openads not detected: found application version '.$oUpgrade->versionInitialApplication);
-        $this->assertEqual($oUpgrade->versionInitialApplication,OA_VERSION,'wrong initial application version expected '.OA_VERSION.' got '.$oUpgrade->versionInitialApplication);
+        $this->assertEqual($oUpgrade->versionInitialApplication,VERSION,'wrong initial application version expected '.VERSION.' got '.$oUpgrade->versionInitialApplication);
         $this->assertEqual($oUpgrade->existing_installation_status, OA_STATUS_CURRENT_VERSION,'wrong upgrade status code, expected '.OA_STATUS_CURRENT_VERSION.' got '.$oUpgrade->existing_installation_status);
         $this->assertEqual($oUpgrade->aPackageList[0], '', 'wrong package file assigned');
         $this->_deleteTestAppVarRecordAllNames('oa_version');
@@ -494,10 +494,10 @@ class Test_OA_Upgrade extends UnitTestCase
         $this->assertEqual($this->_getTestAppVarValue('tables_core', '997'), '997', '');
 
         $this->_createTestAppVarRecord('oa_version','2.3.00');
-        $oUpgrade->versionInitialSchema['tables_core'] = 997;
-        $oUpgrade->versionInitialApplication = '2.3.00';
 
         $oUpgrade  = new OA_Upgrade();
+        $oUpgrade->versionInitialSchema['tables_core'] = 997;
+        $oUpgrade->versionInitialApplication = '2.3.00';
         $oUpgrade->upgradePath = MAX_PATH.'/lib/OA/Upgrade/tests/data/';
         $oUpgrade->oDBUpgrader->path_changes = $oUpgrade->upgradePath;
         $oUpgrade->oDBUpgrader->path_schema = $oUpgrade->upgradePath;
@@ -617,11 +617,11 @@ class Test_OA_Upgrade extends UnitTestCase
             }
             else
             {
-                $this->assertEqual($aRec['upgrade_name'],'openads_version_stamp_'.OA_VERSION, 'wrong package name for version stamp');
+                $this->assertEqual($aRec['upgrade_name'],'openads_version_stamp_'.VERSION, 'wrong package name for version stamp');
             }
         }
         // the application variable should match the code version stamp
-        $this->assertEqual($oUpgrade->versionInitialApplication,OA_VERSION,'wrong initial application version: '.$oUpgrade->versionInitialApplication);
+        $this->assertEqual($oUpgrade->versionInitialApplication,VERSION,'wrong initial application version: '.$oUpgrade->versionInitialApplication);
 //        $this->_deleteTestAppVarRecordAllNames('oa_version');
 
         $oUpgrade->oConfiguration->tally();
@@ -793,7 +793,7 @@ class Test_OA_Upgrade extends UnitTestCase
         $fp = fopen(MAX_PATH.'/var/RECOVER','a');
         if (is_resource($fp))
         {
-            $line = '13/openads_version_stamp_'.OA_VERSION.'/2007-07-02 03:32:39;';
+            $line = '13/openads_version_stamp_'.VERSION.'/2007-07-02 03:32:39;';
             fwrite($fp, $line);
         }
     }

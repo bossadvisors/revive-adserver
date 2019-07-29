@@ -14,6 +14,9 @@
     <include name="*.php"/>
     <include name="*.js"/>
     <include name="robots.txt"/>
+    <include name="crossdomain.xml"/>
+    <include name="composer.json"/>
+    <include name="composer.lock"/>
     <exclude name="build.sh"/>
 
     <!-- Subdirectory rules -->
@@ -24,13 +27,16 @@
     <exclude name="etc/changesfantasy/**"/>
     <include name="etc/permanentcache/**"/>
     <include name="lib/**"/>
-    <exclude name="lib/simpletest/**"/>
     <exclude name="lib/ant/**"/>
+    <exclude name="lib/simpletest/**"/>
+    <exclude name="lib/vendor/figdice/**"/>
+    <exclude name="lib/vendor/tinymce/**"/>
     <include name="maintenance/**"/>
     <include name="plugins/**"/>
     <include name="scripts/maintenance/**"/>
     <include name="scripts/rpm/**"/>
     <exclude name="scripts/rpm/*.spec*" />
+    <exclude name="scripts/translations/**"/>
     <include name="scripts/.htaccess"/>
     <include name="var/cache/README.txt"/>
     <include name="var/plugins/cache"/>
@@ -70,7 +76,9 @@
     <include name="*.properties"/>
     <include name="*.properties.example"/>
     <include name="build.sh"/>
+    <include name="crowdin.*"/>
     <include name="should_not_exist"/><!-- Required for one of the tests - ask Andrew -->
+    <exclude name="crossdomain.xml"/>
 
     <!-- Subdirectory rules -->
     <include name="build/**"/>
@@ -80,6 +88,8 @@
     <include name="etc/changesfantasy/**"/>
     <include name="lib/ant/**"/>
     <include name="lib/simpletest/**"/>
+    <include name="lib/vendor/figdice/**"/>
+    <include name="lib/vendor/tinymce/**"/>
     <exclude name="plugins/**"/>
     <include name="scripts/db_dataobject/**"/>
     <include name="scripts/delivery/**"/>

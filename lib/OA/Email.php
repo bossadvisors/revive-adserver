@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/max/language/Loader.php';
 
 require_once MAX_PATH . '/lib/OA.php';
@@ -148,7 +150,7 @@ class OA_Email
         }
 
         // Prepare the final email - add the greeting to the advertiser
-        $email = "$strMailHeader\n";
+        $email = "$strMailHeader\n\n";
         if (!empty($aUser['contact_name'])) {
             $greetingTo = $aUser['contact_name'];
         } else if (!empty($aAdvertiser['contact'])) {
@@ -697,7 +699,7 @@ class OA_Email
             return false;
         }
 
-        $email = "$strMailHeader\n";
+        $email = "$strMailHeader\n\n";
         // Set the correct greeting, start with username, then advertiser contact/name,
         // then admin name/company, fallback to generic
         if (!empty($aUser['contact_name'])) {
@@ -890,7 +892,7 @@ class OA_Email
         $emailBody = $this->_prepareCampaignActivatedDeactivatedEmailBody($aCampaign);
 
         // Prepare the final email - add the greeting to the advertiser
-        $email = "$strMailHeader\n";
+        $email = "$strMailHeader\n\n";
         if (!empty($aUser['contact_name'])) {
             $greetingTo = $aUser['contact_name'];
         } else if (!empty($aAdvertiser['contact'])) {
@@ -1189,20 +1191,20 @@ class OA_Email
     	$contents = html_entity_decode($contents, ENT_QUOTES);
 
     	// Build the "to:" header for the email
-    	if (!get_cfg_var('SMTP')) {
-    		$toParam = '"'.$userName.'" <'.$userEmail.'>';
-    	} else {
-    		$toParam = $userEmail;
-    	}
+        if (strncasecmp(PHP_OS, 'WIN', 3) == 0) {
+            // We do not know if PHP's mail() in windows can handle the
+            // full username in the "To:" header for all supported 
+            // PHP versions so we leave it out for now to be on the safe side.
+            $toParam = $userEmail;
+        } else {
+            $toParam = '"'.$userName.'" <'.$userEmail.'>';
+        }
     	// Build additional email headers
     	$headersParam = "MIME-Version: 1.0\r\n";
     	if (isset($phpAds_CharSet)) {
     		$headersParam .= "Content-Type: text/plain; charset=" . $phpAds_CharSet . "\r\n";
     	}
     	$headersParam .= "Content-Transfer-Encoding: 8bit\r\n";
-    	if (get_cfg_var('SMTP')) {
-    		$headersParam .= 'To: "' . $userName . '" <' . $userEmail . ">\r\n";
-    	}
     	$headersParam .= 'From: "' . $fromDetails['name'] . '" <' . $fromDetails['emailAddress'] . '>' . "\r\n";
     	// Use only \n as header separator when qmail is used
     	if ($aConf['email']['qmailPatch']) {

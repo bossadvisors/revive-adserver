@@ -15,13 +15,13 @@ require_once MAX_PATH.'/lib/OA/Upgrade/BaseUpgradeAuditor.php';
 Mock::generate('OA_DB_UpgradeAuditor');
 Mock::generate('OA_UpgradeAuditor');
 
-class Test_OA_BaseUpgradeAuditor extends UnitTestCase
+abstract class Test_OA_BaseUpgradeAuditor extends UnitTestCase
 {
     var $aAuditParams = array();
 
-	function Test_OA_BaseUpgradeAuditor()
+	function __construct()
 	{
-		$this->UnitTestCase();
+		parent::__construct();
 	}
 
 	function _getFieldDefinitionArray($id)

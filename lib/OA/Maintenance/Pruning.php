@@ -10,11 +10,10 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
-/*require_once MAX_PATH . '/lib/OA/Dal/Maintenance/Priority.php';
-require_once MAX_PATH . '/lib/OA/ServiceLocator.php';
-require_once MAX_PATH . '/lib/pear/Date.php';
-*/
+
 /**
  * A wrapper class for running the Maintenance Priority Engine process.
  *
@@ -28,9 +27,9 @@ class OA_Maintenance_Pruning extends MAX_Dal_Common
     /**
      * The class constructor method.
      */
-    function OA_Maintenance_Pruning()
+    function __construct()
     {
-        parent::MAX_Dal_Common();
+        parent::__construct();
     }
 
     function run()

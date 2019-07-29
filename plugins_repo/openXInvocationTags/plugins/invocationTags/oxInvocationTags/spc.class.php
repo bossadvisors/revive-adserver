@@ -15,6 +15,8 @@
  * @subpackage InvocationTags
  */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/Max.php';
 require_once LIB_PATH . '/Extension/invocationTags/InvocationTags.php';
 require_once MAX_PATH . '/lib/max/Plugin/Translation.php';
@@ -60,7 +62,7 @@ class Plugins_InvocationTags_OxInvocationTags_Spc extends Plugins_InvocationTags
      * Constructor
      *
      */
-    function Plugins_InvocationTags_OxInvocationTags_Spc()
+    function __construct()
     {
         $conf = $GLOBALS['_MAX']['CONF'];
         $this->publisherPlugin = true;
@@ -95,7 +97,7 @@ class Plugins_InvocationTags_OxInvocationTags_Spc extends Plugins_InvocationTags
      *
      * @return boolean  True - allowed, false - not allowed
      */
-    function isAllowed()
+    function isAllowed($extra = null)
     {
         return false;
     }
@@ -233,7 +235,7 @@ class Plugins_InvocationTags_OxInvocationTags_Spc extends Plugins_InvocationTags
                         break;
                 case 'charset':
                         $optionName = $GLOBALS['strCharset'];
-                        $optionValue = empty($mi->$feature) ? $GLOBALS['strAutoDetect'] : $mi->$feature;
+                        $optionValue = empty($mi->$feature) ? $GLOBALS['strAutoDetect'] : htmlspecialchars($mi->$feature);
                         break;
                 default:
                         $optionName = $feature;

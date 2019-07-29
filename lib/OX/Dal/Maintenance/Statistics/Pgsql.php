@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/ServiceLocator.php';
 
@@ -31,10 +33,10 @@ class OX_Dal_Maintenance_Statistics_Pgsql extends OX_Dal_Maintenance_Statistics
      *
      * @return OX_Dal_Maintenance_Statistics_Pgsql
      */
-    function OX_Dal_Maintenance_Statistics_Pgsql()
+    function __construct()
     {
         $this->timestampCastString = '::timestamp';
-        parent::OX_Dal_Maintenance_Statistics();
+        parent::__construct();
     }
 
     /**

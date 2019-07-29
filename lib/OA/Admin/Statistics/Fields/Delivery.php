@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/Admin/Statistics/Common.php';
 
@@ -399,11 +401,11 @@ class OA_StatisticsFieldsDelivery
      * Add the fields needed for conversions stats
      *
      * @param array Row of stats
-     * @param array Empty row
      * @param string Invocated method
      * @param array Parameter array
+     * @param array Empty row
      */
-    function mergeConversions(&$aRows, $emptyRow, $method, $aParams)
+    function mergeConversions(&$aRows, $method, $aParams, $emptyRow)
     {
         $conf = $GLOBALS['_MAX']['CONF'];
 

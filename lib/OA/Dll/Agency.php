@@ -20,7 +20,7 @@ require_once MAX_PATH . '/lib/OA/Dll.php';
 require_once MAX_PATH . '/lib/OA/Dll/AgencyInfo.php';
 require_once MAX_PATH . '/lib/OA/Dal/Statistics/Agency.php';
 require_once MAX_PATH . '/lib/OA/Auth.php';
-require_once MAX_PATH . '/lib/max/Admin/Languages.php';
+require_once MAX_PATH . '/lib/RV/Admin/Languages.php';
 
 
 /**
@@ -136,8 +136,8 @@ class OA_Dll_Agency extends OA_Dll
 
     function _validateLangage($language)
     {
-        $oLanguages = new MAX_Admin_Languages();
-        return array_key_exists($language, $oLanguages->AvailableLanguages());
+        $aLanguages = RV_Admin_Languages::getAvailableLanguages();
+        return isset($aLanguages[$language]);
     }
 
     /**
@@ -360,6 +360,45 @@ class OA_Dll_Agency extends OA_Dll
         if ($this->_validateForStatistics($agencyId, $oStartDate, $oEndDate)) {
             $dalAgency = new OA_Dal_Statistics_Agency;
             $rsStatisticsData = $dalAgency->getAgencyDailyStatistics($agencyId,
+                $oStartDate, $oEndDate, $localTZ);
+
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * This method returns hourly statistics for an agency for a specified period.
+     *
+     * @access public
+     *
+     * @param integer $agencyId The ID of the agency to view statistics for
+     * @param date $oStartDate The date from which to get statistics (inclusive)
+     * @param date $oEndDate The date to which to get statistics (inclusive)
+     * @param array &$rsStatisticsData The data returned by the function
+     * <ul>
+     *   <li><b>day date</b>  The day
+     *   <li><b>requests integer</b>  The number of requests for the day
+     *   <li><b>impressions integer</b>  The number of impressions for the day
+     *   <li><b>clicks integer</b>  The number of clicks for the day
+     *   <li><b>revenue decimal</b>  The revenue earned for the day
+     * </ul>
+     *
+     * @return boolean  True if the operation was successful and false if not.
+     *
+     */
+    function getAgencyHourlyStatistics($agencyId, $oStartDate, $oEndDate, $localTZ, &$rsStatisticsData)
+    {
+        if (!$this->checkPermissions(
+            array(OA_ACCOUNT_ADMIN, OA_ACCOUNT_MANAGER),
+            'agency', $agencyId)) {
+            return false;
+        }
+
+        if ($this->_validateForStatistics($agencyId, $oStartDate, $oEndDate)) {
+            $dalAgency = new OA_Dal_Statistics_Agency;
+            $rsStatisticsData = $dalAgency->getAgencyHourlyStatistics($agencyId,
                 $oStartDate, $oEndDate, $localTZ);
 
             return true;

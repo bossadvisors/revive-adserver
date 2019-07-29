@@ -91,11 +91,16 @@ class OA_Permission
      * eventually needed) refactoring of the enture UI to a proper MVC
      * framework.
      */
-    public static function checkSessionToken()
+    public static function checkSessionToken($tokenName = 'token')
     {
-        $token = isset($_GET['token']) ? $_GET['token'] : false;
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $token = isset($_POST[$tokenName]) ? $_POST[$tokenName] : false;
+        } else {
+            $token = isset($_GET[$tokenName]) ? $_GET[$tokenName] : false;
+        }
+
         OA_Permission::enforceTrue(
-            phpAds_SessionValidateToken($token)
+            phpAds_SessionValidateToken($token, $tokenName)
         );
     }
 
@@ -812,17 +817,17 @@ class OA_Permission
     /**
      * A method to retrieve the current user object from a session
      *
-     * @static
      * @return OA_Permission_User on success or false otherwise
      */
-    public static function &getCurrentUser()
+    public static function getCurrentUser()
     {
         global $session;
+
         if (isset($session['user'])) {
             return $session['user'];
         }
-        $false = false;
-        return $false;
+
+        return false;
     }
 
 

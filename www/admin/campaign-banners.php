@@ -19,13 +19,13 @@ require_once MAX_PATH . '/lib/OA/Dal.php';
 require_once MAX_PATH . '/lib/OA/Dll.php';
 require_once MAX_PATH . '/www/admin/config.php';
 require_once MAX_PATH . '/www/admin/lib-statistics.inc.php';
-require_once MAX_PATH . '/www/admin/lib-gd.inc.php';
 require_once MAX_PATH . '/lib/max/other/html.php';
 require_once MAX_PATH . '/lib/OX/Translation.php';
 
+require_once RV_PATH . '/lib/RV/Admin/DateTimeFormat.php';
+
 // Register input variables
 phpAds_registerGlobal('hideinactive', 'listorder', 'orderdirection');
-
 
 // Security check
 OA_Permission::enforceAccount(OA_ACCOUNT_MANAGER, OA_ACCOUNT_ADVERTISER);
@@ -158,6 +158,7 @@ $doBanners = OA_Dal::factoryDO('banners');
 $doBanners->campaignid = $campaignid;
 $doBanners->addListorderBy($listorder, $orderdirection);
 $doBanners->selectAdd('storagetype AS type');
+$doBanners->selectAdd('updated AS updated');
 $doBanners->find();
 
 $countActive = 0;
@@ -188,6 +189,10 @@ while ($doBanners->fetch() && $row = $doBanners->toArray()) {
         $bannerCode = '';
     }
     $banners[$row['bannerid']]['preview'] = $bannerCode;
+
+    if (!empty($row['updated'])) {
+        $banners[$row['bannerid']]['updated'] = RV_Admin_DateTimeFormat::formatUTCDateTime($row['updated']);
+    }
 }
 
 $aCount = array(
@@ -196,7 +201,7 @@ $aCount = array(
 );
 
 
-// Figure out which banners are inactive,
+// Figure out which banners are inactive and prepare trimmed URLs for display
 $bannersHidden = 0;
 if (isset($banners) && is_array($banners) && count($banners) > 0) {
     reset ($banners);
@@ -206,6 +211,8 @@ if (isset($banners) && is_array($banners) && count($banners) > 0) {
             $bannersHidden++;
 			$aCount['banners_hidden']++;
             unset($banners[$key]);
+        } elseif (strlen($banner['url']) > 40) {
+            $banners[$key]['url_trimmed'] = substr_replace($banner['url'], ' ...', 40);
         }
     }
 }

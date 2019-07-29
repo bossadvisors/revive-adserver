@@ -15,6 +15,8 @@
  * @subpackage XMLRPC
  */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/Max.php';
 require_once MAX_PATH . '/lib/max/Delivery/adSelect.php';
 require_once MAX_PATH . '/lib/max/Delivery/flash.php';
@@ -368,7 +370,7 @@ function OA_Delivery_XmlRpc_SPC($params)
 
         if ($i) {
             // Put the decoded value the view arg array
-            $$vars[$i] = XML_RPC_decode($p);
+            ${$vars[$i]} = XML_RPC_decode($p);
         } else {
             // First parameter: environment information supplied be XML-RPC client
             $p = XML_RPC_decode($p);
@@ -439,13 +441,13 @@ function OA_Delivery_XmlRpc_SPC($params)
     // Add $referer parameter
     $referer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
 
-    // If the what parameter is an int, it is the affiliateid, otherwise it's a serialized array of name=zone pairs
+    // If the what parameter is an int, it is the affiliateid, otherwise it's a url-like array of name=zone pairs
     // This convention is inline with the parameters passed into local-mode SPC
-    if (is_numeric($what)) {
+    if (ctype_digit($what)) {
         $zones = OA_cacheGetPublisherZones($what);
         $nz = false;
     } else {
-        $zones = unserialize($what);
+        parse_str($what, $zones);
         $nz = true;
     }
 

@@ -280,9 +280,9 @@ class HTML_QuickForm extends HTML_Common
      * @param    bool        $trackSubmit       (optional)Whether to track if the form was submitted by adding a special hidden field
      * @access   public
      */
-    function HTML_QuickForm($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
+    function __construct($formName='', $method='post', $action='', $target='', $attributes=null, $trackSubmit = false)
     {
-        HTML_Common::HTML_Common($attributes);
+        parent::__construct($attributes);
         $method = (strtoupper($method) == 'GET') ? 'get' : 'post';
         $action = ($action == '') ? $_SERVER['PHP_SELF'] : $action;
         $target = empty($target) ? array() : array('target' => $target);
@@ -565,7 +565,7 @@ class HTML_QuickForm extends HTML_Common
     function &createElement($elementType)
     {
         $args    =  func_get_args();
-        $element =& HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
+        $element = HTML_QuickForm::_loadElement('createElement', $elementType, array_slice($args, 1));
         return $element;
     } // end func createElement
 
@@ -583,7 +583,7 @@ class HTML_QuickForm extends HTML_Common
      * @return    HTML_QuickForm_Element
      * @throws    HTML_QuickForm_Error
      */
-    function &_loadElement($event, $type, $args)
+    function _loadElement($event, $type, $args)
     {
         $type = strtolower($type);
         if (!HTML_QuickForm::isTypeRegistered($type)) {
@@ -599,7 +599,7 @@ class HTML_QuickForm extends HTML_Common
                 $args[$i] = null;
             }
         }
-        $err = $elementObject->onQuickFormEvent($event, $args, $this);
+        $err = $elementObject->onQuickFormEvent($event, $args, isset($this) ? $this : null);
         if ($err !== true) {
             return $err;
         }
@@ -622,11 +622,11 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function &addElement($element)
+    function addElement($element)
     {
         if (is_object($element) && is_subclass_of($element, 'html_quickform_element')) {
            $elementObject = &$element;
-           $elementObject->onQuickFormEvent('updateValue', null, $this);
+           $elementObject->onQuickFormEvent('updateValue', null, isset($this) ? $this : null);
         } else {
             $args = func_get_args();
             $elementObject =& $this->_loadElement('addElement', $element, array_slice($args, 1));
@@ -678,7 +678,7 @@ class HTML_QuickForm extends HTML_Common
     * @return   HTML_QuickForm_element  reference to inserted element
     * @throws   HTML_QuickForm_Error
     */
-    function &insertElementBefore(&$element, $nameAfter)
+    function insertElementBefore(&$element, $nameAfter)
     {
         if (!empty($this->_duplicateIndex[$nameAfter])) {
             $error = PEAR::raiseError(null, QUICKFORM_INVALID_ELEMENT_NAME, null, E_USER_WARNING, 'Several elements named "' . $nameAfter . '" exist in HTML_QuickForm::insertElementBefore().', 'HTML_QuickForm_Error', true);
@@ -720,7 +720,7 @@ class HTML_QuickForm extends HTML_Common
         } else {
             $this->_duplicateIndex[$elementName][] = $targetIdx;
         }
-        $element->onQuickFormEvent('updateValue', null, $this);
+        $element->onQuickFormEvent('updateValue', null, isset($this) ? $this : null);
         if ($this->_freezeAll) {
             $element->freeze();
         }
@@ -982,7 +982,7 @@ class HTML_QuickForm extends HTML_Common
     function updateElementAttr($elements, $attrs)
     {
         if (is_string($elements)) {
-            $elements = split('[ ]?,[ ]?', $elements);
+            $elements = preg_split('/[ ]?,[ ]?/D', $elements);
         }
         foreach (array_keys($elements) as $key) {
             if (is_object($elements[$key]) && is_a($elements[$key], 'HTML_QuickForm_element')) {
@@ -2043,13 +2043,13 @@ class HTML_QuickForm_Error extends PEAR_Error {
     * @param int   $level intensity of the error (PHP error code)
     * @param mixed $debuginfo any information that can inform user as to nature of the error
     */
-    function HTML_QuickForm_Error($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
+    function __construct($code = QUICKFORM_ERROR, $mode = PEAR_ERROR_RETURN,
                          $level = E_USER_NOTICE, $debuginfo = null)
     {
         if (is_int($code)) {
-            $this->PEAR_Error(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
+            parent::__construct(HTML_QuickForm::errorMessage($code), $code, $mode, $level, $debuginfo);
         } else {
-            $this->PEAR_Error("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
+            parent::__construct("Invalid error code: $code", QUICKFORM_ERROR, $mode, $level, $debuginfo);
         }
     }
 

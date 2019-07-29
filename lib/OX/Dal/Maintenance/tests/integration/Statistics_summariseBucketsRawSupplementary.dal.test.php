@@ -26,9 +26,9 @@ class Test_OX_Dal_Maintenance_Statistics_summariseBucketsRawSupplementary extend
     /**
      * The constructor method.
      */
-    function Test_OX_Dal_Maintenance_Statistics_summariseBucketsRawSupplementary()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
     }
 
     /**
@@ -227,7 +227,7 @@ class Test_OX_Dal_Maintenance_Statistics_summariseBucketsRawSupplementary extend
         $oData_intermediate_ad_connection->ad_id                            = 6;
         $oData_intermediate_ad_connection->zone_id                          = 7;
         $oData_intermediate_ad_connection->tracker_ip_address               = '127.0.0.1';
-        $oData_intermediate_ad_connection->connection_action                = MAX_CONNECTION_AD_VIEW;
+        $oData_intermediate_ad_connection->connection_action                = MAX_CONNECTION_AD_IMPRESSION;
         $oData_intermediate_ad_connection->connection_window                = 3600;
         $oData_intermediate_ad_connection->connection_status                = MAX_CONNECTION_STATUS_APPROVED;
         $oData_intermediate_ad_connection->inside_window                    = 1;

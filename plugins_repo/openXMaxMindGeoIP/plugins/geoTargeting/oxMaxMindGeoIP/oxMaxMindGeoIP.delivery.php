@@ -34,6 +34,7 @@ function Plugin_geoTargeting_oxMaxMindGeoIP_oxMaxMindGeoIP_Delivery_getGeoInfo($
 
     if ($conf['deliveryLog']['enabled'])
     {
+        require_once RV_PATH . '/lib/RV.php';
         require_once MAX_PATH . '/lib/OA.php';
         OA::switchLogIdent('delivery');
     }
@@ -232,7 +233,7 @@ function _oxMaxMind_getGeoInfo($fp)
                 $buf = fread($fp, $SEGMENT_RECORD_LENGTH);
                 for ($j = 0; $j < $SEGMENT_RECORD_LENGTH; $j++)
                 {
-                    $databaseSegments |= (ord($buf{$j}) << ($j << 3));
+                    $databaseSegments |= (ord($buf[$j]) << ($j << 3));
                 }
                 if ($databaseType == $GEOIP_ORG_EDITION ||
                     $databaseType == $GEOIP_ISP_EDITION)
@@ -339,9 +340,9 @@ function _oxMaxMind_seek($fp, $ipnum)
             if ( $record_length == 3 )
             {
                 /* Most common case is completely unrolled and uses constants. */
-                $x =  (ord($buf{3*1 + 0}) << (0*8))
-                    + (ord($buf{3*1 + 1}) << (1*8))
-                    + (ord($buf{3*1 + 2}) << (2*8));
+                $x =  (ord($buf[3*1 + 0]) << (0*8))
+                    + (ord($buf[3*1 + 1]) << (1*8))
+                    + (ord($buf[3*1 + 2]) << (2*8));
             }
             else
             {
@@ -351,7 +352,7 @@ function _oxMaxMind_seek($fp, $ipnum)
                 $x = 0;
                 do {
                     $x <<= 8;
-                    $x += ord($buf{--$p});
+                    $x += ord($buf[--$p]);
                 } while ( --$j );
             }
 
@@ -362,9 +363,9 @@ function _oxMaxMind_seek($fp, $ipnum)
             if ( $record_length == 3 )
             {
                 /* Most common case is completely unrolled and uses constants. */
-                $x =  (ord($buf{3*0 + 0}) << (0*8))
-                    + (ord($buf{3*0 + 1}) << (1*8))
-                    + (ord($buf{3*0 + 2}) << (2*8));
+                $x =  (ord($buf[3*0 + 0]) << (0*8))
+                    + (ord($buf[3*0 + 1]) << (1*8))
+                    + (ord($buf[3*0 + 2]) << (2*8));
             }
             else
             {
@@ -374,7 +375,7 @@ function _oxMaxMind_seek($fp, $ipnum)
                 $x = 0;
                 do {
                     $x <<= 8;
-                    $x += ord($buf{--$p});
+                    $x += ord($buf[--$p]);
                 } while ( --$j );
             }
         }
@@ -496,7 +497,7 @@ function _oxMaxMind_seek($fp, $ipnum)
         }
 
         /* get country */
-        $country = $countrycodes[ord($record_buf{0})];
+        $country = $countrycodes[ord($record_buf[0])];
         $record_buf = substr($record_buf, 1);
 
         /* get region */
@@ -527,14 +528,14 @@ function _oxMaxMind_seek($fp, $ipnum)
         /* get latitude */
         $latitude = 0;
         for ($j = 0; $j < 3; ++$j)
-            $latitude += (ord($record_buf{$j}) << ($j * 8));
+            $latitude += (ord($record_buf[$j]) << ($j * 8));
         $latitude = $latitude/10000 - 180;
         $record_buf = substr($record_buf, 3);
 
         /* get longitude */
         $longitude = 0;
         for ($j = 0; $j < 3; ++$j)
-            $longitude += (ord($record_buf{$j}) << ($j * 8));
+            $longitude += (ord($record_buf[$j]) << ($j * 8));
         $longitude = $longitude/10000 - 180;
 
         /* get area code and dma code for post April 2002 databases and for US locations */
@@ -545,7 +546,7 @@ function _oxMaxMind_seek($fp, $ipnum)
                 $record_buf = substr($record_buf, 3);
                 $dmaarea_combo = 0;
                 for ($j = 0; $j < 3; ++$j)
-                    $dmaarea_combo += (ord($record_buf{$j}) << ($j * 8));
+                    $dmaarea_combo += (ord($record_buf[$j]) << ($j * 8));
                 $dma_code    = floor($dmaarea_combo / 1000);
                 $area_code    = $dmaarea_combo % 1000;
             }

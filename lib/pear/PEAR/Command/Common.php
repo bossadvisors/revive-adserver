@@ -91,9 +91,9 @@ class PEAR_Command_Common extends PEAR
      *
      * @access public
      */
-    function PEAR_Command_Common(&$ui, &$config)
+    function __construct(&$ui, &$config)
     {
-        parent::PEAR();
+        parent::__construct();
         $this->config = &$config;
         $this->ui = &$ui;
     }
@@ -166,7 +166,7 @@ class PEAR_Command_Common extends PEAR
         while (list($option, $info) = each($this->commands[$command]['options'])) {
             $larg = $sarg = '';
             if (isset($info['arg'])) {
-                if ($info['arg']{0} == '(') {
+                if ($info['arg'][0] == '(') {
                     $larg = '==';
                     $sarg = '::';
                     $arg = substr($info['arg'], 1, -1);

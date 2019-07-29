@@ -5,9 +5,8 @@ require_once(MAX_PATH.'/lib/OA/Upgrade/Migration.php');
 class Migration_/*version*/ extends Migration
 {
 
-    function Migration_/*version*/()
+    function __construct()
     {
-        //$this->__construct();
 /*tasklist*/
 
 /*objectmap*/
@@ -16,5 +15,3 @@ class Migration_/*version*/ extends Migration
 /*methods*/
 
 }
-
-?>

@@ -18,6 +18,7 @@ if(!isset($GLOBALS['_MAX']['FILES']['/lib/max/Delivery/cookie.php'])) {
     require_once MAX_PATH . '/lib/max/Delivery/cookie.php';
 }
 require_once MAX_PATH . '/lib/max/Dal/Admin/Session.php';
+require_once MAX_PATH . '/lib/OA/Permission.php';
 
 /**
  * Fetch sessiondata from the database
@@ -30,70 +31,144 @@ require_once MAX_PATH . '/lib/max/Dal/Admin/Session.php';
 function phpAds_SessionDataFetch()
 {
     global $session;
-    $dal = new MAX_Dal_Admin_Session();
 
     // Guard clause: Can't fetch a session without an ID
-	if (empty($_COOKIE['sessionID'])) {
+    if (empty($_COOKIE['sessionID']) || !preg_match('#^[0-9a-f]{32}$#D', $_COOKIE['sessionID'])) {
         return;
     }
 
+    $dal = new MAX_Dal_Admin_Session();
     $serialized_session = $dal->getSerializedSession($_COOKIE['sessionID']);
 
-    // This is required because 'sessionID' cookie is set to new during logout.
-    // According to comments in the file it is because some servers do not
-    // support setting cookies during redirect.
-    if (empty($serialized_session)) {
+    // Return if the session was not found (expired or forged)
+    if (!$serialized_session) {
         return;
     }
 
     $loaded_session = unserialize($serialized_session);
-	if (!$loaded_session) {
-        // XXX: Consider raising an error
+
+    // Or if it can't be unserialized and/or is not a session we started
+    if (empty($loaded_session['__authentic__'])) {
         return;
     }
-	$session = $loaded_session;
+
+    $session = $loaded_session;
+
     $dal->refreshSession($_COOKIE['sessionID']);
 }
 
 /*-------------------------------------------------------*/
-/* Create a new sessionid                                */
+/* Sets an admin cookie                                  */
+/*-------------------------------------------------------*/
+
+function phpAds_SessionSetAdminCookie($name, $value)
+{
+    $conf = $GLOBALS['_MAX']['CONF'];
+
+    return setcookie(
+        $name,
+        $value,
+        0,
+        dirname($_SERVER["SCRIPT_NAME"]),
+        empty($_SERVER['HTTP_HOST']) ? null : preg_replace('#:\d+$#', '', $_SERVER['HTTP_HOST']),
+        !empty($conf['openads']['requireSSL']),
+        true
+    );
+}
+
+/*-------------------------------------------------------*/
+/* Start a new session                                   */
 /*-------------------------------------------------------*/
 
 function phpAds_SessionStart()
 {
 	global $session;
+
 	if (empty($_COOKIE['sessionID'])) {
-		$session = array();
-		$_COOKIE['sessionID'] = md5(uniqid('phpads', 1));
-		MAX_cookieAdd('sessionID', $_COOKIE['sessionID']);
-		MAX_cookieFlush();
+		phpAds_clearSession();
+
+        $sessionId = phpAds_SessionGenerateId();
+
+        $dal = new MAX_Dal_Admin_Session();
+        $dal->storeSerializedSession(serialize($session), $sessionId, OA_Permission::getUserId());
 	}
+
 	return $_COOKIE['sessionID'];
+}
+
+/*-------------------------------------------------------*/
+/* Generate a sessionid                                  */
+/*-------------------------------------------------------*/
+
+function phpAds_SessionGenerateId()
+{
+    $_COOKIE['sessionID'] = md5(uniqid('phpads', 1));
+
+    phpAds_SessionSetAdminCookie('sessionID', $_COOKIE['sessionID']);
+
+    return $_COOKIE['sessionID'];
+}
+
+/*-------------------------------------------------------*/
+/* Re-generate the sessionid                             */
+/*-------------------------------------------------------*/
+
+function phpAds_SessionRegenerateId($deleteAllUserSessions = false)
+{
+    global $session;
+
+    $dal = new MAX_Dal_Admin_Session();
+
+    if ($deleteAllUserSessions && !empty($session['user'])) {
+        $dal->deleteUserSessions($session['user']->aUser['user_id']);
+    } elseif (!empty($_COOKIE['sessionID'])) {
+        $dal->deleteSession($_COOKIE['sessionID']);
+    }
+
+    if (!empty($session['__authentic__'])) {
+        $sessionId = phpAds_SessionGenerateId();
+        $dal->storeSerializedSession(serialize($session), $sessionId, OA_Permission::getUserId());
+
+        return $sessionId;
+    }
+
+    unset($_COOKIE['sessionID']);
+
+    return phpAds_SessionStart();
+}
+
+/*-------------------------------------------------------*/
+/* Clear the session and mark it as authentic            */
+/*-------------------------------------------------------*/
+
+function phpAds_clearSession()
+{
+    $GLOBALS['session'] = array(
+        '__authentic__' => true,
+    );
 }
 
 /*-------------------------------------------------------*/
 /* Register the data in the session array                */
 /*-------------------------------------------------------*/
 
-function phpAds_SessionDataRegister($key, $value='')
+function phpAds_SessionDataRegister($key, $value = '')
 {
-    $conf = $GLOBALS['_MAX']['CONF'];
 	global $session;
-    //if ($conf['openads']['installed'])
-    if (OA_INSTALLATION_STATUS == OA_INSTALLATION_STATUS_INSTALLED)
-    {
+
+    if (defined('OA_INSTALLATION_STATUS') && OA_INSTALLATION_STATUS == OA_INSTALLATION_STATUS_INSTALLED)  {
 		phpAds_SessionStart();
 	}
-	if (is_array($key) && $value=='') {
+
+	if (is_array($key) && $value == '') {
 		foreach (array_keys($key) as $name) {
 			$session[$name] = $key[$name];
 		}
 	} else {
 		$session[$key] = $value;
 	}
-    //if ($conf['openads']['installed'])
-    if (OA_INSTALLATION_STATUS == OA_INSTALLATION_STATUS_INSTALLED)
-    {
+
+    if (defined('OA_INSTALLATION_STATUS') && OA_INSTALLATION_STATUS == OA_INSTALLATION_STATUS_INSTALLED) {
 	   phpAds_SessionDataStore();
 	}
 }
@@ -103,20 +178,19 @@ function phpAds_SessionDataRegister($key, $value='')
  */
 function phpAds_SessionDataStore()
 {
-    $dal = new MAX_Dal_Admin_Session();
-    $conf = $GLOBALS['_MAX']['CONF'];
     global $session;
+
+    $dal = new MAX_Dal_Admin_Session();
+
     if (isset($_COOKIE['sessionID']) && $_COOKIE['sessionID'] != '') {
         $session_id = $_COOKIE['sessionID'];
         $serialized_session_data = serialize($session);
-        $dal->storeSerializedSession($serialized_session_data, $session_id);
-    }
-    // Randomly purge old sessions
-    // XXX: Why is this random?
-    // XXX: Shouldn't this be done by a daemon, or at least at logout time?
-    srand((double)microtime()*1000000);
-    if(rand(1, 100) == 42) {
-        $dal->pruneOldSessions();
+        $dal->storeSerializedSession($serialized_session_data, $session_id, OA_Permission::getUserId());
+
+        // Garbage collect old sessions, 1 out of 100 requests, roughly
+        if (mt_rand(1, 100) == 42) {
+            $dal->pruneOldSessions();
+        }
     }
 }
 
@@ -133,34 +207,37 @@ function phpAds_SessionDataDestroy()
 	global $session;
     $dal->deleteSession($_COOKIE['sessionID']);
 
-    MAX_cookieAdd('sessionID', '');
-    MAX_cookieFlush();
+    phpAds_SessionSetAdminCookie('sessionID', '');
 
 	unset($session);
 	unset($_COOKIE['sessionID']);
 }
 
-function phpAds_SessionGetToken()
+function phpAds_SessionGetToken($tokenName = 'token')
 {
-    if (OA_INSTALLATION_STATUS != OA_INSTALLATION_STATUS_INSTALLED) {
+    global $session;
+
+    if (defined('OA_INSTALLATION_STATUS') && OA_INSTALLATION_STATUS != OA_INSTALLATION_STATUS_INSTALLED) {
         return false;
     }
-    global $session;
+
     phpAds_SessionStart();
-    if (empty($session['token'])) {
-        $session['token'] = md5(uniqid('phpads', 1));
+
+    if (empty($session[$tokenName])) {
+        $session[$tokenName] = md5(uniqid('phpads', 1));
         phpAds_SessionDataStore();
     }
-    return $session['token'];
+
+    return $session[$tokenName];
 }
 
-function phpAds_SessionValidateToken($token)
+function phpAds_SessionValidateToken($token, $tokenName = 'token')
 {
     static $result;
 
     if (!isset($result)) {
-        $result = ($token === phpAds_SessionGetToken());
-        phpAds_SessionDataRegister('token', null);
+        $result = ($token === phpAds_SessionGetToken($tokenName));
+        phpAds_SessionDataRegister($tokenName, null);
     }
     return $result;
 }

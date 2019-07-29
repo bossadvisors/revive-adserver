@@ -57,6 +57,8 @@ phpAds_SessionDataStore();
     // Process submitted form
     if (isset($submit))
     {
+        OA_Permission::checkSessionToken();
+
         $dalZones       = OA_Dal::factoryDAL('zones');
         $prioritise     = false;
         $error          = false;
@@ -132,11 +134,30 @@ phpAds_SessionDataStore();
     // Main code
     $aAd = Admin_DA::getAd($bannerId);
     $aParams = array('agency_id' => $agencyId);
+    $aExtraParams = array();
     if ($aAd['type'] == 'txt') {
+        // If the banner is a text banner, only select zones (and their parent
+        // publishers) where the zone type is a text zone
         $aParams['zone_type'] = phpAds_ZoneText;
     } else {
+        // Only select zones (and their parent publishers) where the zone
+        // dimensions are a match for the banner
         $aParams['zone_width'] = $aAd['width'] . ',-1';
         $aParams['zone_height'] = $aAd['height'] . ',-1';
+        if ($aAd['type'] == 'html') {
+            // In addition, if the banner is an HTML banner, only select zones
+            // (and their parent publishers) where the zone type is NOT an 
+            // email/newsletter zone
+            $aTypes = array(
+                phpAds_ZoneBanner,
+                phpAds_ZoneInterstitial,
+                phpAds_ZonePopup,
+                MAX_ZoneClick,
+                OX_ZoneVideoInstream,
+                OX_ZoneVideoOverlay,
+            );
+            $aExtraParams['zone_type'] = implode(',', $aTypes);
+        }
     }
     $aPublishers = Admin_DA::getPublishers($aParams, true);
     $aLinkedZones = Admin_DA::getAdZones(array('ad_id' => $bannerId), false, 'zone_id');
@@ -146,7 +167,8 @@ phpAds_SessionDataStore();
 <form name='zones' action='$pageName' method='post'>
 <input type='hidden' name='clientid' value='$advertiserId'>
 <input type='hidden' name='campaignid' value='$campaignId'>
-<input type='hidden' name='bannerid' value='$bannerId'>";
+<input type='hidden' name='bannerid' value='$bannerId'>
+<input type='hidden' name='token' value='".htmlspecialchars(phpAds_SessionGetToken(), ENT_QUOTES)."'>";
 
     MAX_displayZoneHeader($pageName, $listorder, $orderdirection, $aEntities);
 
@@ -179,7 +201,7 @@ phpAds_SessionDataStore();
 
         foreach ($aPublishers as $publisherId => $aPublisher) {
             $publisherName = $aPublisher['name'];
-		    $aZones = Admin_DA::getZones($aParams + array('publisher_id' => $publisherId), true);
+		    $aZones = Admin_DA::getZones($aParams + $aExtraParams + array('publisher_id' => $publisherId), true);
             if (!empty($aZones)) {
 		        $zoneToSelect = true;
                 $bgcolor = ($i % 2 == 0) ? " bgcolor='#F6F6F6'" : '';

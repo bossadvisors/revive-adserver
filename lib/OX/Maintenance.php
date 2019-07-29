@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/Max.php';
 require_once MAX_PATH . '/scripts/maintenance/translationStrings.php';
 
@@ -46,7 +48,7 @@ class OX_Maintenance
     var $aConf;
     var $aPref;
 
-    function OX_Maintenance()
+    function __construct()
     {
         $this->aConf = $GLOBALS['_MAX']['CONF'];
 
@@ -218,7 +220,6 @@ class OX_Maintenance
         $this->_runReports();
         $this->_runGeneralPruning();
         $this->_runPriorityPruning();
-        $this->_runDeleteUnverifiedAccounts();
         OA::debug('Midnight Maintenance Tasks Completed', PEAR_LOG_INFO);
     }
 
@@ -297,12 +298,6 @@ class OX_Maintenance
         }
         $oDal = new OA_Maintenance_Pruning();
         $oDal->run();
-    }
-
-    function _runDeleteUnverifiedAccounts()
-    {
-        $oPlugin = OA_Auth::staticGetAuthPlugin();
-        $oPlugin->deleteUnverifiedUsers($this);
     }
 
     function _startProcessDebugMessage($processName)

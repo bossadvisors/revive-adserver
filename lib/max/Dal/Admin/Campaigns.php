@@ -30,14 +30,15 @@ class MAX_Dal_Admin_Campaigns extends MAX_Dal_Common
     var $table = 'campaigns';
 
 	var $orderListName = array(
-        'name'   => 'campaignname',
-        'id'     => array('clientid', 'campaignid'),
-        'status' => 'status',
+        'name'        => 'campaignname',
+        'id'          => array('clientid', 'campaignid'),
+        'status'      => 'status',
 	// hack to sort by type asc first (non default campaigns always on top)
 	// DataObjects_Campaigns::CAMPAIGN_TYPE_DEFAULT = 0
 	    'type+name'   => "(type=0) ASC, campaignname",
 	    'type+id'     => array('(type=0) ASC, clientid', 'campaignid'),
 	    'type+status' => '(type=0) ASC, status',
+        'updated'     => 'updated',
     );
 
     /**
@@ -752,9 +753,9 @@ class MAX_Dal_Admin_Campaigns extends MAX_Dal_Common
                 {$prefix}zones.delivery = " . $this->oDbh->quote(MAX_ZoneEmail, 'integer') . "
             ORDER BY
                 zone_id";
-        OX::disableErrorHandling();
+        RV::disableErrorHandling();
         $rsResult = $this->oDbh->query($sQuery);
-        OX::enableErrorHandling();
+        RV::enableErrorHandling();
         if (PEAR::isError($rsResult)) {
             return $rsResult;
         }

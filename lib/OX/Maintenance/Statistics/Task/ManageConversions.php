@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/ServiceLocator.php';
 
@@ -33,9 +35,9 @@ class OX_Maintenance_Statistics_Task_ManageConversions extends OX_Maintenance_St
      *
      * @return OX_Maintenance_Statistics_Task_ManageConversions
      */
-    function OX_Maintenance_Statistics_Task_ManageConversions()
+    function __construct()
     {
-        parent::OX_Maintenance_Statistics_Task();
+        parent::__construct();
     }
 
     /**

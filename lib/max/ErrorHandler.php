@@ -10,7 +10,11 @@
 +---------------------------------------------------------------------------+
 */
 
-//  This class was taken from Seagull: http://seagull.phpkitchen.com
+// This class was originally taken from Seagull, with permission.
+// See: http://seagull.phpkitchen.com
+
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/Max.php';
 
@@ -34,7 +38,7 @@ class MAX_ErrorHandler
      * @access  public
      * @return  void
      */
-    function MAX_ErrorHandler()
+    function __construct()
     {
         //  first dimension elements are PHP error types
         //  2nd dimension elements are roughly PEAR Log's equivalents

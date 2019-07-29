@@ -85,9 +85,9 @@ class HTML_QuickForm_advcheckbox extends HTML_QuickForm_checkbox
      * @access    public
      * @return    void
      */
-    function HTML_QuickForm_advcheckbox($elementName=null, $elementLabel=null, $text=null, $attributes=null, $values=null)
+    function __construct($elementName=null, $elementLabel=null, $text=null, $attributes=null, $values=null)
     {
-        $this->HTML_QuickForm_checkbox($elementName, $elementLabel, $text, $attributes);
+        parent::__construct($elementName, $elementLabel, $text, $attributes);
         $this->setValues($values);
     } //end constructor
 
@@ -240,7 +240,7 @@ class HTML_QuickForm_advcheckbox extends HTML_QuickForm_checkbox
      * @access    public
      * @return    void
      */
-    function onQuickFormEvent($event, $arg, &$caller)
+    function onQuickFormEvent($event, $arg, $caller = null)
     {
         switch ($event) {
             case 'updateValue':
@@ -270,7 +270,7 @@ class HTML_QuickForm_advcheckbox extends HTML_QuickForm_checkbox
     * This element has a value even if it is not checked, thus we override
     * checkbox's behaviour here
     */
-    function exportValue(&$submitValues, $assoc)
+    function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
         if (null === $value) {

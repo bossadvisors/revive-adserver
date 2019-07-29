@@ -39,23 +39,26 @@ phpAds_SessionDataStore();
 /*-------------------------------------------------------*/
 
 if (isset($submitbutton)) {
-    if (isset($bannerid) && $bannerid != '') {
-        // Update banner
-        $doBanners = OA_Dal::factoryDO('banners');
-        $doBanners->get($bannerid);
-        $doBanners->prepend = $prepend;
-        $doBanners->append  = $append;
-        $doBanners->update();
+    OA_Permission::checkSessionToken();
 
-        // Queue confirmation message
-        $translation = new OX_Translation();
-        $translated_message = $translation->translate($GLOBALS['strBannerAdvancedHasBeenUpdated'], array(
-            MAX::constructURL(MAX_URL_ADMIN, 'banner-edit.php?clientid=' .  $clientid . '&campaignid=' . $campaignid . '&bannerid=' . $bannerid),
-            htmlspecialchars($doBanners->description)
-        ));
-        OA_Admin_UI::queueMessage($translated_message, 'local', 'confirm', 0);
-    }
+    // Update banner
+    $doBanners = OA_Dal::factoryDO('banners');
+    $doBanners->get($bannerid);
+    $doBanners->prepend = $prepend;
+    $doBanners->append  = $append;
+    $doBanners->update();
+
+    // Queue confirmation message
+    $translation = new OX_Translation();
+    $translated_message = $translation->translate($GLOBALS['strBannerAdvancedHasBeenUpdated'], array(
+        MAX::constructURL(MAX_URL_ADMIN, 'banner-edit.php?clientid=' .  $clientid . '&campaignid=' . $campaignid . '&bannerid=' . $bannerid),
+        htmlspecialchars($doBanners->description)
+    ));
+
+    OA_Admin_UI::queueMessage($translated_message, 'local', 'confirm', 0);
+
     header ("Location: banner-advanced.php?clientid=".$clientid."&campaignid=".$campaignid."&bannerid=".$bannerid);
+    exit;
 }
 
 /*-------------------------------------------------------*/
@@ -90,6 +93,7 @@ $tabindex = 1;
     echo "<input type='hidden' name='clientid' value='".(isset($clientid) && $clientid != '' ? $clientid : '')."'>";
     echo "<input type='hidden' name='campaignid' value='".(isset($campaignid) && $campaignid != '' ? $campaignid : '')."'>";
     echo "<input type='hidden' name='bannerid' value='".(isset($bannerid) && $bannerid != '' ? $bannerid : '')."'>";
+    echo "<input type='hidden' name='token' value='".htmlspecialchars(phpAds_SessionGetToken(), ENT_QUOTES)."'>";
 
     echo "<br /><table border='0' width='100%' cellpadding='0' cellspacing='0'>";
     echo "<tr><td height='25' colspan='3'><b>".$strAppendSettings."</b></td></tr>";

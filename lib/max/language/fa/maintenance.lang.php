@@ -1,114 +1,168 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
-
-/**
- * A file for holding the "maintenance" English translation information.
- *
- * @package    MaxUI
- * @subpackage Languages
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
  */
 
 // Main strings
-$GLOBALS['strChooseSection']			= "انتخاب بخش";
+$GLOBALS['strChooseSection'] = "قسمتی را انتخاب کنید ";
+$GLOBALS['strAppendCodes'] = "کد های اضافه ... ";
 
+// Maintenance
+$GLOBALS['strScheduledMaintenanceHasntRun'] = "<b>تعمیر و نگهداری برنامه ریزی شده در ساعت گذشته اجرا نشده است این به این معناست که شما آن را بدرستی تنظیم نکرده اید .</b>";
+
+$GLOBALS['strAutoMantenaceEnabledAndHasntRun'] = "	تعمیر و نگهداری خودکار فعال است، اما آن را ایجاد نکرده است تعمیر و نگهداری خودکار ایجاد می شود که تنها زمانی که {$PRODUCT_NAME} آگهی ارایه شده باشد .
+    برای بهرین اجرا شما باید  <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>تعمیر و نگهداری خودکار را </a> نصب کنید .";
+
+$GLOBALS['strAutoMantenaceDisabledAndHasntRun'] = "	
+تعمیر و نگهداری خودکار حال حاضر غیرفعال است, 
+بنابراین، هنگامی که {$PRODUCT_NAME} آگهی دریافت کرد , 
+تعمیر و نگهداری خودکار شروع نخواهد شد.
+	
+برای بهترین عملکرد, شما باید راه اندازی <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>
+تعمیر و نگهداری برنامه ریزی شده</a>.
+    
+با این حال، اگر شما در حال رفتن به راه اندازی نباشید<a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>
+تعمیر و نگهداری برنامه ریزی شده</a>,
+    شما <i>باید</i> <a href='account-settings-maintenance.php'>تعمیر و نگهداری خودکار را فعال کنید</a> 
+تا اطمینان حاصل شود که {$PRODUCT_NAME} درست کار می کند.";
+
+$GLOBALS['strAutoMantenaceEnabledAndRunning'] = "	تعمیر و نگهداری خودکار فعال شده و فعال نخواهد شد, 
+در صورت لزوم, 
+وقتی {$PRODUCT_NAME} آگهی دریافت کرد .
+	
+با این حال، برای بهترین عملکرد، شما باید راه اندازی کنید <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>
+تعمیر و نگهداری برنامه ریزی شده را</a>.";
+
+$GLOBALS['strAutoMantenaceDisabledAndRunning'] = "	با این حال, 
+تعمیر و نگهداری خودکار اخیرا غیر فعال شده است. 
+برای اطمینان از اینکه {$PRODUCT_NAME} درستی کار می کند، 
+شما باید
+  هم تنظیم کنید<a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>
+تعمیر و نگهداری برنامه ریزی شده را</a> یا
+	<a href='account-settings-maintenance.php'>rدوباره فعال کردن تعمیر و نگهداری خودکار </a>.
+	<br><br>
+	
+برای بهترین عملکرد، شما باید راه اندازی کنید <a href='{$PRODUCT_DOCSURL}/admin/maintenance' target='_blank'>تعمیر و نگهداری برنامه ریزی شده را</a>.";
+
+$GLOBALS['strScheduledMantenaceRunning'] = "<b>تعمیر و نگهداری برنامه ریزی شده به درستی در حال اجرا است .</b>";
+
+$GLOBALS['strAutomaticMaintenanceHasRun'] = "<b>
+تعمیر و نگهداری خودکار به درستی در حال اجرا است ی.</b>";
+
+$GLOBALS['strAutoMantenaceEnabled'] = "
+با این حال، تعمیر و نگهداری خودکار هنوز فعال است. برای بهترین عملکرد، باید <a href='account-settings-maintenance.php'> تعمیر و نگهداری خودکار را غیر فعال کنید</a>.";
 
 // Priority
-$GLOBALS['strRecalculatePriority']		= "محاسبه مجدد اولو&#1740;ت";
-$GLOBALS['strHighPriorityCampaigns']		= "بااولو&#1740;ت تر&#1740;ن  campaigns";
-$GLOBALS['strAdViewsAssigned']			= "مشاهدات تع&#1740;&#1740;ن شده";
-$GLOBALS['strLowPriorityCampaigns']		= "پا&#1740;&#1740;ن تر&#1740;ن اولو&#1740;ت campaigns";
-$GLOBALS['strPredictedAdViews']			= "مشاهدات پ&#1740;ش ب&#1740;ن&#1740; شده";
-$GLOBALS['strPriorityDaysRunning']		= "در حا حاضر {days} روز دارا&#1740; ارزش آمار&#1740; برا&#1740;  ".MAX_PRODUCT_NAME." م&#1740; باشد که پ&#1740;ش ب&#1740;ن&#1740; روزانه م&#1740; تواند مبتن&#1740; بر آن م&#1740; باشد. ";
-$GLOBALS['strPriorityBasedLastWeek']		= "ا&#1740;ن پ&#1740;ش ب&#1740;ن&#1740; مبتن&#1740; بر اطلاعات ا&#1740;ن ه�?ته و ه�?ته گذشته م&#1740; باشد. ";
-$GLOBALS['strPriorityBasedLastDays']		= "ا&#1740;ن پ&#1740;ش ب&#1740;ن&#1740; م&#1740;تن&#1740; بر اطلاعات ج�?ت&#1740; دو روز گذشته م&#1740; باشد. ";
-$GLOBALS['strPriorityBasedYesterday']		= "ا&#1740;ن پ&#1740;ش ب&#1740;ن&#1740; مبتن&#1740; بر اطلاعات روز گذشته م&#1740; باشد. ";
-$GLOBALS['strPriorityNoData']			= "There isn't enough data available to make a reliable prediction about the number of impressions this adserver will generate today. Priority assignments will be based on real time statistics only. ";
-$GLOBALS['strPriorityEnoughAdViews']		= "There should be enough AdViews to fully satisfy the target all high priority campaigns. ";
-$GLOBALS['strPriorityNotEnoughAdViews']		= "It isn't clear wether there will be enough AdViews served today to satisfy the target all high priority campaigns. ";
-
+$GLOBALS['strRecalculatePriority'] = "اولوبت محاسبه";
 
 // Banner cache
-$GLOBALS['strCheckBannerCache']		= "Check banner cache";
-$GLOBALS['strRebuildBannerCache']		= "ساختن مجدد cache بنر";
-$GLOBALS['strBannerCacheErrorsFound'] = "The database banner cache check has found some errors. These banners will not work until you manually fix them.";
-$GLOBALS['strBannerCacheOK'] = "There were no errors detected. Your database banner cache is up to date";
-$GLOBALS['strBannerCacheDifferencesFound'] = "The database banner cache check has found that your cache is not up to date and requires rebuilding. Click here to automatically  update your cache.";
-$GLOBALS['strBannerCacheFixed'] = "The database banner cache rebuild was successfully completed. Your database cache is now up to date.";
-$GLOBALS['strBannerCacheRebuildButton'] = "Rebuild";
-$GLOBALS['strRebuildDeliveryCache']			= "Rebuild database banner cache";
-$GLOBALS['strBannerCacheExplaination']		= "\n    The database banner cache is used to speed up delivery of banners during delivery<br />\n    This cache needs to be updated when:\n    <ul>\n        <li>You upgrade your version of Openads</li>\n        <li>You move your openads installation to a different server</li>\n    </ul>\n";
+$GLOBALS['strCheckBannerCache'] = "بررسی کش بنر";
+$GLOBALS['strBannerCacheErrorsFound'] = "بررسی کش پایگاه داده تبلیغات چند خطا را پیدا کرده است  . این آگهی ها کار نخواهد کرد تا زمانی که شما به صورت دستی آنها را تعمیر کنید.";
+$GLOBALS['strBannerCacheOK'] = "هیچ خطاهای شناسایی نشده است. کش پایگاه داده تبلیغاتی شما به رئز است ";
+$GLOBALS['strBannerCacheDifferencesFound'] = "بررسی کش پایگاه داده بنر نشان داده است که کش شما به به روز نیست و نیاز به بازسازی دارد .برای به روز رسانی خودکار کش تان این ججا را کلیک کنید ";
+$GLOBALS['strBannerCacheRebuildButton'] = "بازسازی";
+$GLOBALS['strRebuildDeliveryCache'] = "بازسازی کش پایگاه داده تبلیغاتی";
+$GLOBALS['strBannerCacheExplaination'] = "   کش پابگاه داده تبلیغاتی برای سرعت بخشیدن به دریافت تبلیغات در هنگام دریافت استفاده می شود <br />
+    
+این کش باید به روز شود زمانی که:
+    <ul>
+        <li>شما نسخه {$PRODUCT_NAME} خود را ارتقا داده باشید </li>
+        <li>شما {$PRODUCT_NAME}  نصب و راه اندازی خود را  به سرور های مختلف حرکت داده اید </li>
+    </ul>";
 
 // Cache
-$GLOBALS['strCache']			= "Delivery cache";
-$GLOBALS['strAge']				= "Age";
-$GLOBALS['strDeliveryCacheSharedMem']		= "\nحا�?ظه تقسیم شده در حال حاضر برای تحویل cache است�?اده می شود.\n\n";
-$GLOBALS['strDeliveryCacheDatabase']		= "\nبانک اطلاعای در حال حاضر در حال است�?اده تحیل cache می باشد.\n\n";
-$GLOBALS['strDeliveryCacheFiles']		= "\ncache تحویل در حال حاضر درون �?ایل های چندگانه بر روی سرور شما ذخیره شده است.\n\n";
-
+$GLOBALS['strCache'] = "کش دریافتی ";
+$GLOBALS['strDeliveryCacheSharedMem'] = "	حافظه مشترک در حال حاضر برای ذخیره سازی کش تحویل استفاده می شود.";
+$GLOBALS['strDeliveryCacheDatabase'] = "	پایگاه داده در حال حاضر برای ذخیره سازی کش تحویل استفاده می شود.";
+$GLOBALS['strDeliveryCacheFiles'] = "	کش تحویل در حال حاضر به چند فایل بر روی سرور شما ذخیره می شود.";
 
 // Storage
-$GLOBALS['strStorage']				= "ذخیره سازی";
-$GLOBALS['strMoveToDirectory']			= "انتقال تصاویر ذخیره شده درون بانک اطلاعای بهیک دایرکتوری";
-$GLOBALS['strStorageExplaination']		= "\n	The images used by local banners are stored inside the database or stored in a directory. If you store the images inside\n	a directory the load on the database will be reduced and this will lead to an increase in speed.\n";
+$GLOBALS['strStorage'] = "
+ذخیره سازی";
+$GLOBALS['strMoveToDirectory'] = "نتقال تصاویر ذخیره شده در داخل پایگاه داده به یک دایرکتوری";
+$GLOBALS['strStorageExplaination'] = "	تصاویر مورد استفاده توسط آگهی ها محلی در داخل پایگاه داده ذخیره شده و یا ذخیره شده در یک دایرکتوری. 
+اگر شما در تصاویر را ذخیره داخل
+یک دایرکتوری بار بر روی پایگاه داده کاهش خواهد یافت و این به افزایش در سرعت منجر شود.";
 
-
-// Storage
-$GLOBALS['strStatisticsExplaination']		= "\n	You have enabled the <i>compact statistics</i>, but your old statistics are still in verbose format.\n	Do you want to convert your verbose statistics to the new compact format?\n";
-
+// Encoding
+$GLOBALS['strEncoding'] = "
+رمز گذاری";
+$GLOBALS['strEncodingExplaination'] = "{$PRODUCT_NAME}در حال حاضر ذخیره تمام داده ها در پایگاه داده در فرمت UTF-8.<br />
+    در صورت امکان، اطلاعات خود را دارند به طور خودکار به این رمزگذاری تبدیل شده است.<br />
+   اگر پس از ارتقا به شما پیدا کردن شخصیت های فاسد، و شما می دانید را پشتیبانی می کند استفاده می شود، شما ممکن است این ابزار برای تبدیل داده ها از DAT فرمت به UTF-8 استفاده";
+$GLOBALS['strEncodingConvertFrom'] = "
+تبدیل از این رمزگذاری:";
+$GLOBALS['strEncodingConvertTest'] = "بررسی مکالمات";
+$GLOBALS['strConvertThese'] = "
+داده های زیر تغییر خواهد کرد اگر ادامه دهید";
 
 // Product Updates
-$GLOBALS['strSearchingUpdates']			= "جستجو برای بروزرسانی. منتظر بمانید....";
-$GLOBALS['strAvailableUpdates']			= "به روزرسانی های در دسترس";
-$GLOBALS['strDownloadZip']			= "دانلود (.zip)";
-$GLOBALS['strDownloadGZip']			= "دانلود (.tar.gz)";
+$GLOBALS['strSearchingUpdates'] = "در حال جست و جوی به روز رسانی . اطفا صبر کنید ... ";
+$GLOBALS['strAvailableUpdates'] = "به روز رسانی های موجود ";
+$GLOBALS['strDownloadZip'] = "دانلود (.zip)";
+$GLOBALS['strDownloadGZip'] = "دانلود (.tar.gz)";
 
-$GLOBALS['strUpdateAlert']			= "یک نسخه جدید از  موجود می باشد.                 \n\nآیا میخواهید اطلاعات یشتری در مورد این نسخه کسب نمایید؟ \nabout this update?";
-$GLOBALS['strUpdateAlertSecurity']		= "یک نسخه جدید از  موجود می باشد.                 \.";
+$GLOBALS['strUpdateAlert'] = "
+نسخه جدید {$PRODUCT_NAME} در دسترس است.                 \n\nآیا شما می خواهید اطلاعات بیشتری را دریافت کنید \nدر مورد این به روز رسانی?";
+$GLOBALS['strUpdateAlertSecurity'] = "نسخه جدید {$PRODUCT_NAME} در دسترس است.                 \n\nبسیار توصیه می شود برای ارتقاء \nدر اسرع وقت,چرا که این \n
+نسخه شامل یک یا چند اصلاحات امنیتی می باشد.";
 
-$GLOBALS['strUpdateServerDown']			= "\nبه دلیل یک مشکل ناسناخته امکان بازیابی وجود ندارد. <br>\nاطلاعات در باره بروزرسای هی ممکن.لط�?ا دوباره تلاش نمید.\n\n";
-$GLOBALS['strNoNewVersionAvailable']		= "\nنسخه ".MAX_PRODUCT_NAME." به روز رسانی شد. درحال حاضر هیچ گونه بروزرسانی موجود نمی باشد.\n\n";
+$GLOBALS['strUpdateServerDown'] = "
+به سبب دلیلی نامعلوم ممکن نیست تا بازیابی شود <br>اطلاعات در مورد به روز رسانی های محتمل . اطلاعات در مورد به روز رسانی محتمل. لطفا بعدا دوباره امتحان کنید.";
 
-$GLOBALS['strNewVersionAvailable']		= "\n	<b>A new version of ".MAX_PRODUCT_NAME." is available.</b><br /> It is recommended to install this update,\n	because it may fix some currently existing problems and will add new features. For more information\n	about upgrading please read the documentation which is included in the files below.\n";
+$GLOBALS['strNoNewVersionAvailable'] = "	نسخه{$PRODUCT_NAME} شما به روز است . 
+در حال حاضر هیچ به روز رسانی در دسترس وجود دارد.";
 
-$GLOBALS['strSecurityUpdate']			= "\n	<b>It is highly recommended to install this update as soon as possible, because it contains a number\n	of security fixes.</b> The version of ".MAX_PRODUCT_NAME." which you are currently using might\n	be vulnerable to certain attacks and is probably not secure. For more information\n	about upgrading please read the documentation which is included in the files below.\n";
+$GLOBALS['strServerCommunicationError'] = "    <b>ارتباط با سرور به روز رسانی به پایان رسیده است, بنابراین {$PRODUCT_NAME}
+     قادر به بررسی این نیست که آیا یک نسخه جدیدتر در این مرحله در دسترس است یا خیر. 
+لطفا بعدا دوباره امتحان کنید.</b>";
 
-$GLOBALS['strNotAbleToCheck']			= "\n	<b>Because the XML extention isn't available on your server, ".MAX_PRODUCT_NAME." is not\n    able to check if a newer version is available.</b>\n";
+$GLOBALS['strCheckForUpdatesDisabled'] = "    <b>بررسی برای به روز رسانی غیر فعال است . از طریق 
+    <a href='account-settings-update.php'>به روز رسانی تنظیمات </a>صفحه .</b> فعال کنید ";
 
-$GLOBALS['strForUpdatesLookOnWebsite']	= "\n	If you want to know if there is a newer version available, please take a look at our website.\n";
+$GLOBALS['strNewVersionAvailable'] = "	<b> {$PRODUCT_NAME}   نسخه ی جدیدی  از آماده است  </b><br /> پیشنهاد می شود که این آپدیت را نصب کنید ,
+	
+چرا که ممکن است برخی از مشکلات موجود در حال حاضر تعمیر و ویژگی های جدید اضافه کنید. برای اطلاعات بیشتر
+در مورد ارتقاء لطفا مستندات است که در فایل های زیر را شامل شده است بخوانید.</b>";
 
-$GLOBALS['strClickToVisitWebsite']		= "برای دیدن وب سایت ما اینجا کلیک نمایید";
-$GLOBALS['strCurrentlyUsing'] 			= "شما در حال است�?اده هستید.";
-$GLOBALS['strRunningOn']				= "اجرا روی";
-$GLOBALS['strAndPlain']					= "و";
+$GLOBALS['strSecurityUpdate'] = "	<b>بسیار توصیه می شود تا این آپدیت را را در اسرع وقت به دلیل رفع بسیاری از مشکلات نصب کنید . </b> نسخه {$PRODUCT_NAME} که شما در حال حاضر استفاده از آن هستید شاید
+آسیب پذیر به حملات خاص و احتمالا امن باشد. برای اطلاعات بیشتر در مورد ارتقا مستندات زیر را که در فایل ها آمده هست بخوانید . </b>";
 
+$GLOBALS['strNotAbleToCheck'] = "	<b>از آنجا که پسوند XML در دسترس بر روی سرور شما نیست ، {$PRODUCT_NAME} قابل بررسی شدن نیست اگر نسخه ی جدیدی حاضر باشد .</b>";
 
-// Stats conversion
-$GLOBALS['strConverting']			= "برگرداندن";
-$GLOBALS['strConvertingStats']			= "درحال برگرداندن آمار ...";
-$GLOBALS['strConvertStats']			= "برگرداندن آمار";
-$GLOBALS['strConvertAdViews']			= "مشاهدات برگردانده شد...";
-$GLOBALS['strConvertAdClicks']			= "کل&#1740;ک ها برگردانده شد ...";
-$GLOBALS['strConvertAdConversions']			= "AdConversions converted...";
-$GLOBALS['strConvertNothing']			= "چ&#1740;ز&#1740; برا&#1740; برگرداندن ن&#1740;ست...";
-$GLOBALS['strConvertFinished']			= "پا&#1740;ان &#1740;ا�?ت ...";
+$GLOBALS['strForUpdatesLookOnWebsite'] = "
+اگر می خواهید بدانید که اگر یک نسخه جدیدتر در دسترس وجود دارد، لطفا نگاهی به وب سایت ما بیندازید.";
 
-$GLOBALS['strConvertExplaination']		= "\n	You are currently using the compact format to store your statistics, but there are <br />\n	still some statistics in verbose format. As long as the verbose statistics aren't  <br />\n	converted to compact format they will not be used while viewing these pages.  <br />\n	Before converting your statistics, make a backup of the database!  <br />\n	Do you want to convert your verbose statistics to the new compact format? <br />\n";
+$GLOBALS['strClickToVisitWebsite'] = "اینجا را کلیک کنید تا وارد شوید";
+$GLOBALS['strCurrentlyUsing'] = "
+در حال استفاده";
+$GLOBALS['strRunningOn'] = "در حال اجرا";
+$GLOBALS['strAndPlain'] = "و";
 
-$GLOBALS['strConvertingExplaination']		= "\n	All remaining verbose statistics are now being converted to the compact format. <br />\n	Depending on how many impressions are stored in verbose format this may take a  <br />\n	couple of minutes. Please wait until the conversion is finished before you visit other <br />\n	pages. Below you will see a log of all modification made to the database. <br />\n";
+//  Deliver Limitations
+$GLOBALS['strErrorsFound'] = "خطاهایی پیدا شد ";
+$GLOBALS['strRecompile'] = "کامپایل مجدد";
 
-$GLOBALS['strConvertFinishedExplaination']  	= "\n	The conversion of the remaining verbose statistics was succesful and the data <br />\n	should now be usable again. Below you will see a log of all modification made <br />\n	to the database.<br />\n";
+//  Append codes
+$GLOBALS['strAppendCodesDesc'] = " تحت برخی شرایط موتور تحویل می توانید با کدهای اضافه ذخیره شده برای رهگیری اختلاف نظر دارند، از لینک های زیر استفاده کنید به اعتبار کدهای پیوست در پایگاه داده ";
+$GLOBALS['strCheckAppendCodes'] = "کد های اضافه را بررسی کنید";
+$GLOBALS['strAppendCodesRecompiled'] = "همه الحاق ارزش کدهای وارد شده اند مجددا کامپایل شدند";
+$GLOBALS['strAppendCodesResult'] = "
+نتایج حاصل از کامپایل اعتبار سنجی کد اضافه عبارتند از";
+$GLOBALS['strAppendCodesValid'] = "تمام کدهای ردیاب کامپایل الحاق معتبر هستند";
+$GLOBALS['strRepairAppenedCodes'] = "برخی از تناقضات بالا پیدا شد، شما می توانید تعمیر این با استفاده از دکمه زیر تعمیر کنید ، این کد اضافه برای هر ردیاب در سیستم کامپایل مجدد خوانده می شود . ";
 
+$GLOBALS['strPlugins'] = "پلاگین";
+$GLOBALS['strPluginsPrecis'] = "
+تشخیص و تعمیر مشکلات با پلاگین {$PRODUCT_NAME}";
 
-
-// Note: New translations not found in original lang files but found in CSV
-$GLOBALS['strEncodingConvert'] = "تبدیل";
-?>
+$GLOBALS['strMenus'] = "منوها";
+$GLOBALS['strMenusPrecis'] = "بازسازی کش منو";
+$GLOBALS['strMenusCachedOk'] = "کش منو بازسازی شده است";

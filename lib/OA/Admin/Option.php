@@ -45,7 +45,7 @@ class OA_Admin_Option
      *                           on if the options are to be displayed in the Settings,
      *                           Account Preferences or User Preferences section.
      */
-    function OA_Admin_Option($optionType)
+    function __construct($optionType)
     {
         // Load the required language files
         Language_Loader::load('default');
@@ -479,7 +479,7 @@ class OA_Admin_Option
                             $value = implode($aItem['merge'], $aValues);
             			}
 
-            			if ($aItem[type] != 'break') {
+            			if ($aItem['type'] != 'break') {
             			    $showBreak = true;
             			}
             		}
@@ -656,8 +656,8 @@ class OA_Admin_Option
             $GLOBALS['phpAds_hlp_'.$name] = '';
         }
         $string = $GLOBALS['phpAds_hlp_'.$name];
-        $string = ereg_replace ("[\n\r\t]", " ", $string);
-        $string = ereg_replace ("[ ]+", " ", $string);
+        $string = preg_replace ("/[\n\r\t]/D", " ", $string);
+        $string = preg_replace ("/[ ]+/D", " ", $string);
         $string = str_replace("'", "\\'", $string);
         $string = trim ($string);
         return "helpArray['$name'] = '".$string."';\n";
@@ -674,16 +674,16 @@ class OA_Admin_Option
     {
         $formName = empty($GLOBALS['settings_formName']) ? 'settingsform' : $GLOBALS['settings_formName'];
         if (isset($aItem['depends'])) {
-            $depends    = split('[ ]+', $aItem['depends']);
+            $depends    = preg_split('/[ ]+/D', $aItem['depends']);
             $javascript = "\tenabled = (";
             $result     = true;
             foreach ($depends as $word) {
-                if (ereg('[\&\|]{1,2}', $word)) {
+                if (preg_match('/[\&\|]{1,2}/D', $word)) {
                     // Operator
                     $javascript .= " ".$word." ";
                 } else {
                     // Assignment
-                    eregi ("^(\(?)([a-z0-9_-]+)([\=\!\<\>]{1,2})([\"\'a-z0-9_-]+)(\)?)$", $word, $regs);
+                    preg_match ("/^(\(?)([a-z0-9_-]+)([\=\!\<\>]{1,2})([\"\'a-z0-9_-]+)(\)?)$/Di", $word, $regs);
                     $type          = $this->_showGetType($aData, $regs[2]);
                     $javascript .= $regs[1]."document.".$formName.".".$regs[2].".";
                     switch ($type){
@@ -974,7 +974,7 @@ class OA_Admin_Option
 
     function _display_to_bytes($val) {
         $val = trim($val);
-        $last = strtolower($val{strlen($val)-1});
+        $last = strtolower($val[strlen($val)-1]);
         switch($last) {
             // The 'G' modifier is available since PHP 5.1.0
             case 'g':

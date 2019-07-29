@@ -192,7 +192,8 @@ function MAX_displayNoStatsMessage()
 function _getHtmlHeaderColumn($title, $name, $pageName, $entityIds, $listorder, $orderdirection, $showColumn = true)
 {
     $str = '';
-    $entity = _getEntityString($entityIds);
+    $entity = htmlspecialchars(_getEntityString($entityIds), ENT_QUOTES);
+    $pageName = htmlspecialchars($pageName, ENT_QUOTES);
     if ($listorder == $name) {
         if (($orderdirection == '') || ($orderdirection == 'down')) {
             $str = "<a href='$pageName?{$entity}orderdirection=up'><img src='" . OX::assetPath() . "/images/caret-ds.gif' border='0' alt='' title=''></a>";
@@ -200,7 +201,7 @@ function _getHtmlHeaderColumn($title, $name, $pageName, $entityIds, $listorder, 
             $str = "<a href='$pageName?{$entity}orderdirection=down'><img src='" . OX::assetPath() . "/images/caret-u.gif' border='0' alt='' title=''></a>";
         }
     }
-    return $showColumn ? "<b><a href='$pageName?{$entity}listorder=$name'>$title</a>$str</b>" : '';
+    return $showColumn ? "<b><a href='$pageName?{$entity}listorder=".urlencode($name)."'>$title</a>$str</b>" : '';
 }
 
 function _getEntityString($entityIds)
@@ -209,9 +210,9 @@ function _getEntityString($entityIds)
     if (!empty($entityIds)) {
         $entityArr = array();
         foreach ($entityIds as $entityId => $entityValue) {
-            $entityArr[] = "$entityId=$entityValue";
+            $entityArr[] = "$entityId=".urlencode($entityValue);
         }
-        $entity = implode('&',$entityArr) . '&';
+        $entity = implode('&', $entityArr) . '&';
     }
 
     return $entity;
@@ -866,9 +867,7 @@ function _displayZoneEntitySelectionCell($entity, $entityId, $aOtherEntities, $e
             }
         }
 
-        $name = MAX_buildName($otherEntityId, $aOtherEntity['name']);
-        echo "
-        <option value='$otherEntityId'{$selected}>".htmlspecialchars($name)." $adsCount</option>";
+        echo "<option value='$otherEntityId'{$selected}>".htmlspecialchars($aOtherEntity['name'])." $adsCount</option>";
     }
     echo "
     </select>
@@ -1142,11 +1141,14 @@ function MAX_displayPlacementAdSelectionViewForm($publisherId, $zoneId, $view, $
 
 function MAX_displayAcls($acls, $aParams)
 {
+    global $session;
+    
     $tabindex =& $GLOBALS['tabindex'];
     $page = basename($_SERVER['SCRIPT_NAME']);
     $conf = $GLOBALS['_MAX']['CONF'];
 
     echo "<form action='{$page}' method='post'>";
+    echo "<input type='hidden' name='token' value='".urlencode(phpAds_SessionGetToken())."' />";
 
     echo "<label><img src='" . OX::assetPath() . "/images/icon-acl-add.gif' align='absmiddle'>&nbsp;". $GLOBALS['strACLAdd'] .": &nbsp;";
     echo "<select name='type' accesskey='{$GLOBALS['keyAddNew']}' tabindex='".($tabindex++)."'>";
@@ -1167,12 +1169,22 @@ function MAX_displayAcls($acls, $aParams)
     $aErrors = OX_AclCheckInputsFields($acls, $page);
     if (!empty($GLOBALS['action'])) {
         // We are part way through making changes, show a message
-        //echo "<br>";
         echo "<div class='errormessage'><img class='errormessage' src='" . OX::assetPath() . "/images/warning.gif' align='absmiddle'>";
         echo "<span class='tab-s'>{$GLOBALS['strUnsavedChanges']}</span><br>";
         echo "</div>";
-    }
-    elseif (!MAX_AclValidate($page, $aParams)) {
+    } elseif ($session['aclsDbError']) {
+        unset($session['aclsDbError']);
+        phpAds_SessionDataStore();
+        echo "<div class='errormessage'><img class='errormessage' src='" . OX::assetPath() . "/images/warning.gif' align='absmiddle'>";
+        echo "<span class='tab-r'>{$GLOBALS['strDeliveryRulesDbError']}</span><br>";
+        echo "</div>";
+    } elseif ($session['aclsTruncation']) {
+        unset($session['aclsTruncation']);
+        phpAds_SessionDataStore();
+        echo "<div class='errormessage'><img class='errormessage' src='" . OX::assetPath() . "/images/warning.gif' align='absmiddle'>";
+        echo "<span class='tab-r'>{$GLOBALS['strDeliveryRulesTruncation']}</span><br>";
+        echo "</div>";
+    } elseif (!MAX_AclValidate($page, $aParams)) {
         echo "<div class='errormessage'><img class='errormessage' src='" . OX::assetPath() . "/images/warning.gif' align='absmiddle'>";
         echo "<span class='tab-r'>{$GLOBALS['strDeliveryLimitationsDisagree']}</span><br>";
         echo "</div>";
@@ -1436,7 +1448,7 @@ function MAX_displayNavigationCampaign($campaignId, $aOtherAdvertisers, $aOtherC
     $doCampaign->fetch();
     $campaignName = $doCampaign->campaignname;
 
-    $advertiserName = MAX_buildName($advertiserId, $aOtherAdvertisers[$advertiserId]['name']);
+    $advertiserName = $aOtherAdvertisers[$advertiserId]['name'];
     $advertiserEditUrl = '';
     if (OA_Permission::hasAccessToObject('clients', $advertiserId, OA_Permission::OPERATION_EDIT)) {
         $advertiserEditUrl = "advertiser-edit.php?clientid=$advertiserId";
@@ -1541,8 +1553,8 @@ function MAX_displayNavigationZone($pageName, $aOtherPublishers, $aOtherZones, $
     unset($aOtherEntities['zoneid']);
     $otherEntityString = _getEntityString($aOtherEntities);
     $aPublisher = $aOtherPublishers[$websiteId];
-    $publisherName = MAX_buildName($websiteId, $aPublisher['name']);
-    $zoneName = (empty($zoneId)) ? $GLOBALS['strUntitled'] : MAX_buildName($zoneId, $aOtherZones[$zoneId]['name']);
+    $publisherName = $aPublisher['name'];
+    $zoneName = (empty($zoneId)) ? $GLOBALS['strUntitled'] : $aOtherZones[$zoneId]['name'];
 
     if (OA_Permission::isAccount(OA_ACCOUNT_ADMIN) || OA_Permission::isAccount(OA_ACCOUNT_MANAGER)) {
         $tabSections = array('4.2.3.2', '4.2.3.6', '4.2.3.3', '4.2.3.4', '4.2.3.5');
@@ -1689,24 +1701,27 @@ function addAdvertiserPageToolsAndShortcuts($advertiserId)
 function addTrackerPageTools($advertiserId, $trackerId, $aOtherAdvertisers)
 {
     if (OA_Permission::isAccount(OA_ACCOUNT_ADMIN) || OA_Permission::isAccount(OA_ACCOUNT_MANAGER)) {
+        $token = phpAds_SessionGetToken();
+
         //duplicate
-        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "tracker-modify.php?clientid=".$advertiserId."&trackerid=".$trackerId."&duplicate=true&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconTrackerDuplicate");
+        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "tracker-modify.php?token=".urlencode($token)."&clientid=".$advertiserId."&trackerid=".$trackerId."&duplicate=true&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconTrackerDuplicate");
 
         //move to
         $form  = "<form action='" . MAX::constructUrl(MAX_URL_ADMIN, 'tracker-modify.php') . "'>
+            <input type='hidden' name='token' value='".htmlspecialchars($token, ENT_QUOTES)."'>
             <input type='hidden' name='trackerid' value='$trackerId'
             <input type='hidden' name='clientid' value='$advertiserId'
             <input type='hidden' name='returnurl' value='tracker-edit.php'>
             <select name='moveto'>";
         foreach ($aOtherAdvertisers as $advertiser) {
-            $form .= "<option value='".$advertiser['clientid']."'>".htmlspecialchars(MAX_buildName($advertiser['clientid'], $advertiser['clientname']))."</option>";
+            $form .= "<option value='".$advertiser['clientid']."'>".htmlspecialchars($advertiser['clientname'])."</option>";
         }
         $form .= "</select><input type='image' class='submit' src='" . OX::assetPath() . "/images/".$GLOBALS['phpAds_TextDirection']."/go_blue.gif'></form>";
         addPageFormTool($GLOBALS['strMoveTo'], 'iconTrackerMove', $form);
 
         //delete
         $deleteConfirm = phpAds_DelConfirm($GLOBALS['strConfirmDeleteTracker']);
-        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "tracker-delete.php?token=" . urlencode(phpAds_SessionGetToken()) . "&clientid=".$advertiserId."&trackerid=".$trackerId."&returnurl=advertiser-trackers.php"), "iconDelete", null, $deleteConfirm);
+        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "tracker-delete.php?token=".urlencode($token)."&clientid=".$advertiserId."&trackerid=".$trackerId."&returnurl=advertiser-trackers.php"), "iconDelete", null, $deleteConfirm);
         addPageShortcut($GLOBALS['strBackToTrackers'], MAX::constructUrl(MAX_URL_ADMIN, "advertiser-trackers.php?clientid=$advertiserId"), "iconBack");
     }
 }
@@ -1717,30 +1732,36 @@ function addCampaignPageTools($clientid, $campaignid, $aOtherAdvertisers, $aEnti
     global $phpAds_TextDirection;
 
     if (!OA_Permission::isAccount(OA_ACCOUNT_ADVERTISER)) {
-        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "campaign-modify.php?duplicate=1&clientid=$clientid&campaignid=$campaignid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconCampaignDuplicate");
+
+        $token = phpAds_SessionGetToken();
+
+        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "campaign-modify.php?token=".urlencode($token)."&duplicate=1&clientid=$clientid&campaignid=$campaignid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconCampaignDuplicate");
 
         if (OA_Permission::hasAccessToObject('campaigns', $campaignid, OA_Permission::OPERATION_MOVE)) {
             $form = "<form action='" . MAX::constructUrl(MAX_URL_ADMIN, 'campaign-modify.php') . "'>
+            <input type='hidden' name='token' value='".htmlspecialchars($token, ENT_QUOTES)."'>
             <input type='hidden' name='clientid' value='$clientid'>
             <input type='hidden' name='campaignid' value='$campaignid'>
-            <input type='hidden' name='returnurl' value='".htmlspecialchars(basename($_SERVER['SCRIPT_NAME']))."'>
+            <input type='hidden' name='returnurl' value='".htmlspecialchars(basename($_SERVER['SCRIPT_NAME'], ENT_QUOTES))."'>
             <select name='newclientid'>";
-                $aOtherAdvertisers = _multiSort($aOtherAdvertisers,'name','advertiser_id');
-                foreach ($aOtherAdvertisers as $aOtherAdvertiser) {
-                    $otherAdvertiserId = $aOtherAdvertiser['advertiser_id'];
-                    $otherAdvertiserName = MAX_buildName($otherAdvertiserId, $aOtherAdvertiser['name']);
 
-                    if ($otherAdvertiserId != $advertiserId) {
-                        $form .= "<option value='$otherAdvertiserId'>" . htmlspecialchars($otherAdvertiserName) . "</option>";
-                    }
+            $aOtherAdvertisers = _multiSort($aOtherAdvertisers,'name','advertiser_id');
+            foreach ($aOtherAdvertisers as $aOtherAdvertiser) {
+                $otherAdvertiserId = $aOtherAdvertiser['advertiser_id'];
+                $otherAdvertiserName = $aOtherAdvertiser['name'];
+
+                if ($otherAdvertiserId != $clientid) {
+                    $form .= "<option value='$otherAdvertiserId'>" . htmlspecialchars($otherAdvertiserName) . "</option>";
                 }
+            }
+
             $form .= "</select><input type='image' class='submit' src='" . OX::assetPath() . "/images/$phpAds_TextDirection/go_blue.gif'></form>";
 
             addPageFormTool($GLOBALS['strMoveTo'], 'iconCampaignMove', $form);
         }
 
         $deleteConfirm = phpAds_DelConfirm($GLOBALS['strConfirmDeleteCampaign']);
-        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "campaign-delete.php?token=" . urlencode(phpAds_SessionGetToken()) . "&clientid=$clientid&campaignid=$campaignid&returnurl=advertiser-campaigns.php"), "iconDelete", null, $deleteConfirm);
+        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "campaign-delete.php?token=".urlencode($token)."&clientid=$clientid&campaignid=$campaignid&returnurl=advertiser-campaigns.php"), "iconDelete", null, $deleteConfirm);
     }
 
     //shortcuts
@@ -1761,16 +1782,20 @@ function addCampaignPageTools($clientid, $campaignid, $aOtherAdvertisers, $aEnti
 
 function addBannerPageTools($advertiserId, $campaignId, $bannerId, $aOtherCampaigns, $aOtherBanners, $aEntities)
 {
+    global $phpAds_TextDirection;
+
     if (empty($bannerId)) {
         return;
     }
 
-    global $phpAds_TextDirection;
+    $token = phpAds_SessionGetToken();
+
     //duplicate
-    addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "banner-modify.php?duplicate=true&clientid=$advertiserId&campaignid=$campaignId&bannerid=$bannerId&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconBannerDuplicate");
+    addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "banner-modify.php?token=".urlencode($token)."&duplicate=true&clientid=$advertiserId&campaignid=$campaignId&bannerid=$bannerId&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconBannerDuplicate");
 
     //move to
     $form = "<form action='" . MAX::constructUrl(MAX_URL_ADMIN, 'banner-modify.php') . "'>
+    <input type='hidden' name='token' value='".htmlspecialchars($token, ENT_QUOTES)."'>
     <input type='hidden' name='clientid' value='$advertiserId'>
     <input type='hidden' name='campaignid' value='$campaignId'>
     <input type='hidden' name='bannerid' value='$bannerId'>
@@ -1780,7 +1805,7 @@ function addBannerPageTools($advertiserId, $campaignId, $bannerId, $aOtherCampai
     foreach ($aOtherCampaigns as $otherCampaignId => $aOtherCampaign) {
         // mask campaign name if anonymous campaign
         $aOtherCampaign['name'] = MAX_getPlacementName($aOtherCampaign);
-        $otherCampaignName = MAX_buildName($aOtherCampaign['placement_id'], $aOtherCampaign['name']);
+        $otherCampaignName = $aOtherCampaign['name'];
 
         if ($aOtherCampaign['placement_id'] != $campaignId) {
             $form .= "<option value='" . $aOtherCampaign['placement_id'] . "'>" . htmlspecialchars($otherCampaignName) . "</option>";
@@ -1795,6 +1820,7 @@ function addBannerPageTools($advertiserId, $campaignId, $bannerId, $aOtherCampai
     //apply to
     if (basename($_SERVER['SCRIPT_NAME']) == 'banner-acl.php') {
         $form = "<form action='" . MAX::constructUrl(MAX_URL_ADMIN, 'banner-modify.php') . "'>
+        <input type='hidden' name='token' value='".htmlspecialchars($token, ENT_QUOTES)."'>
         <input type='hidden' name='clientid' value='$advertiserId'>
         <input type='hidden' name='campaignid' value='$campaignId'>
         <input type='hidden' name='bannerid' value='$bannerId'>
@@ -1804,7 +1830,7 @@ function addBannerPageTools($advertiserId, $campaignId, $bannerId, $aOtherCampai
         $aOtherBanners = _multiSort($aOtherBanners,'name','ad_id');
         foreach ($aOtherBanners as $idx => $aOtherBanner) {
             if ($aOtherBanner['ad_id'] != $bannerId) {
-                $form .= "<option value='{$aOtherBanner['ad_id']}'>" . MAX_buildName($aOtherBanner['ad_id'], $aOtherBanner['name']) . "</option>";
+                $form .= "<option value='{$aOtherBanner['ad_id']}'>" . htmlspecialchars($aOtherBanner['name']) . "</option>";
             }
         }
         $form .= "</select><input type='image' class='submit' name='applyto' src='" . OX::assetPath() . "/images/".$phpAds_TextDirection."/go_blue.gif'></form>";
@@ -1815,7 +1841,7 @@ function addBannerPageTools($advertiserId, $campaignId, $bannerId, $aOtherCampai
     //delete
     if (!OA_Permission::isAccount(OA_ACCOUNT_ADVERTISER)) {
         $deleteConfirm = phpAds_DelConfirm($GLOBALS['strConfirmDeleteBanner']);
-        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "banner-delete.php?token=" . urlencode(phpAds_SessionGetToken()) . "&clientid=$advertiserId&campaignid=$campaignId&bannerid=$bannerId&returnurl=campaign-banners.php"), "iconDelete", null, $deleteConfirm);
+        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "banner-delete.php?token=".urlencode($token)."&clientid=$advertiserId&campaignid=$campaignId&bannerid=$bannerId&returnurl=campaign-banners.php"), "iconDelete", null, $deleteConfirm);
     }
 
     /* Shortcuts */
@@ -1840,24 +1866,28 @@ function addWebsitePageTools($websiteId)
 function addZonePageTools($affiliateid, $zoneid, $aOtherPublishers, $aEntities)
 {
     global $phpAds_TextDirection;
+
+    $token = phpAds_SessionGetToken();
+
     //duplicate
     if (OA_Permission::isAccount(OA_ACCOUNT_ADMIN)
         || OA_Permission::isAccount(OA_ACCOUNT_MANAGER)
         || OA_Permission::hasPermission(OA_PERM_ZONE_ADD)) {
-        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "zone-modify.php?duplicate=true&affiliateid=$affiliateid&zoneid=$zoneid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconZoneDuplicate");
+        addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "zone-modify.php?token=".urlencode($token)."&duplicate=true&affiliateid=$affiliateid&zoneid=$zoneid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconZoneDuplicate");
     }
 
     //move to
     if (OA_Permission::isAccount(OA_ACCOUNT_ADMIN)
         || OA_Permission::isAccount(OA_ACCOUNT_MANAGER)) {
         $form = "<form action='" . MAX::constructUrl(MAX_URL_ADMIN, 'zone-modify.php') . "'>
+        <input type='hidden' name='token' value='".htmlspecialchars($token, ENT_QUOTES)."'>
         <input type='hidden' name='affiliateid' value='$affiliateid'>
         <input type='hidden' name='zoneid' value='$zoneid'>
         <input type='hidden' name='returnurl' value='".htmlspecialchars(basename($_SERVER['SCRIPT_NAME']))."'>
         <select name='newaffiliateid'>";
         $aOtherPublishers = _multiSort($aOtherPublishers,'name','publisher_id');
         foreach ($aOtherPublishers as $otherPublisherId => $aOtherPublisher) {
-            $otherPublisherName = MAX_buildName($aOtherPublisher['publisher_id'], $aOtherPublisher['name']);
+            $otherPublisherName = $aOtherPublisher['name'];
             if ($aOtherPublisher['publisher_id'] != $affiliateid) {
                 $form .= "<option value='" . $aOtherPublisher['publisher_id'] . "'>" . htmlspecialchars($otherPublisherName) . "</option>";
             }
@@ -1872,7 +1902,7 @@ function addZonePageTools($affiliateid, $zoneid, $aOtherPublishers, $aEntities)
        || OA_Permission::isAccount(OA_ACCOUNT_MANAGER)
        || OA_Permission::hasPermission(OA_PERM_ZONE_DELETE)) {
         $deleteConfirm = phpAds_DelConfirm($GLOBALS['strConfirmDeleteZone']);
-        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "zone-delete.php?token=" . urlencode(phpAds_SessionGetToken()) . "&affiliateid=$affiliateid&zoneid=$zoneid&returnurl=affiliate-zones.php"), "iconDelete", null, $deleteConfirm);
+        addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "zone-delete.php?token=".urlencode($token)."&affiliateid=$affiliateid&zoneid=$zoneid&returnurl=affiliate-zones.php"), "iconDelete", null, $deleteConfirm);
     }
 
     //shortcut
@@ -1890,12 +1920,14 @@ function addChannelPageTools($agencyid, $websiteId, $channelid, $channelType)
         $deleteReturlUrl = MAX::constructUrl(MAX_URL_ADMIN, 'channel-index.php');
     }
 
+    $token = phpAds_SessionGetToken();
+
     //duplicate
-    addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "channel-modify.php?duplicate=true&agencyid=$agencyid&affiliateid=$websiteId&channelid=$channelid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconTargetingChannelDuplicate");
+    addPageLinkTool($GLOBALS["strDuplicate"], MAX::constructUrl(MAX_URL_ADMIN, "channel-modify.php?token=".urlencode($token)."&duplicate=true&agencyid=$agencyid&affiliateid=$websiteId&channelid=$channelid&returnurl=".urlencode(basename($_SERVER['SCRIPT_NAME']))), "iconTargetingChannelDuplicate");
 
     //delete
     $deleteConfirm = phpAds_DelConfirm($GLOBALS['strConfirmDeleteChannel']);
-    addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "channel-delete.php?token=" . urlencode(phpAds_SessionGetToken()) . "&agencyid=$agencyid&affiliateid=$websiteId&channelid=$channelid&returnurl=$deleteReturlUrl"), "iconDelete", null, $deleteConfirm);
+    addPageLinkTool($GLOBALS["strDelete"], MAX::constructUrl(MAX_URL_ADMIN, "channel-delete.php?token=".urlencode($token)."&agencyid=$agencyid&affiliateid=$websiteId&channelid=$channelid&returnurl=$deleteReturlUrl"), "iconDelete", null, $deleteConfirm);
 }
 
 

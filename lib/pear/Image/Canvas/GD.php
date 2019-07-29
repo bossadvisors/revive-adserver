@@ -141,11 +141,11 @@ class Image_Canvas_GD extends Image_Canvas_WithMap
      *
      * @param array $param Parameter array
      */
-    function Image_Canvas_GD($param)
+    function __construct($param)
     {
         include_once 'Image/Canvas/Color.php';
 
-        parent::Image_Canvas_WithMap($param);
+        parent::__construct($param);
 
         $this->_gd2 = ($this->_version() == 2);
         $this->_font = array('font' => 1, 'color' => 'black');
@@ -1671,16 +1671,16 @@ class Image_Canvas_GD extends Image_Canvas_WithMap
             $php_info = ob_get_contents();
             ob_end_clean();
 
-            if (ereg("<td[^>]*>GD Version *<\/td><td[^>]*>([^<]*)<\/td>",
+            if (preg_match("#<td[^>]*>GD Version *<\/td><td[^>]*>([^<]*)<\/td>#D",
                 $php_info, $result))
             {
                 $version = $result[1];
             }
         }
 
-        if (ereg('1\.[0-9]{1,2}', $version)) {
+        if (preg_match('/1\.[0-9]{1,2}/D', $version)) {
             return 1;
-        } elseif (ereg('2\.[0-9]{1,2}', $version)) {
+        } elseif (preg_match('/2\.[0-9]{1,2}/D', $version)) {
             return 2;
         } else {
             return 0;

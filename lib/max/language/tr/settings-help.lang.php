@@ -1,189 +1,185 @@
 <?php
 
 /*
-+---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
-| http://www.revive-adserver.com                                            |
-|                                                                           |
-| Copyright: See the COPYRIGHT.txt file.                                    |
-| License: GPLv2 or later, see the LICENSE.txt file.                        |
-+---------------------------------------------------------------------------+
-*/
-
+  +---------------------------------------------------------------------------+
+  | Revive Adserver                                                           |
+  | http://www.revive-adserver.com                                            |
+  |                                                                           |
+  | Copyright: See the COPYRIGHT.txt file.                                    |
+  | License: GPLv2 or later, see the LICENSE.txt file.                        |
+  +---------------------------------------------------------------------------+
+ */
 
 // Settings help translation strings
-$GLOBALS['phpAds_hlp_dbhost'] =
-		$phpAds_dbmsname." veritabanının veritabanı sunucusunu belirtiniz.
-		";
+$GLOBALS['phpAds_hlp_dbhost'] = "Bağlanmaya çalıştığınız {$phpAds_dbmsname} veritabanı sunucusunun ana makine adını belirtin.";
 
-$GLOBALS['phpAds_hlp_dbuser'] =
-		MAX_PRODUCT_NAME." programının ".$phpAds_dbmsname." veritabanına bağlanması için kullanıcı adını belirtiniz.
-		";
+$GLOBALS['phpAds_hlp_dbport'] = "Bağlanmaya çalıştığınız {$phpAds_dbmsname} veritabanı sunucusunun bağlantı noktasının sayısını belirtin.";
 
-$GLOBALS['phpAds_hlp_dbpassword'] =
-		MAX_PRODUCT_NAME." programının ".$phpAds_dbmsname." veritabanına bağlanması için parolanızı belirtiniz.
-		";
+$GLOBALS['phpAds_hlp_dbuser'] = "{$phpAds_dbmsname} veritabanı sunucusuna erişmek için {$PRODUCT_NAME} tarafından kullanılması gereken kullanıcı adını belirtin.";
 
-$GLOBALS['phpAds_hlp_dbname'] =
-		MAX_PRODUCT_NAME." programının verilerini saklayacağı veritabanını belirtiniz.
-		";
+$GLOBALS['phpAds_hlp_dbpassword'] = "{$phpAds_dbmsname} veritabanı sunucusuna erişmek için {$PRODUCT_NAME} ürününün kullanması gereken şifreyi belirtin.";
 
-$GLOBALS['phpAds_hlp_persistent_connections'] = "\n		İnatçı bağlantıları kullanırsanız ".MAX_PRODUCT_NAME." programı hızlanır ve sunucuya\n		yükünü azaltır. Buna rağmen çok kullanıcının ziyaret ettiği sitelerde server yükü fazlalaşacağından\n		hatta normal zamanlardaki bağlantılardan daha fazla olacağından dolayı dezavantajı vardır.\n		Düzenli bağlantıları veya inatçı bağlantıları ziyaretçi sayınız ve donanımınız destekliyorsa\n		kullanabilirsiniz. Eğer ".MAX_PRODUCT_NAME." programı çok fazla kaynak harcıyorsa ilk olarak\n		bakacağınız ayar burasıdır.\n		";
+$GLOBALS['phpAds_hlp_dbname'] = "{$PRODUCT_NAME} ürününün veri depolaması gereken veritabanı sunucusunda veritabanının adını belirtin.
+Önemli Veritabanı, veritabanı sunucusunda önceden oluşturulmuş olmalıdır. {$PRODUCT_NAME}, bu veritabanı <b> henüz </b> oluşturulmadıysa oluşturulur.";
 
-$GLOBALS['phpAds_hlp_insert_delayed'] = "\n        ".$phpAds_dbmsname." veritabanı veri girilirken tabloları kilitlesin. Çok sayıda ziyaretçiniz varsa\n		".MAX_PRODUCT_NAME." programı yeni veri girişi esnasında bekler, çünkü veritabanı kilitlidir.\n		Veri ekleme gecikmesi kullanırsanız, beklemezsiniz ve yeni veri daha tablonun açık olduğu sırada\n		sonra da eklenebilir.\n		";
+$GLOBALS['phpAds_hlp_persistent_connections'] = "Sürekli bağlantı kullanılması {$PRODUCT_NAME} ürününü önemli ölçüde hızlandırabilir ve sunucu üzerindeki yükü düşürebilir. Bununla birlikte, bir çok dezavantajı vardır, ziyaretçiler çok fazla olan sitelerde normal bağlantıları kullanırken sunucudaki yük artabilir ve daha da büyür. Normal bağlantılar kullanmanız gerekip gerekmediğine bağlı olarak, ziyaretçilerin sayısına ve kullandığınız donanıma bağlıdır. {$PRODUCT_NAME} çok fazla kaynak kullanıyorsa, önce bu ayara göz atmanız gerekir.";
 
-$GLOBALS['phpAds_hlp_compatibility_mode'] = "\n		Eğer ".MAX_PRODUCT_NAME." ile üçüncü parti bir programın bir bütün olarak çalışmasında\n		problem yaşıyorsanız, veritabanı uyum modunu kullanabilirsiniz. Eğer yerel sistem kullanıyorsanız\n		ve veritabanı uyum modu açık ise ".MAX_PRODUCT_NAME." programı veritabanı durumunu çalışmadan\n		önceki durumu gibi teslim eder. Bu özellik sistemi biraz yavaşlatabilir. Bundan dolayı öntanımlı\n		olarak kapatılmıştır.\n		";
+$GLOBALS['phpAds_hlp_compatibility_mode'] = "{$PRODUCT_NAME} ürününü başka bir üçüncü parti ürünle entegrasyonda sorun yaşıyorsanız, veritabanı uyumluluğu modunu açmanıza yardımcı olabilir. Yerel mod çağrısı kullanıyorsanız ve veritabanı uyumluluğu açıksa, {$PRODUCT_NAME}, veritabanı bağlantısının durumunu exterior olarak {$PRODUCT_NAME} 'nın çalıştığı zamanki gibi bırakmalıdır.
+Bu seçenek biraz daha yavaştır (yalnızca biraz) ve bu nedenle varsayılan olarak kapalıdır.";
 
-$GLOBALS['phpAds_hlp_table_prefix'] = "\n		".MAX_PRODUCT_NAME." veritabanı birden fazla programla kullanılıyorsa tablolara önad koymak\n		akıllıca olur. ".MAX_PRODUCT_NAME." programının birden fazla kopyasını aynı veritabanında\n		kullanıyorsanız, bu önadların farklı olmasını istersiniz.\n		";
+$GLOBALS['phpAds_hlp_table_prefix'] = "{$PRODUCT_NAME} adlı veritabanı birden fazla yazılım ürünü tarafından paylaşılıyorsa, tabloların adlarına ön ek eklemek akıllıca olur. Aynı veritabanında {$PRODUCT_NAME} ürününün birden fazla yüklemesini kullanıyorsanız, bu öneki tüm kurulumlar için benzersiz olduğundan emin olmanız gerekir.";
 
-$GLOBALS['phpAds_hlp_tabletype'] = "\n        ".$phpAds_dbmsname." veritabanı farklı tablo yapılarını destekler. Her tablo türü kendine has\n		özelliklere sahiptir ve bazıları ".MAX_PRODUCT_NAME." programını hatrı sayılır derecede\n		hızlandırabilir. MyISAM öntanımlı tablo yapısıdır ve ".$phpAds_dbmsname." veritabanının\n		tüm kurulumları içerir. Diğer tablo yapıları sunucunuz tarafından desteklenmeyebilir.\n		";
+$GLOBALS['phpAds_hlp_table_type'] = "MySQL, birden çok tablo türünü desteklemektedir. Her tablo türü benzersiz özelliklere sahiptir ve bazıları {$PRODUCT_NAME} ürününü önemli ölçüde hızlandırabilir. MyISAM, varsayılan tablo türüdür ve MySQL'in tüm yüklemelerinde kullanılabilir. Diğer tablo türleri sunucunuzda bulunmayabilir.";
 
-$GLOBALS['phpAds_hlp_url_prefix'] = "\n        ".MAX_PRODUCT_NAME." programı düzgün çalışabilmesi için sunucu üzerinde nerede\n		çalıştığını bilmelidir. ".MAX_PRODUCT_NAME." programının kurulu olduğu URLyi\n		tam olarak girmelisiniz mesela: http://your-url.com/".MAX_PRODUCT_NAME.".\n		";
+$GLOBALS['phpAds_hlp_url_prefix'] = "{$PRODUCT_NAME} ürününün doğru çalışması için web sunucusunda nerede olduğunu bilmemiz gerekir. {$PRODUCT_NAME} kurulumunun bulunduğu dizinin URL'sini belirtmelisiniz, örneğin: <i>http://www.your-url.com/ads</i>.";
 
-$GLOBALS['phpAds_hlp_my_header'] =
-$GLOBALS['phpAds_hlp_my_footer'] = "\n		Buraya yönetici sayfasındaki üstbilgi ve altbilgi içeren dosyaların yollarını\n		belirtebilirsiniz(ör: ../yonetici_paneli/ekstra/header.html). Buraya dosyalara\n		yazı veya HTML kodu girebilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_ssl_url_prefix'] = "{$PRODUCT_NAME} ürününün doğru çalışması için web sunucusunda nerede olduğunu bilmemiz gerekir. Bazen SSL önek normal URL önekten farklıdır.
+{$PRODUCT_NAME} ürününün yüklü olduğu dizinin URL'sini belirtmelisiniz, örneğin: <i>https://www.your-url.com/ads</i>.";
 
-$GLOBALS['phpAds_hlp_content_gzip_compression'] = "\n		GZIP içerik sıkıştırmayı aktif ettiğiniz takdirde yönetici paneline her girişteki\n		tarayıcıya gönderilen veri oranında büyük bir düşüş olur. Bu özelliği aktif\n		edebilmeniz için en az GZIP eklentili PHP 4.0.5 sürümüne sahip olmanız gerekiyor.\n		";
+$GLOBALS['phpAds_hlp_my_header'] = $GLOBALS['phpAds_hlp_my_footer'] = "Yönetici arayüzündeki her sayfada üstbilgi ve / veya altbilgi olması için üstbilgi dosyalarının yolunu buraya yerleştirmelisiniz (ör. /home/login/www/header.htm). Bu dosyalara metin veya html koyabilirsiniz (bu dosyalardan birinde veya her ikisinde html kullanmak istiyorsanız <body> veya <html> gibi etiketleri kullanmayın).";
 
-$GLOBALS['phpAds_hlp_language'] = "\n		".MAX_PRODUCT_NAME." programının kullanacağı öntanımlı dili seçiniz. Bu dil\n		yönetici ve reklamcılar için öntanımlı olacaktır.\n		NOT: Herbir reklamcı için yönetici arabiriminden farklı bir dil seçebilirsiniz veya\n		herbir reklamcıya kendi dilini değiştirme izni verebilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_my_logo'] = "Burada, varsayılan logo yerine, görüntülemek istediğiniz özel logo dosyasının adını girmelisiniz. Logo burada dosya adını ayarlamadan önce admin / images dizinine yerleştirilmelidir.";
 
-$GLOBALS['phpAds_hlp_name'] = "\n		Bu uygulama için kullanacağınız program ismini seçiniz. Bu isim tüm\n		yönetici ve reklamcı sayfalarında görüntülenecektir. Bu ayarı boş geçerseniz\n		(öntanımlı) ".MAX_PRODUCT_NAME." logosu görüntülenecektir.\n		";
+$GLOBALS['phpAds_hlp_gui_header_foreground_color'] = "Buraya, sekmeler, arama çubuğu ve kalın metin için kullanılacak özel bir renk koymalısınız.";
 
-$GLOBALS['phpAds_hlp_company_name'] = "\n		Bu isim ".MAX_PRODUCT_NAME." programı tarafından gönderilen e-maillerde kullanılacaktır.\n		";
+$GLOBALS['phpAds_hlp_gui_header_background_color'] = "Burada, üstbilgi arka planı için kullanılacak özel bir renk koymalısınız.";
 
-$GLOBALS['phpAds_hlp_override_gd_imageformat'] = "\n		".MAX_PRODUCT_NAME." programı genellikle GD kütüphanesinin kurulu olup olmadığını\n		ve hangi resim formatlarının desteklenip desteklenmediğini bulur. Herşeye rağmen\n		bu sonuç kesin olarak doğrudur veya yanlıştır diyemeyiz, çünkü bazı PHP sürümleri\n		desteklenen resim formatlarının bulunmasına izin vermez. Eğer ".MAX_PRODUCT_NAME."\n		otomatik bulma sisteminde hata yaparsa doğru resim formatlarını siz belirtmelisiniz.\n		Olağan formatlar: hiçbiri, png, jpeg, gif.\n		";
+$GLOBALS['phpAds_hlp_gui_header_active_tab_color'] = "Burada seçili olan ana sekme için kullanılacak özel bir renk koymalısınız.";
 
-$GLOBALS['phpAds_hlp_p3p_policies'] = "\n		".MAX_PRODUCT_NAME." programının P3P Gizlilik Politikalarını kullanmasını istiyorsanız\n		bu özelliği açınız.\n		";
+$GLOBALS['phpAds_hlp_gui_header_text_color'] = "Burada, üstbilgideki metin için kullanılacak özel bir renk koymalısınız.";
 
-$GLOBALS['phpAds_hlp_p3p_compact_policy'] = "\n		Cookielerle gönderilen yoğunlaştırılmış politika. Öntanımlı ayar: 'CUR ADM OUR NOR STA NID'\n		Bu ayarlama ".MAX_PRODUCT_NAME." programının Internet Explorer 6 üzerinde cookie\n		göndermesine izin verir. Eğer isterseniz bu ayarları kendi Gizlilik durumunuza göre\n		değiştirebilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_content_gzip_compression'] = "GZIP içerik sıkıştırmasını etkinleştirerek, yönetici arayüzünün her sayfası açıldığında tarayıcıya gönderilen verilerin büyük bir kısmının azalmasını sağlayabilirsiniz.
+Bu özelliği etkinleştirmek için GZIP uzantısının yüklü olması gerekir.";
 
-$GLOBALS['phpAds_hlp_p3p_policy_location'] = "\n		Eğer tam gizlilik politikası kullanmak istiyorsanız, politikanın tam yerini\n		belirtebilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_language'] = "{$PRODUCT_NAME} kullanması gereken varsayılan dili belirtin. Bu dil, yönetici ve reklamveren arayüzü için varsayılan olarak kullanılacaktır. Lütfen unutmayın: Yönetici arayüzünden her reklamveren için farklı bir dil ayarlayabilir ve reklamverenlerin kendi dillerini değiştirmesine izin verebilirsiniz.";
 
-$GLOBALS['phpAds_hlp_log_beacon'] = "\n		Yol göstericiler bannerların gösterildiği sayfalarda küçük görünmez resimlerdir.\n		Bu özelliği açarsanız ".MAX_PRODUCT_NAME." programı bannerın görüntülenme esnaısındaki\n		sayısını hesaplar. Bu özelliği kapatırsanız banner görüntülenme sayısı sadece teslimatta\n		sayılır fakat bu sayı kesin sayı olmayabilir. Çünkü teslim edilmiş banner her zaman ekranda\n		görüntülenmeyebilir.\n		";
+$GLOBALS['phpAds_hlp_name'] = "Bu uygulama için kullanmak istediğiniz adı belirtin. Bu dizge, yönetici ve reklamveren arayüzündeki tüm sayfalarda görüntülenecektir. Bu ayarı boş (varsayılan) bırakırsanız onun yerine {$PRODUCT_NAME} bir logo görüntülenir.";
 
-$GLOBALS['phpAds_hlp_compact_stats'] = "\n		Geleneksel olarak ".MAX_PRODUCT_NAME." programı çok detaylı ve bakım gerektiren\n		genişletilmiş logları tercih eder. Bu çok ziyaretçili sitelerde büyük problemlere\n		yol açabilir. Bu problemi halletmek için ".MAX_PRODUCT_NAME." programı az bakım\n		gerektiren ama az detaylı yeni istatistik tipini destekler. Yoğunlaştırılmış istatistikler\n		saatlik görüntülenme ve tıklanma sayılarını depolar. Daha fazla detaya ihtiyacınız varsa\n		yoğunlaştırılmış istatistikler özelliğini kapatabilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_company_name'] = "Bu ad, {$PRODUCT_NAME} tarafından gönderilen e-postada kullanılır.";
 
-$GLOBALS['phpAds_hlp_log_adviews'] = "\n		Normal durumda tüm görüntülenmeler depolanır, ama görüntülenmeleri depolamak\n		istemiyorsanız bu özelliği kapatabilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_override_gd_imageformat'] = "{$PRODUCT_NAME} genellikle GD kitaplığının yüklü olup olmadığını ve hangi resim biçiminin GD'nin yüklü sürümüyle desteklendiğini algılar. Bununla birlikte, algılamanın doğru veya yanlış yapılmaması mümkündür, PHP'nin bazı sürümleri desteklenen resim biçimlerinin saptanmasına izin vermemektedir. {$PRODUCT_NAME} doğru resim biçimini otomatik algılayamazsa doğru resim biçimini belirleyebilirsiniz. Olası değerler şunlardır: none, png, jpeg, gif.";
 
-$GLOBALS['phpAds_hlp_block_adviews'] = "\n		Eğer bir ziyaretçi sayfayı yenilerse ".MAX_PRODUCT_NAME." her görüntülemeyi depolar.\n		Bu özellik belirlediğiniz süre içerisinde görüntülenmelerden sadece birini depolar.\n		Örneğin: bu özelliği 300 saniye yaparsanız, ".MAX_PRODUCT_NAME." son 5 dakika içerisinde\n		aynı ziyaretçiye sadece tekrar gösterilmeyen bannerların istatistiklerini depolar. Bu\n		özellik sadece <i>Görüntülenmeleri loglamak için yol göstericileri kullan</i> seçeneği\n		açılmış ise ve tarayıcı cookieleri kabul ediyorsa kullanılır.\n		";
+$GLOBALS['phpAds_hlp_p3p_policies'] = "{$PRODUCT_NAME} 'P3P Gizlilik Politikası'nı etkinleştirmek istiyorsanız bu seçeneği etkinleştirmeniz gerekir.";
 
-$GLOBALS['phpAds_hlp_log_adclicks'] = "\n		Normal durumda tüm tıklanmalar depolanır, ama tıklanmalrı depolamak\n		istemiyorsanız bu özelliği kapatabilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_p3p_compact_policy'] = "Çerezlerle birlikte gönderilen kompakt politika. Varsayılan ayar: Internet Explorer 6'nın {$PRODUCT_NAME} tarafından kullanılan çerezleri kabul etmesini sağlayan 'CUM ADM OUR NOR STA NID' dır. İsterseniz, kendi gizlilik bildiriminizle eşleşecek şekilde bu ayarları değiştirebilirsiniz.";
 
-$GLOBALS['phpAds_hlp_block_adclicks'] = "\n		Eğer bir ziyaretçi bir bannera birden fazla tıklarsa ".MAX_PRODUCT_NAME." programı her\n		tıklamayı kaydeder. Bu özellik belirlediğiniz süre içerisinde sadece bir tıklamayı depolar.\n		Örneğin: bu özelliği 300 saniye yaparsanız, ".MAX_PRODUCT_NAME." son 5 dakika içerisinde\n		aynı ziyaretçinin sadece tekrar tıklamadığı bannerların istatistiklerini depolar. Bu\n		özellik sadece tarayıcı cookieleri kabul ediyorsa kullanılabilır.\n		";
+$GLOBALS['phpAds_hlp_p3p_policy_location'] = "Tam bir gizlilik politikası kullanmak istiyorsanız, ilkenin bulunduğu yeri belirtebilirsiniz.";
 
-$GLOBALS['phpAds_hlp_reverse_lookup'] = "\n		".MAX_PRODUCT_NAME." programı öntanımlı olarak her ziyaretçinin IP adresini depolar.\n		Eğer ".MAX_PRODUCT_NAME." programının domain isimlerini depolamasını istiyorsanız\n		bu özelliği açabilirsiniz. Geri besleme biraz zaman alabilir ve tüm işlemler biraz\n		yavaşlar.\n		";
+$GLOBALS['phpAds_hlp_compact_stats'] = "Geleneksel olarak {$PRODUCT_NAME} oldukça ayrıntılı bir günlüğe kaydetme işlemi gerçekleştirdi; bu çok detaylıydı, ancak veritabanı sunucusunda da çok talepkardı. Bu, çok sayıda ziyaretçinin bulunduğu sitelerde büyük bir problem olabilir. Bu sorunun üstesinden gelmek için {$PRODUCT_NAME}, yeni bir istatistik türünü desteklemektedir; kompakt istatistikler, veritabanı sunucusunda daha az talep gerektirir, ancak aynı zamanda daha az detaylıdır.
+Kompakt istatistikler, her saat için ilan izlemesi, ilan tıklaması ve ilan dönüşümleri toplar; daha fazla ayrıntıya ihtiyacınız varsa, sıkıştırılmış istatistikleri kapatabilirsiniz.";
 
-$GLOBALS['phpAds_hlp_proxy_lookup'] = "\n		Bazı kullanıcılar internete erişebilmek için proxy sunucular kullanır. Bu durumda\n		".MAX_PRODUCT_NAME." programı kullanıcının değilde proxy sunucunun Ip adresini\n		veya sunucu adını alır. Eğer bu özelliği açarsanız ".MAX_PRODUCT_NAME." programı\n		proxy sunucu arkasındaki kullanıcının IP adresini veya sunucu adını bulmaya çalışır.\n		Eğer proxy sunucu kullanılıyorsa kullanıcının kesin adresini bulmak mümkün olmayabilir.\n		Bu özellik öntanımlı olarak kapalıdır, çünkü depolama hızını düşürür.\n		";
+$GLOBALS['phpAds_hlp_log_adviews'] = "Normalde tüm ilan izlemeleri günlüğe kaydedilir; İlan izlemesi ile ilgili istatistikleri toplamak istemiyorsanız, bu özelliği kapatabilirsiniz.";
 
-$GLOBALS['phpAds_hlp_ignore_hosts'] = "\n		Eğer bazı bilgisayarların tıklama ve görüntüleme sayılarını depolamak\n		istemiyorsanız bu bilgisayarları bu listeye  ekleyebilirsiniz. Geri beslemeyi\n		açarsanız hem domain adını hem de IP adresini ekleyebilirsiniz, aksi\n		takdirde sadece IP adresini yazınız. Tanımlamaları kullanbilirsiniz (Örn:\n		'*.altavista.com' veya '192.168.*').\n		";
+$GLOBALS['phpAds_hlp_block_adviews'] = "Bir ziyaretçi bir sayfayı yeniden yüklerse, her daim {$PRODUCT_NAME} tarafından bir ilan izlemesi kaydedilir.
+Bu özellik, belirlediğiniz saniye sayısı için her benzersiz afiş için yalnızca bir ilan izlemesinin kaydedildiğinden emin olmak için kullanılır. Örneğin: Bu değeri 300 saniyeye ayarlarsanız, {$PRODUCT_NAME} yalnızca aynı afişi son 5 dakika içinde aynı ziyaretçiye göstermediyse ilan izlemesi günlüğüne kaydeder. Bu özellik yalnızca çerezleri kabul eden tarayıcılarda çalışır.";
 
-$GLOBALS['phpAds_hlp_begin_of_week'] = "\n		Çoğu insan için hafta Pazartesi başlar. Fakat isterseniz Pazar günü başlatabilirsiniz.\n		";
 
-$GLOBALS['phpAds_hlp_percentage_decimals'] = "\n		İstatistik sayfalarında kaç tane ondalık alanı olacağını belirtiniz.\n		";
+$GLOBALS['phpAds_hlp_block_adclicks'] = "Bir ziyaretçi bir afişe birden çok kez tıklarsa, her defasında {$PRODUCT_NAME} tarafından bir ilan tıklaması kaydedilecektir. Bu özellik, belirlediğiniz saniye sayısı için benzersiz her afiş için yalnızca bir ilan tıklaması kaydedildiğinden emin olmak için kullanılır. Örneğin: Bu değeri 300 saniyeye ayarlarsanız, {$PRODUCT_NAME}, ziyaretçinin son 5 dakikada aynı afişi tıklaması durumunda ilan tıklaması günlüğüne kaydeder. Bu özellik yalnızca tarayıcı çerezleri kabul ettiğinde çalışır.";
 
-$GLOBALS['phpAds_hlp_warn_admin'] = "\n		".MAX_PRODUCT_NAME." programı kampanyanın belirli bir tıklama veya görüntülenme\n		sayısı kaldığında size e-mail atabilir. Bu özellik öntanılı açıktır.\n		";
 
-$GLOBALS['phpAds_hlp_warn_client'] = "\n		".MAX_PRODUCT_NAME." programı bir kampanyanın belirli bir tıklama ve görütülenme\n		sayısı kaldığında reklamcıya e-mail atabilir. Bu özellik öntanımlı açıktır.\n		";
+$GLOBALS['phpAds_hlp_block_adconversions'] = "Bir ziyaretçi bir ilan dönüştürme işaretçisine sahip bir sayfayı yeniden yüklerse {$PRODUCT_NAME} ilan dönüştürmeyi her seferinde günlüğe kaydeder. Bu özellik, belirttiğiniz saniye sayısı için yalnızca bir ilan dönüştürmeyi kaydettiğinden emin olmak için kullanılır. Örneğin: Bu değeri 300 saniyeye ayarlarsanız, {$PRODUCT_NAME}, ziyaretçinin ilan dönüştürme işaretçisiyle aynı sayfayı son 5 dakikada yüklememesi durumunda, yalnızca ilan dönüştürmeyi günlüğe kaydeder. Bu özellik yalnızca tarayıcı çerezleri kabul ettiğinde çalışır.";
 
-$GLOBALS['phpAds_hlp_qmail_patch'] = "\n		Bazı qmail sürümleri ".MAX_PRODUCT_NAME." programı tarafından gönderilen maillerin\n		içerisine mailin başlık kısmını gömmektedir. Bu ayarı açarsanız ".MAX_PRODUCT_NAME."\n		programı mailleri qmail uyumlu biçimde gönderecektir.\n		";
+$GLOBALS['phpAds_hlp_geotracking_stats'] = "Bir coğrafi hedefleme veritabanı kullanıyorsanız coğrafi bilgileri veritabanında da saklayabilirsiniz. Bu seçeneği etkinleştirdiyseniz, ziyaretçilerinizin konumu ve farklı ülkelerin her afişin performansı hakkında istatistikleri görebilirsiniz.
+Bu seçenek yalnızca ayrıntılı istatistikler kullanıyorsanız kullanılabilir.";
 
-$GLOBALS['phpAds_hlp_warn_limit'] = "\n		".MAX_PRODUCT_NAME." programının uyarı e-mailleri gönderme sınırlaması. Bu öntanımlı\n		100dür.\n		";
+$GLOBALS['phpAds_hlp_reverse_lookup'] = "Ana makine adı genellikle web sunucusu tarafından belirlenir, ancak bazı durumlarda bu kapatılabilir. Ziyaretçi kurallarının içinde ziyaretçi ana makine adını kullanmak ve / veya bununla ilgili istatistikleri tutmak ve aynı zamanda sunucu bu bilgiyi sağlamıyorsa, bu seçeneği etkinleştirebilirsiniz. Ziyaretçinin ana makine adının belirlenmesi biraz zaman alabilir; Afiş teslimatını yavaşlatacaktır.";
 
-$GLOBALS['phpAds_hlp_allow_invocation_plain'] =
-$GLOBALS['phpAds_hlp_allow_invocation_js'] =
-$GLOBALS['phpAds_hlp_allow_invocation_frame'] =
-$GLOBALS['phpAds_hlp_allow_invocation_xmlrpc'] =
-$GLOBALS['phpAds_hlp_allow_invocation_local'] =
-$GLOBALS['phpAds_hlp_allow_invocation_interstitial'] =
-$GLOBALS['phpAds_hlp_allow_invocation_popup'] = "\n		Bu ayarlar invocation tiplerine izin verdiğinizi belirtir. Bu biçimlerden\n		birisi kapalı ise invocationcode ve bannercode içerisinde kullanılabilir olmayacaktır.\n		ÖNEMLİ: Seçilmeseler bile invocation metodları çalışacaktır. Sadece kod\n		üretiminde kullanılmayacaktır.\n		";
+$GLOBALS['phpAds_hlp_proxy_lookup'] = "Bazı ziyaretçiler internete erişmek için bir proxy sunucusu kullanıyor. Bu durumda {$PRODUCT_NAME} kullanıcı yerine proxy sunucusunun IP adresini veya ana bilgisayar adını günlüğe kaydeder. Bu özelliği etkinleştirirseniz {$PRODUCT_NAME}, ziyaretçinin bilgisayarının proxy sunucusunun arkasındaki IP adresini veya ana makine adını bulmaya çalışacaktır. Ziyaretçinin tam adresini bulmak mümkün değilse bunun yerine proxy sunucusunun adresini kullanacaktır. Bu seçenek varsayılan olarak etkinleştirilmemiştir, çünkü afişlerin teslimatını önemli derecede yavaşlatacaktır.";
 
-$GLOBALS['phpAds_hlp_con_key'] = "\n		".MAX_PRODUCT_NAME." programı güçlü bir düzeltme modülüne sahiptir.\n		Daha fazla bilgi için kullanıcı klavuzunu okuyunuz. Bu özellikler, durum\n		anahtar kelimelerini kullanabilirsiniz. Öntanımlı açıktır.\n		";
+$GLOBALS['phpAds_hlp_obfuscate'] = "Burada hiçbir şey yok....";
 
-$GLOBALS['phpAds_hlp_mult_key'] = "\n		Eğer banner göstermek için direk seçim yöntemini kullanıyorsanız, bir yada\n		birden fazla anahtar kelime seçebilirsiniz. Birden fazla anahtar kelime seçerseniz\n		bu özellik açılmalıdır. Öntanımlı olarak açıktır.\n		";
+$GLOBALS['phpAds_hlp_auto_clean_tables'] = $GLOBALS['phpAds_hlp_auto_clean_tables_interval'] = "Bu özelliği etkinleştirirseniz, bu onay kutusunun altındaki belirlediğiniz süre geçtikten sonra toplanan istatistikler otomatik olarak silinir. Örneğin, bunu 5 haftaya ayarlarsanız, 5 haftadan daha eski istatistikler otomatik olarak silinir.";
 
-$GLOBALS['phpAds_hlp_acl'] = "\n		Teslimat sınırlamaları kullanmıyorsanız bu özelliği bu parametreyi kullanıp kapatabilirsiniz.\n		Bu ".MAX_PRODUCT_NAME." sistemini hızlandıracaktır.\n		";
+$GLOBALS['phpAds_hlp_auto_clean_userlog'] = $GLOBALS['phpAds_hlp_auto_clean_userlog_interval'] = "Bu özellik, bu onay kutusunun altındaki belirtilen hafta sayısından daha eski girdileri otomatik olarak kullanıcı günlüğünden silecektir.";
 
-$GLOBALS['phpAds_hlp_default_banner_url'] =
-$GLOBALS['phpAds_hlp_default_banner_target'] = "\n		".MAX_PRODUCT_NAME." programı veritabanına bağlanmazsa veya eşleşen bir banner bulamazsa\n		mesela veritabanının bozulması veya silinmesi durumunda, boş sayfa basacaktır.\n		Bazı kullanıcılar bu durumda öntanımlı bir banner gösterilmesini isteyecektir.\n		Bu bannerla ilgili hiçbir istatistik tutulmamaktadır. Bu özellik öntanımlı kapalıdır.\n		";
 
-$GLOBALS['phpAds_hlp_zone_cache'] = "\n        Eğer alanları kullanıyorsanız ".MAX_PRODUCT_NAME." programı banner bilgilerini daha\n		sonra kullanılması için hafızada tutabilir. Bu ".MAX_PRODUCT_NAME." programının hızlı\n		çalışmasını sağlar. Program çalışırken Alan bilgisini almak için ve bannerın bilgisini\n		almak için ve doğru banneı seçmek için ".MAX_PRODUCT_NAME." programı sadece hafıza\n		yükler. Bu özellik öntanımlı açıktır.\n		";
+$GLOBALS['phpAds_hlp_geotracking_location'] = "Coğrafi Apache modülüne sahip olmadığınız sürece {$PRODUCT_NAME}'e coğrafi hedefleme veritabanının konumunu bildirmeniz gerekir. Veritabanını web sunucuları belge kökü dışında kullanmak her zaman önerilir, aksi takdirde kullanıcılar veritabanını indirebilir.";
 
-$GLOBALS['phpAds_hlp_zone_cache_limit'] = "\n        Hafızalanmış alanlar kullanıyorsanız, hafıza içerisindeki bilgiler güncellenebilir.\n		".MAX_PRODUCT_NAME." programı hafızayı yeniden oluşturduğu zaman, alana eklenen\n		yeni bannerlarda hafıza alınır. Bu ayar size hafızanın ne kadar sürede tazeleneceğini\n		ve en fazla yaşama süresini belirtir. Örneğin: Bu ayarı 600 olarak ayarlarsanız,\n		hafıza her 10 dakikada bir yenilenir.\n		";
+$GLOBALS['phpAds_hlp_geotracking_cookie'] = "IP adresini coğrafi bilgilerde dönüştürmek zaman almaktadır. {$PRODUCT_NAME} tarafından bir afiş gönderildiğinde bunu yapmak zorunda kalmamak için sonuç bir çerezde saklanabilir. Bu çerez varsa {$PRODUCT_NAME} IP adresini dönüştürmek yerine bu bilgiyi kullanacaktır.";
 
-$GLOBALS['phpAds_hlp_type_sql_allow'] =
-$GLOBALS['phpAds_hlp_type_web_allow'] =
-$GLOBALS['phpAds_hlp_type_url_allow'] =
-$GLOBALS['phpAds_hlp_type_html_allow'] =
-$GLOBALS['phpAds_hlp_type_txt_allow'] = "\n        ".MAX_PRODUCT_NAME." programı farklı tiplerde bannerları destekler ve bunları\n		farklı yollarla kaydeder. İlk iki seçim yerel depolama için kullanılır. Yönetici\n		arabiriminden banner yükleyebilirsiniz ve ".MAX_PRODUCT_NAME." programı bunları\n		SQL veritabanına veya web sunucuya kaydeder. Harici web sunucudaki bannerları da\n		kullanabilirsiniz veya HTML kullanabilirsiniz veya basit bir yazı ile de banner\n		oluşturabilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_ignore_hosts'] = "Bazı bilgisayarlardan görüntülemeleri, tıklamaları ve dönüşümleri saymak istemiyorsanız bunları bu listeye ekleyebilirsiniz. Geriye doğru aramayı etkinleştirdiyseniz hem alan adlarını hem de IP adreslerini ekleyebilirsiniz, aksi takdirde sadece IP adreslerini kullanabilirsiniz. Joker karakterleri de kullanabilirsiniz (ör. '*.altavista.com' veya '192.168. *').";
 
-$GLOBALS['phpAds_hlp_type_web_mode'] = "\n        Eğer bannerların web sunucuda saklanmasını seçerseniz, bu ayarları yapmak\n		zorundasınız. Bannerları yerel klasörde saklamak istiyorsanız bu ayarları\n		<i>Yerel Klasör</i> olarak ayarlayınız. Eğer bannerlarınızı harici web sunucu\n		üzerinde saklamak istiyorsanız bu ayarları <i>Harici FTP Sunucu</i> olarak\n		ayarlayınız. Yerel sunucu haricindeki sunucularda FTP ayarlarını kullanmanız\n		gerekmektedir.\n		";
+$GLOBALS['phpAds_hlp_begin_of_week'] = "Çoğu insan için hafta Pazartesi günü ile başlar, ancak Pazar günü ile başlamak isterseniz yapabilirsiniz.";
 
-$GLOBALS['phpAds_hlp_type_web_dir'] = "\n		".MAX_PRODUCT_NAME." programının gönderilen bannerları nereye kopyalayacağını\n		(hangi klasöre) belirtiniz. Bu klasör PHP tarafından yazılabilir olmalıdır. Bu\n		klasörün UNIX izinlerinin ayarlanmasını gerektirir(chmod). Burada belirttiğiniz\n		klasör web sunucu üzerinde web paylaşımı olan (web sunucu web hizmeti verebilmelidir)\n		yerde olmalıdır. Son (/)ı yazmayınız. Depolamak için <i>Yerel Klasör</i> metodunu\n		seçtiyseniz bu ayarları yapmalısınız.\n		";
+$GLOBALS['phpAds_hlp_percentage_decimals'] = "İstatistik sayfalarında kaç tane ondalık basamak gösterileceğini belirtir.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_host'] = "\n		Depolama metodunu <i>Harici FTP sunucusu</i> olarak belirlediyseniz, ".MAX_PRODUCT_NAME."\n		programının bannerları göndereceği harici FTP sunucunun IP Adresi veya domain adını\n		belirtmelisiniz.\n		";
+$GLOBALS['phpAds_hlp_warn_admin'] = "{$PRODUCT_NAME}, bir kampanyada yalnızca sınırlı sayıda görüntüleme, tıklama veya dönüşüm kaldığında size e-posta gönderebilir. Bu varsayılan olarak açıktır.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_path'] = "\n		Depolama metodunu <i>Harici FTP sunucusu</i> olarak belirlediyseniz, ".MAX_PRODUCT_NAME."\n		programının harici FTP sunucuda bannerları göndereceği klasör ismini belirtmelisiniz.\n		";
+$GLOBALS['phpAds_hlp_warn_client'] = "{$PRODUCT_NAME}, kampanyalarından birinde yalnızca sınırlı sayıda görüntüleme, tıklama veya dönüşüm kaldığında reklamverenin e-postasını gönderdi. Bu varsayılan olarak açıktır.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_user'] = "\n		Depolama metodunu <i>Harici FTP sunucusu</i> olarak belirlediyseniz, ".MAX_PRODUCT_NAME."\n		programının harici FTP sunucuya ulaşması için kullanacağı kullanıcı adını belirtmelisiniz.\n		";
+$GLOBALS['phpAds_hlp_qmail_patch'] = "Qmail'in bazı sürümleri, {$PRODUCT_NAME} tarafından e-postanın gövdesinde başlıkları göstermek için gönderilen bir hatadan etkilenir. Bu ayarı etkinleştirirseniz {$PRODUCT_NAME}, e-postayı qmail uyumlu bir biçimde gönderir.";
 
-$GLOBALS['phpAds_hlp_type_web_ftp_password'] = "\n		Depolama metodunu <i>Harici FTP sunucusu</i> olarak belirlediyseniz, ".MAX_PRODUCT_NAME."\n		programının harici FTP sunucuya ulaşması için kullanacağı parolayı belirtmelisiniz.\n		";
+$GLOBALS['phpAds_hlp_warn_limit'] = "{$PRODUCT_NAME} ürününün uyarı e-postaları göndermeye başlama limiti. Varsayılan olarak bu 100'dür.";
 
-$GLOBALS['phpAds_hlp_type_web_url'] = "\n		Eğer bannerlarınızı web sunucusu üzerinde tutuyorsanız, ".MAX_PRODUCT_NAME." programı\n		bannerları sakladığınız klasörün umumi konumunu bilmek zorundadır. (En son / ı koymayınız.)\n		";
 
-$GLOBALS['phpAds_hlp_type_html_auto'] = "\n		Eğer bu özellik açık ise ".MAX_PRODUCT_NAME." programı HTML banner kodu içerisine otomatik olarak tıklanma\n		izleme kodunu gönderir. Ama bu özellik açık olduğu zaman bannerdaki bu özellik açık ise\n		banner özlelliğini yok sayar.\n		";
+$GLOBALS['phpAds_hlp_default_banner_url'] = $GLOBALS['phpAds_hlp_default_banner_target'] = "{$PRODUCT_NAME} veritabanı sunucusuna bağlanamazsa veya eşleşen herhangi bir afiş bulamazsa, veritabanı çöktüğünde veya silindiğinde herhangi bir şey görüntülenmez. Bazı kullanıcılar, bu durumlarda gösterilecek varsayılan bir afiş belirlemek isteyebilir. Burada belirtilen varsayılan afiş kaydedilmeyecek ve veritabanında hala etkin afişler kalmışsa kullanılamayacaktır. Bu varsayılan olarak kapalıdır.";
 
-$GLOBALS['phpAds_hlp_type_html_php'] = MAX_PRODUCT_NAME."
-		programının HTML bannerları içerisndeki PHP kodlarını çalıştırmasına izin ver.
-		Bu özellik öntanımlı olarak kapalıdır.
-		";
+$GLOBALS['phpAds_hlp_delivery_caching'] = "İletimin hızlandırılmasına yardımcı olmak için {$PRODUCT_NAME}, web sitenizin ziyaretçisine afiş göndermek için gereken tüm bilgileri içeren bir önbellek kullanır. Teslimat önbelleği varsayılan olarak veritabanında saklanır, ancak hızı daha da artırmak için önbellek dosyanın içinde veya paylaşılan bellekte saklamak da mümkündür. Paylaşılan bellek en hızlı yöntemdir, Dosyalar da çok hızlıdır. Teslimat önbelleğini kapatmanız önerilmez çünkü bu performansı ciddi şekilde etkiler.";
 
-$GLOBALS['phpAds_hlp_admin'] = "\n		Site yöneticisi kullanıcı adı, yönetici arabirimindeki loglarda kullanılacak\n		kullanıcı adını belirtebilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_type_web_mode'] = "Web sunucusunda saklanan afişleri kullanmak istiyorsanız, bu ayarı yapılandırmanız gerekir. Afişleri yerel bir dizinde saklamak isterseniz, bu seçeneği <i> Yerel dizin </i> olarak ayarlayın. Banner'ı harici bir FTP sunucusunda saklamak isterseniz, bu seçeneği <i> Harici FTP sunucusu </i> olarak ayarlayın. Bazı web sunucularında, FTP seçeneklerini yerel web sunucusunda bile kullanmak isteyebilirsiniz.";
 
-$GLOBALS['phpAds_hlp_pwold'] =
-$GLOBALS['phpAds_hlp_pw'] =
-$GLOBALS['phpAds_hlp_pw2'] = "\n		Yönetici parolasını değiştirmek için, eski parolayı girmeniz gerekiyor.\n		Yeni parolayı da yazım hatalarına karşı güvenli olsun diye iki defa\n		girmeniz gerekmektedir.\n		";
+$GLOBALS['phpAds_hlp_type_web_dir'] = "{$PRODUCT_NAME} ürününün, yüklenen afişleri kopyalaması gereken dizini belirtin. Bu dizinin PHP tarafından yazılabilir olması gerekir; bu, bu dizin için UNIX izinlerini değiştirmeniz gerektiği anlamına gelebilir (chmod). Burada belirttiğiniz dizinin web sunucusunun belge kökünde olması gerekir, web sunucusu dosyalara doğrudan hizmet edebilmelidir. Arka bir eğik çizgi (/) belirtmeyin. Depolama yöntemini <i> Yerel dizin </i> olarak ayarladıysanız, yalnızca bu seçeneği yapılandırmanız yeterlidir.";
 
-$GLOBALS['phpAds_hlp_admin_fullname'] = "\n		Site Yöneticisinin tam ismini belirtiniz. Bu istatistik mailleri gönderilirken\n		kullanılacaktır.\n		";
+$GLOBALS['phpAds_hlp_type_web_ftp_host'] = "Depolama yöntemini <i> Harici FTP sunucusu </i> olarak ayarlarsanız, {$PRODUCT_NAME}'e ürününün yüklenen afişleri kopyalaması gereken FTP sunucusunun IP adresini veya alan adını belirtmeniz gerekir.";
 
-$GLOBALS['phpAds_hlp_admin_email'] = "\n		Site yöneticisinin e-mail adresini belirtiniz. Bu e-mail hesabı gönderilen\n		istatistik maillerinin kimden kısmına yazılacaktır.\n		";
 
-$GLOBALS['phpAds_hlp_admin_email_headers'] = MAX_PRODUCT_NAME."
-		programı tarafından gönderilen e-maillere e-mail başlıkları ekleyebilirsiniz.
-		";
 
-$GLOBALS['phpAds_hlp_admin_novice'] = "\n		Herhangi reklamcı, kampanya, banner, yayıncı ve/veya alan silerken uyarı verilmesini\n		istiyorsanız bu özelliği açınız.\n		";
 
-$GLOBALS['phpAds_hlp_client_welcome'] = "\n		Eğer bu özelliği aktif ederseniz, reklamcı giriş yaptıktan sonra ilk sayfada hoşgeldiniz\n		mesajı görüntülenecektir. Bu mesajı welcome.html dosyasını (admin/templates klasöründe)\n		düzenleyerek kişiselleştirebilirsiniz. Eklemek isteyebileceğiniz veriler: Firma isminiz,\n		irtibat bilgileri, firma logonuz, reklam oranları ile ilgili sayfa linki....\n		";
 
-$GLOBALS['phpAds_hlp_client_welcome_msg'] = "\n		Welcome.html dosyasını değiştirmenin yanında buradaki ufak alana da belirtebilirsiniz.\n		Eğer buraya bir yazı girerseniz, welcome.html dosyası yok sayılacaktır. html etiketleri\n		kulanılabilir.\n		";
+$GLOBALS['phpAds_hlp_type_web_url'] = "Bir web sunucusuna afişler depolarsanız, {$PRODUCT_NAME} aşağıdaki genel URL'yi aşağıda belirttiğiniz dizine karşılık geldiğini bilmelidir. Arka bir eğik çizgi (/) belirtmeyin.";
 
-$GLOBALS['phpAds_hlp_updates_frequency'] = MAX_PRODUCT_NAME."
-		programının yeni sürümlerini kontrol etmek istiyorsanız bu seçeneği aktif edebilirsiniz.
-		".MAX_PRODUCT_NAME." programının sunucu ile bağlanmasını sağlar. Eğer yeni bir sürüm
-		bulunursa açılan kutu içerisinde bilgi verilecektir.
-		";
+$GLOBALS['phpAds_hlp_type_web_ssl_url'] = "Bir web sunucusunda afişler depolarsanız, {$PRODUCT_NAME} aşağıdaki genel URL'nin (SSL) aşağıda belirttiğiniz dizine karşılık geldiğini bilmelidir. Arka bir eğik çizgi (/) belirtmeyin.";
 
-$GLOBALS['phpAds_hlp_userlog_email'] = MAX_PRODUCT_NAME."
-		programı tarafından gönderilen tüm mailleri depolamak istiyorsanız bu özelliği
-		aktif etmelisiniz. Bu e-mail mesajları kullanıcı logları içerisinde depolanacaktır.
-		";
+$GLOBALS['phpAds_hlp_type_html_auto'] = "Bu seçenek açıksa, {$PRODUCT_NAME} tıklamaların günlüğe kaydedilmesini sağlamak için HTML afişlerini otomatik olarak değiştirir. Ancak bu seçenek etkinleştirildiğinde bile, afiş bazında devre dışı bırakma özelliği yine de mümkün olacaktır.";
 
-$GLOBALS['phpAds_hlp_userlog_priority'] = "\n		Öncelik hesabının doğru olarak hesaplandığından emin olmak için, saatlik\n		hesaplamaları raporlayabilirsiniz. Bu rapor olasılık profilini ve tüm banneların\n		önceliklerini içerir. Bu bilgileri olasılık hesaplamaları ile ilgili bir problemi\n		bildirmek için kullanabilirsiniz. Bu bilgileri kullanıcı logları içerisinde depolar.\n		";
+$GLOBALS['phpAds_hlp_type_html_php'] = "HTML afişlerine yerleştirilen PHP kodunu {$PRODUCT_NAME}'n çalıştırmasına izin vermek mümkündür. Bu özellik varsayılan olarak kapalıdır.";
 
-$GLOBALS['phpAds_hlp_default_banner_weight'] = "\n		Eğer yüksek öneme sahip öntanımlı banner kullanmak istiyorsanız önem ayarını buradan\n		yapabilirsiniz. Öntanımlı olarak bu değer 1dir.\n		";
+$GLOBALS['phpAds_hlp_admin'] = "Lütfen yönetici kullanıcı adını giriniz. Bu kullanıcı adı ile yönetici arayüzüne giriş yapabilirsiniz.";
 
-$GLOBALS['phpAds_hlp_default_campaign_weight'] = "\n		Eğer yüksek öneme sahip öntanımlı kampanya kullanmak istiyorsanız önem ayarını buradan\n		yapabilirsiniz. Öntanımlı olarak bu değer 1dir.\n		";
+$GLOBALS['phpAds_hlp_admin_pw'] = $GLOBALS['phpAds_hlp_admin_pw2'] = "Lütfen yönetici arayüzüne giriş yapmak için kullanmak istediğiniz şifreyi girin.
+Yazım hatalarını önlemek için iki kez girmeniz gerekir.";
 
-$GLOBALS['phpAds_hlp_gui_show_campaign_info'] = "\n		Eğer bu seçenek seçili ise kampanyalar hakkında ekstra bilgiler <i>Kampanya Önizleme</i>\n		sayfasında gösterilir. Ekstra bilgi kalan görüntülenme sayısını, kalan tıklama sayısını,\n		aktivasyon tarihini, bitiş tarihini ve öncelik ayarlarını içerir.\n		";
+$GLOBALS['phpAds_hlp_pwold'] = $GLOBALS['phpAds_hlp_pw'] = $GLOBALS['phpAds_hlp_pw2'] = "Yönetici şifresini değiştirmek için, yukarıdaki eski şifreyi belirtmeniz gerekebilir. Ayrıca, yazım hatalarını önlemek için yeni parolayı iki kez belirtmeniz gerekir.";
 
-$GLOBALS['phpAds_hlp_gui_show_banner_info'] = "\n		Eğer bu seçenek seçilmiş ise banner hakkındaki ekstra bilgiler <i>Banner Özellikleri</i>\n		sayfasında gösterilir. Ekstra bilgi hedef URL, anahtar kelimeler, boyut ve banner önemini\n		içerir.\n		";
+$GLOBALS['phpAds_hlp_admin_fullname'] = "Yöneticinin tam adını belirtin. Bu istatistikler e-posta ile gönderilirken kullanılır.";
 
-$GLOBALS['phpAds_hlp_gui_show_campaign_preview'] = "\n		Eğer bu seçenek seçili ise <i>Banner Önizleme</i> sayfasında tüm bannerların önizlemesi\n		görüntülenir. Eğer bu seçenek seçili değil ise <i>Banner Önizleme</i> sayfasında bannerların\n		yanındaki üçgenlere basarak bannerlar görüntülenebilir.\n		";
+$GLOBALS['phpAds_hlp_admin_email'] = "Yöneticinin e-posta adresi. Bu, e-posta yoluyla istatistik gönderirken gönderen adresi olarak kullanılır.";
 
-$GLOBALS['phpAds_hlp_gui_show_banner_html'] = "\n		Eğer bu seçenek seçilmiş ise HTML Bannerları HTMLsiz olarak gösterilir. Bu özellik öntanımlı\n		olarak seçilmemiştir, çünkü HTML Bannerı kullanıcı arayüzü ile çakışabilir. Bu seçenek seçili\n		değilken bile HTML banner, <i>Banner Göster</i> butonuna tıklanarak görüntülenebilir.\n		";
+$GLOBALS['phpAds_hlp_admin_novice'] = "Reklamverenleri, kampanyaları, afişleri, web sitelerini ve bölgeleri silmeden önce bir uyarı almak istiyorsanız; Bu seçeneği doğru olarak ayarlayın.";
 
-$GLOBALS['phpAds_hlp_gui_show_banner_preview'] = "\n		Eğer bu seçenek seçilmiş ise önizleme <i>Banner Özellikleri</i>, <i>Teslimat Ayarları</i> ve\n		<i>İlişkilendirilmiş Alanlar</i> sayfalarının en üstünde görüntülenecektir. Bu seçenek seçilmemeiş\n		ise bannerları görüntülemek için sayfaların en üstünde bulunan <i>Banner Göster</i> butonuna\n		basabilirsiniz.\n		";
+$GLOBALS['phpAds_hlp_client_welcome'] = "Bu özelliği açarsanız hoş geldiniz mesajı, giriş yaptıktan sonra bir reklamverenin göreceği ilk sayfada görüntülenir. Admin / templates dizininde welcome.html dosya konumunu düzenleyerek bu mesajı kişiselleştirebilirsiniz. Eklemek isteyebileceğiniz şeyler şunlardır: Şirketinizin adı, iletişim bilgileri, şirket logonuz, özel bir sayfa ile reklamcılık oranları vb..";
 
-$GLOBALS['phpAds_hlp_gui_hide_inactive'] = "\n		Eğer bu seçenek seçilmiş ise tüm pasif bannerlar, kampanyalar ve reklamcılar <i>Reklamcılar &\n		Kampanyalar</i> ve <i>Kampanya Önizleme</i> sayfalarında gizlenecektir. Eğer bu seçenek seçilmiş\n		ise tüm gizlenmiş öğeler sayfanın altında bulunan <i>Hepsini Göster</i> butonu ile görüntülenebilir.\n		";
+$GLOBALS['phpAds_hlp_client_welcome_msg'] = "Welcome.html dosyasını düzenlemek yerine, burada küçük bir metin de belirleyebilirsiniz. Burada bir metin girerseniz, welcome.html dosyası yok sayılır. Html etiketlerini kullanmasına izin verilir.";
 
-?>
+$GLOBALS['phpAds_hlp_updates_frequency'] = "{$PRODUCT_NAME} ürününün yeni sürümlerini kontrol etmek istiyorsanız bu özelliği etkinleştirebilirsiniz.
+{$PRODUCT_NAME} ürününün güncelleme sunucusu ile bağlantı kurduğu süreyi belirtmek mümkündür. Yeni bir sürüm bulunursa, güncelleme ile ilgili ek bilgi içeren bir iletişim kutusu açılır.";
+
+$GLOBALS['phpAds_hlp_userlog_email'] = "Giden tüm e-posta iletilerinin bir kopyasını {$PRODUCT_NAME} tarafından saklanmasını istiyorsanız bu özelliği etkinleştirebilirsiniz. E-posta mesajları kullanıcı günlüğünde saklanır.";
+
+$GLOBALS['phpAds_hlp_userlog_inventory'] = "Envanter hesaplamasının doğru şekilde çalıştığından emin olmak için saatlik envanter hesaplamasına ilişkin bir raporu kaydedebilirsiniz. Bu rapor, öngörülen profili ve tüm bannerlara ne kadar öncelik atanmış olduğunu içerir. Bu bilgi, öncelik hesaplamaları hakkında bir hata raporu göndermek isterseniz yararlı olabilir. Raporlar, kullanıcı logusunun içinde saklanır.";
+
+$GLOBALS['phpAds_hlp_userlog_autoclean'] = "Veritabanının doğru budandığinden emin olmak için, budama sırasında tam olarak ne olduğunu anlatan bir raporu kaydedebilirsiniz. Bu bilgiler kullanıcı günlüğünde saklanır.";
+
+$GLOBALS['phpAds_hlp_default_banner_weight'] = "Daha yüksek bir varsayılan banner ağırlığı kullanmak isterseniz, burada istediğiniz ağırlığı belirtebilirsiniz.
+Bu ayar varsayılan olarak 1'dir.";
+
+$GLOBALS['phpAds_hlp_default_campaign_weight'] = "Daha yüksek bir varsayılan kampanya ağırlığı kullanmak istiyorsanız, burada istediğiniz ağırlığı belirtebilirsiniz.
+Bu ayar varsayılan olarak 1'dir.";
+
+$GLOBALS['phpAds_hlp_gui_show_campaign_info'] = "Bu seçenek etkinleştirilirse, her kampanyaya ilişkin ek bilgi <i> Kampanyalar </i> sayfasında gösterilir. Ekstra bilgi, kalan ilan görüntüleme sayısını, kalan ilan tıklama sayısını, kalan ilan dönüşümleri sayısını, etkinleştirme tarihini, son kullanma tarihini ve öncelik ayarlarını içerir.";
+
+$GLOBALS['phpAds_hlp_gui_show_banner_info'] = "Bu seçenek etkinleştirilirse, her afiş ile ilgili ek bilgi <i> Afişler </i> sayfasında gösterilir. Ekstra bilgi, hedef URL'yi, anahtar kelimeleri, boyutu ve afişin ağırlığını içerir.";
+
+$GLOBALS['phpAds_hlp_gui_show_campaign_preview'] = "Bu seçenek etkinleştirilirse, tüm afişlerin bir önizlemesi <i> Afişler </i> sayfasında gösterilir. Bu seçenek devre dışı bırakılırsa, her afişin önizlemesini tıklama ile gösterebilirsiniz
+<i> Afişler </i> sayfasındaki her bir afişin yanındaki üçgene tıklayın.";
+
+$GLOBALS['phpAds_hlp_gui_show_banner_html'] = "Bu seçenek etkinleştirilirse, HTML kodu yerine gerçek HTML afişi gösterilir. Bu seçenek varsayılan olarak devre dışıdır, çünkü HTML afişleri kullanıcı arayüzü ile çakışabilir.
+Bu seçenek devre dışı bırakılırsa, HTML kodunun yanındaki <i> Afişi göster </i> düğmesini tıklayarak asıl HTML afişlerini görüntülemek yine de mümkündür.";
+
+$GLOBALS['phpAds_hlp_gui_show_banner_preview'] = "Bu seçenek etkinleştirilirse, <i> Afiş özellikleri </i>, <i> Teslimat seçeneği </i> ve <i> Bağlantılı bölgeler </i> sayfalarının üst kısmında bir önizleme gösterilir. Bu seçenek devre dışı bırakılırsa, sayfaların üst kısmındaki <i> Afiş göster </i> düğmesini tıklayarak afişi görüntülemek yine de mümkündür.";
+
+$GLOBALS['phpAds_hlp_gui_hide_inactive'] = "Bu seçenek etkinleştirilirse, etkin olmayan tüm afişler, kampanyalar ve reklamverenler <i> Reklamverenler ve Kampanyalar </i> ve <i> Kampanyalar </i> sayfalarından gizlenecektir. Bu seçenek etkinleştirilirse, sayfanın altındaki <i> Tümünü göster </i> düğmesini tıklayarak gizli öğeleri görmek yine de mümkündür.";
+
+$GLOBALS['phpAds_hlp_gui_show_matching'] = "Bu seçenek etkinleştirilirse, eşleşen afiş, <i> Kampanya seçimi </i> yöntemi ile seçilirse, <i> Bağlantılı afişler</i> sayfasında gösterilir. Kampanyaya bağlıysa, tam olarak hangi afişlerin yayınlanması için kabul edildiğini görmenizi sağlar. Eşleşen afişlerin bir önizlemesine bakmakta mümkün.";
+
+$GLOBALS['phpAds_hlp_gui_show_parents'] = "Bu seçenek etkinleştirilirse, afişlerin üst kampanyaları <i> Afiş seçimi </i> yöntemi ile seçilirse <i> Bağlantılı afişler </i> sayfasında gösterilir. Bu, afiş bağlanmadan önce hangi afişlerin hangi kampanyaya ait olduğunu görmenizi sağlayacaktır. Bu aynı zamanda, afişlerin ana kampanyalar tarafından gruplandırıldığı ve artık alfabetik olarak sıralanmadığı anlamına gelir.";

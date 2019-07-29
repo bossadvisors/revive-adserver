@@ -42,9 +42,9 @@ class OA_Dll_ZoneTest extends DllUnitTestCase
     /**
      * The constructor method.
      */
-    function OA_Dll_ZoneTest()
+    function __construct()
     {
-        $this->UnitTestCase();
+        parent::__construct();
         Mock::generatePartial(
             'OA_Dll_Publisher',
             'PartialMockOA_Dll_Publisher_ZoneTest',
@@ -300,6 +300,14 @@ class OA_Dll_ZoneTest extends DllUnitTestCase
     function testDailyStatistics()
     {
         $this->_testStatistics('getZoneDailyStatistics');
+    }
+
+    /**
+     * A method to test getZoneHourlyStatistics.
+     */
+    function testHourlyStatistics()
+    {
+        $this->_testStatistics('getZoneHourlyStatistics');
     }
 
     /**

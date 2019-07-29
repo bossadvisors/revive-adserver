@@ -42,23 +42,23 @@ define('OA_STATUS_CAN_UPGRADE',            10);
 require_once 'MDB2.php';
 require_once 'MDB2/Schema.php';
 
-require_once MAX_PATH.'/lib/OA.php';
-require_once MAX_PATH.'/lib/OA/DB.php';
-require_once MAX_PATH.'/lib/OA/DB/Charset.php';
-require_once MAX_PATH.'/lib/OA/Dal/ApplicationVariables.php';
-require_once(MAX_PATH.'/lib/OA/Upgrade/UpgradeLogger.php');
-require_once(MAX_PATH.'/lib/OA/Upgrade/DB_Upgrade.php');
-require_once(MAX_PATH.'/lib/OA/Upgrade/UpgradeAuditor.php');
-require_once(MAX_PATH.'/lib/OA/Upgrade/DB_UpgradeAuditor.php');
-require_once(MAX_PATH.'/lib/OA/Upgrade/UpgradePackageParser.php');
-require_once(MAX_PATH.'/lib/OA/Upgrade/VersionController.php');
-require_once MAX_PATH.'/lib/OA/Upgrade/EnvironmentManager.php';
-require_once MAX_PATH.'/lib/OA/Upgrade/phpAdsNew.php';
-require_once(MAX_PATH.'/lib/OA/Upgrade/Configuration.php');
-require_once MAX_PATH.'/lib/OA/Upgrade/DB_Integrity.php';
+require_once RV_PATH . '/lib/RV.php';
 
+require_once MAX_PATH . '/lib/OA.php';
+require_once MAX_PATH . '/lib/OA/DB.php';
+require_once MAX_PATH . '/lib/OA/DB/Charset.php';
+require_once MAX_PATH . '/lib/OA/Dal/ApplicationVariables.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/UpgradeLogger.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/DB_Upgrade.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/UpgradeAuditor.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/DB_UpgradeAuditor.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/UpgradePackageParser.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/VersionController.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/EnvironmentManager.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/phpAdsNew.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/Configuration.php';
+require_once MAX_PATH . '/lib/OA/Upgrade/DB_Integrity.php';
 require_once MAX_PATH . '/lib/OA/Preferences.php';
-
 
 /**
  * @package    OpenXUpgrade Class
@@ -75,14 +75,47 @@ class OA_Upgrade
      */
     var $oLogger;
 
+    /**
+     * @var OA_UpgradePackageParser
+     */
     var $oParser;
+
+    /**
+     * @var OA_DB_Upgrade
+     */
     var $oDBUpgrader;
+
+    /**
+     * @var OA_Version_Controller
+     */
     var $oVersioner;
+
+    /**
+     * @var OA_UpgradeAuditor
+     */
     var $oAuditor;
+
+    /**
+     * @var OA_Environment_Manager
+     */
     var $oSystemMgr;
+
+    /**
+     * @var MDB2_Driver_Common
+     */
     var $oDbh;
+
+    /**
+     * @var OA_phpAdsNew
+     */
     var $oPAN;
+
+    /**
+     * @var OA_Upgrade_Config
+     */
     var $oConfiguration;
+
+    /** @var OA_DB_Integrity */
     var $oIntegrity;
 
     var $aPackageList = array();
@@ -147,11 +180,6 @@ class OA_Upgrade
         $this->aDsn['table']['prefix']      = 'rv_';
     }
 
-    function OA_Upgrade()
-    {
-        $this->__construct();
-    }
-
     /**
      * initialise a database connection
      * hook up the various components with a db object
@@ -207,7 +235,7 @@ class OA_Upgrade
     function initDatabaseParameters($aConfig)
     {
         // Check if we need to ensure to enable MySQL 4 compatibility
-        if (strcasecmp($aConfig['database']['type'], 'mysql') === 0) {
+        if (strcasecmp($aConfig['database']['type'], 'mysql') === 0 || strcasecmp($aConfig['database']['type'], 'mysqli') === 0) {
             $result = $this->oDbh->exec("SET SESSION sql_mode='MYSQL40'");
             $aConfig['database']['mysql4_compatibility'] = !PEAR::isError($result);
         }
@@ -961,9 +989,10 @@ class OA_Upgrade
      * with that of a given schema
      *
      * @param string $version
+     * @param array $aSchema
      * @return boolean
      */
-    function _checkDBIntegrity($version, $aSchema='')
+    function _checkDBIntegrity($version, $aSchema=array())
     {
         if (empty($aSchema))
         {
@@ -991,7 +1020,7 @@ class OA_Upgrade
             return false;
         }
         $this->oLogger->logClear();
-        if (count($this->oIntegrity->aTasksConstructiveAll)>0)
+        if (!empty($this->oIntegrity->aTasksConstructiveAll))
         {
             $this->oLogger->logError('database integrity check detected problems with the database');
             foreach ($this->oIntegrity->aTasksConstructiveAll AS $elem => &$aTasks)
@@ -1055,8 +1084,8 @@ class OA_Upgrade
                     return true;
                 }
             }
-            $current = (version_compare($this->versionInitialApplication,OA_VERSION)==0);
-            $valid   = (version_compare($this->versionInitialApplication,OA_VERSION)<0);
+            $current = (version_compare($this->versionInitialApplication,VERSION)==0);
+            $valid   = (version_compare($this->versionInitialApplication,VERSION)<0);
             if ($valid)
             {
                 $this->aPackageList = $this->getUpgradePackageList($this->versionInitialApplication, $this->_readUpgradePackagesArray());
@@ -1185,8 +1214,8 @@ class OA_Upgrade
         }
         $this->oLogger->log('Installation created the core tables');
 
-        $this->oAuditor->setKeyParams(array('upgrade_name'=>'install_'.OA_VERSION,
-                                            'version_to'=>OA_VERSION,
+        $this->oAuditor->setKeyParams(array('upgrade_name'=>'install_'.VERSION,
+                                            'version_to'=>VERSION,
                                             'version_from'=>0,
                                             'logfile'=>basename($this->oLogger->logFile)
                                             )
@@ -1200,13 +1229,13 @@ class OA_Upgrade
         }
         $this->oLogger->log('Installation updated the schema version to '.$this->oTable->aDefinition['version']);
 
-        if (!$this->oVersioner->putApplicationVersion(OA_VERSION))
+        if (!$this->oVersioner->putApplicationVersion(VERSION))
         {
-            $this->_auditInstallationFailure('Installation failed to update the application version to '.OA_VERSION);
+            $this->_auditInstallationFailure('Installation failed to update the application version to '.VERSION);
             $this->_dropDatabase();
             return false;
         }
-        $this->oLogger->log('Installation updated the application version to '.OA_VERSION);
+        $this->oLogger->log('Installation updated the application version to '.VERSION);
 
         $this->oConfiguration->getInitialConfig();
         if (!$this->saveConfigDB($aConfig))
@@ -1492,7 +1521,7 @@ class OA_Upgrade
         }
         else
         {
-            $version = OA_VERSION;
+            $version = VERSION;
             if ($this->seekFantasyUpgradeFile())
             {
                 $version = '999.999.999';
@@ -1720,7 +1749,8 @@ class OA_Upgrade
                 throw new Exception("error creating access to default agency account, account id: $agencyAccountId, user ID: $userId");
             }
 
-            $this->putDefaultPreferences($adminAccountId);
+            OA_Preferences::putDefaultPreferences($adminAccountId);
+
             if (!$this->putTimezoneAccountPreference($aPrefs))
             {
                 // rollback if fails
@@ -1868,45 +1898,6 @@ class OA_Upgrade
         }
         return true;
     }
-
-    /**
-     * A method to inser initialise the preferences table and insert the default prefs
-     *
-     * @param int $adminAccountId
-     * @return bool
-     * @throws Exception on errors
-     */
-    function putDefaultPreferences($adminAccountId)
-    {
-        // Preferences handling
-        $oPreferences = new OA_Preferences();
-        $aPrefs = $oPreferences->getPreferenceDefaults();
-
-        // Insert default prefs
-        foreach ($aPrefs as $prefName => &$aPref) {
-            $doPreferences = OA_Dal::factoryDO('preferences');
-            $doPreferences->preference_name = $prefName;
-            $doPreferences->account_type = empty($aPref['account_type']) ? '' : $aPref['account_type'];
-            $preferenceId = $doPreferences->insert();
-
-            if (!$preferenceId) {
-                throw new Exception("error adding preference entry: $prefName");
-            }
-
-            $doAPA = OA_Dal::factoryDO('account_preference_assoc');
-            $doAPA->account_id    = $adminAccountId;
-            $doAPA->preference_id = $preferenceId;
-            $doAPA->value         = $aPref['default'];
-            $result = $doAPA->insert();
-
-            if (!$result) {
-                throw new Exception("error adding preference default for $prefName: '".$aPref['default']."'");
-            }
-        }
-
-        return true;
-    }
-
 
     /**
      * this can be used to run custom scripts
@@ -2266,7 +2257,7 @@ class OA_Upgrade
         else
         {
             // an actual package for this version does not exist so fake it
-            $this->aPackage['versionTo']   = OA_VERSION;
+            $this->aPackage['versionTo']   = VERSION;
             $this->aPackage['versionFrom'] = $this->versionInitialApplication;
             $this->aPackage['prescript']   = '';
             $this->aPackage['postscript']  = '';
@@ -2534,7 +2525,7 @@ class OA_Upgrade
     {
         if ($this->package_file=='')
         {
-            $package = 'openads_upgrade_'.OA_VERSION;
+            $package = 'openads_upgrade_'.VERSION;
         }
         else
         {
@@ -2616,7 +2607,7 @@ class OA_Upgrade
      */
     function getUpgradePackageList($verPrev, $aVersions=null)
     {
-        $verPrev = OA::stripVersion($verPrev);
+        $verPrev = RV::stripVersion($verPrev);
         $aFiles = array();
         if (is_array($aVersions))
         {

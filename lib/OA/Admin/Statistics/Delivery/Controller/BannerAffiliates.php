@@ -46,21 +46,6 @@ class OA_Admin_Statistics_Delivery_Controller_BannerAffiliates extends OA_Admin_
     }
 
     /**
-     * PHP4-style constructor
-     *
-     * @param array $aParams An array of parameters. The array should
-     *                       be indexed by the name of object variables,
-     *                       with the values that those variables should
-     *                       be set to. For example, the parameter:
-     *                       $aParams = array('foo' => 'bar')
-     *                       would result in $this->foo = bar.
-     */
-    function OA_Admin_Statistics_Delivery_Controller_BannerAffiliates($aParams)
-    {
-        $this->__construct($aParams);
-    }
-
-    /**
      * The final "child" implementation of the parental abstract method.
      *
      * @see OA_Admin_Statistics_Common::start()
@@ -117,23 +102,23 @@ class OA_Admin_Statistics_Delivery_Controller_BannerAffiliates extends OA_Admin_
             $this->_addShortcut(
                 $GLOBALS['strClientProperties'],
                 'advertiser-edit.php?clientid='.$advertiserId,
-                'images/icon-advertiser.gif'
+                'iconAdvertiser'
             );
         }
         $this->_addShortcut(
             $GLOBALS['strCampaignProperties'],
             'campaign-edit.php?clientid='.$advertiserId.'&campaignid='.$placementId,
-            'images/icon-campaign.gif'
+            'iconCampaign'
         );
         $this->_addShortcut(
             $GLOBALS['strBannerProperties'],
             'banner-edit.php?clientid='.$advertiserId.'&campaignid='.$placementId.'&bannerid='.$adId,
-            'images/icon-banner-stored.gif'
+            'iconBanner'
         );
         $this->_addShortcut(
             $GLOBALS['strModifyBannerAcl'],
             'banner-acl.php?clientid='.$advertiserId.'&campaignid='.$placementId.'&bannerid='.$adId,
-            'images/icon-acl.gif'
+            'iconTargetingChannelAcl'
         );
 
 

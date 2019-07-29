@@ -31,6 +31,21 @@
  */
 function parseIniFile($configPath = null, $configFile = null, $sections = true, $type = '.php')
 {
+    $fixMysqli = function($conf) {
+        if ('mysql' === $conf['database']['type'] && !extension_loaded('mysql') && extension_loaded('mysqli')) {
+            $conf['database']['type'] = 'mysqli';
+        } elseif ('mysqli' === $conf['database']['type']) {
+            if (empty($conf['table']['type'])) {
+                $conf['table']['type'] = 'InnoDB';
+            }
+            if (!extension_loaded('mysqli') && extension_loaded('mysql')) {
+                $conf['database']['type'] = 'mysql';
+            }
+        }
+
+        return $conf;
+    };
+
     // Set up the configuration .ini file path location
     if (is_null($configPath)) {
         $configPath = MAX_PATH . '/var';
@@ -79,7 +94,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
         // Is this a real config file?
         if (!isset($conf['realConfig'])) {
             // Yes, return the parsed configuration file
-            return $conf;
+            return $fixMysqli($conf);
         }
         // Parse and return the real configuration .ini file
         if (file_exists($configPath . '/' . $conf['realConfig'] . $configFile . '.conf' . $type)) {
@@ -87,7 +102,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
             $mergedConf = mergeConfigFiles($realConfig, $conf);
             // if not multiple levels of configs
             if (!isset($mergedConf['realConfig'])) {
-                return $mergedConf;
+                return $fixMysqli($mergedConf);
             }
         }
     } elseif ($configFile === '.plugin') {
@@ -97,7 +112,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
         if (file_exists($defaultConfig)) {
             return parse_ini_file($defaultConfig, $sections);
         } else {
-            echo MAX_PRODUCT_NAME . " could not read the default configuration file for the {$pluginType} plugin";
+            echo PRODUCT_NAME . " could not read the default configuration file for the {$pluginType} plugin";
             exit(1);
         }
     }
@@ -108,7 +123,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
         // Is this a real config file?
         if (!isset($conf['realConfig'])) {
             // Yes, return the parsed configuration file
-            return $conf;
+            return $fixMysqli($conf);
         }
         // Parse and return the real configuration .ini file
         if (file_exists($configPath . '/' . $conf['realConfig'] . $configFile . '.conf' . $type)) {
@@ -116,7 +131,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
             $mergedConf = mergeConfigFiles($realConfig, $conf);
             // if not multiple levels of configs
             if (!isset($mergedConf['realConfig'])) {
-                return $mergedConf;
+                return $fixMysqli($mergedConf);
             }
         }
     }
@@ -149,7 +164,7 @@ function parseIniFile($configPath = null, $configFile = null, $sections = true, 
         {
             return parseIniFile($configPath, $configFile, $sections, '.ini');
         }
-        echo MAX_PRODUCT_NAME . " has been installed, but no configuration file ".$configPath . '/' . $host . $configFile . '.conf.php'." was found.\n";
+        echo PRODUCT_NAME . " has been installed, but no configuration file ".$configPath . '/' . $host . $configFile . '.conf.php'." was found.\n";
         exit(1);
     }
     // Revive Adserver hasn't been installed, so use the distribution .ini file

@@ -175,13 +175,14 @@ else {
     $aBanner['keyword']      = '';
     $aBanner["weight"]       = $pref['default_banner_weight'];
 
+    $aBanner['iframe_friendly'] = true;
+
     $aBanner['hardcoded_links'] = array();
     $aBanner['hardcoded_targets'] = array();
 }
 if ($ext_bannertype)
 {
-    list($extension, $group, $plugin) = explode(':', $ext_bannertype);
-    $oComponent = &OX_Component::factory($extension, $group, $plugin);
+    $oComponent = OX_Component::factoryByComponentIdentifier($ext_bannertype);
     //  we may want to use the ancestor class for some sort of generic functionality
     if (!$oComponent)
     {
@@ -191,8 +192,7 @@ if ($ext_bannertype)
 }
 if ((!$ext_bannertype) && $type && (!in_array($type, array('sql','web','url','html','txt'))))
 {
-    list($extension, $group, $plugin) = explode('.',$type);
-    $oComponent = &OX_Component::factoryByComponentIdentifier($extension, $group, $plugin);
+    $oComponent = OX_Component::factoryByComponentIdentifier($type);
     $formDisabled = (!$oComponent || !$oComponent->enabled);
     if ($oComponent)
     {
@@ -513,26 +513,8 @@ function buildBannerForm($type, $aBanner, &$oComponent=null, $formDisabled=false
     }
 
     //html & text banners
-    if ($oComponent)
-    {
+    if ($oComponent) {
         $oComponent->buildForm($form, $aBanner);
-        if ($type == 'html') {
-            if ($aBanner['bannerid'] == '') {
-                // Remove the deprecated "url" and "target" form elements; these
-                // are not required for new HTML banners
-                $form->removeElement('header_b_links');
-                $form->removeElement('url');
-                $form->removeElement('target');
-            } else {
-                // Remove the deprecated "url" and "target" form elements from
-                // the existing HTML banner only if BOTH are unset
-                if ($aBanner['url'] == '' && $aBanner['target'] == '' ) {
-                    $form->removeElement('header_b_links');
-                    $form->removeElement('url');
-                    $form->removeElement('target');
-                }
-            }
-        }
     }
 
     $translation = new OX_Translation();
@@ -546,7 +528,8 @@ function buildBannerForm($type, $aBanner, &$oComponent=null, $formDisabled=false
         $form->addElement($weightElem);
         $form->addElement('textarea', 'comments', $GLOBALS['strComments']);
         $weightPositiveRule = $translation->translate($GLOBALS['strXPositiveWholeNumberField'], array($GLOBALS['strWeight']));
-        $form->addRule('weight', $weightPositiveRule, 'numeric');
+        $form->addRule('weight', $weightPositiveRule, 'regex', '#^\d+$#');
+        $form->addRule('weight', $weightPositiveRule, 'nonzero');
     }
 
 
@@ -588,8 +571,11 @@ function buildBannerForm($type, $aBanner, &$oComponent=null, $formDisabled=false
 
 function addUploadGroup($form, $aBanner, $vars)
 {
-        $uploadG = array();
-        if (isset($vars['fileName']) && $vars['fileName'] != '') {
+        $uploadG = [];
+
+        $update = !empty($vars['fileName']);
+
+        if ($update) {
             $uploadG['radio1'] = $form->createElement('radio', $vars['radioName'], null, (empty($vars['imageName']) ? '' : "<img src='".OX::assetPath()."/images/".$vars['imageName']."' align='absmiddle'> ").$vars['fileName']." <i dir=".$GLOBALS['phpAds_TextDirection'].">(".$vars['fileSize'].")</i>", 'f');
             $uploadG['radio2'] = $form->createElement('radio', $vars['radioName'], null, null, 't');
             $uploadG['upload'] = $form->createElement('file', $vars['uploadName'], null, array("onchange" => "selectFile(this, ".($vars['handleSWF'] ? 'true' : 'false').")", "style" => "width: 250px;"));
@@ -601,9 +587,8 @@ function addUploadGroup($form, $aBanner, $vars)
             }
 
             $form->addGroup($uploadG, $vars['uploadName'].'_group', $vars['updateLabel'], array("<br>", "", "<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"), false);
-        }
-        else { //add new creative
-            $uploadG['hidden'] = $form->createElement("hidden", $vars['radioName'], "t");
+        } else { //add new creative
+            $uploadG['hidden'] = $form->createElement("hidden", $vars['radioName']);
             $uploadG['upload'] = $form->createElement('file', $vars['uploadName'], null, array("onchange" => "selectFile(this, ".($vars['handleSWF'] ? 'true' : 'false').")", "size" => 26, "style" => "width: 250px"));
             if ($vars['handleSWF']) {
                 $uploadG['checkSWF'] = $form->createElement("checkbox", "checkswf", null, $GLOBALS['strCheckSWF']);
@@ -621,7 +606,10 @@ function addUploadGroup($form, $aBanner, $vars)
             }
 
         }
-        $form->setDefaults(array("checkswf" => "t")); //TODO does not work??
+        $form->setDefaults(array(
+            $vars['radioName'] => $update ? 'f' : 't',
+            'checkswf' => 't'
+        ));
 }
 
 
@@ -655,6 +643,7 @@ function processForm($bannerid, $form, &$oComponent, $formDisabled=false)
     $aVariables['storagetype']     = $aFields['type'];
     $aVariables['ext_bannertype']  = $aFields['ext_bannertype'];
     $aVariables['comments']        = $aFields['comments'];
+    $aVariables['iframe_friendly'] = $aFields['iframe_friendly'] ? 1 : 0;
 
     $aVariables['filename']        = !empty($aBanner['filename']) ? $aBanner['filename'] : '';
     $aVariables['contenttype']     = !empty($aBanner['contenttype']) ? $aBanner['contenttype'] : '';
@@ -675,7 +664,7 @@ function processForm($bannerid, $form, &$oComponent, $formDisabled=false)
     $aVariables['alt_imageurl']    = !empty($aFields['alt_imageurl']) ? $aFields['alt_imageurl'] : '';
 
     if (isset($aFields['keyword']) && $aFields['keyword'] != '') {
-        $keywordArray = split('[ ,]+', $aFields['keyword']);
+        $keywordArray = preg_split('/[ ,]+/D', $aFields['keyword']);
         $aVariables['keyword'] = implode(' ', $keywordArray);
     } else {
         $aVariables['keyword'] = '';
@@ -893,18 +882,18 @@ function _getContentTypeIconImageName($contentType)
     return $imageName;
 }
 
+function _getPrettySize($size)
+{
+    $kb = round($size / 1024);
+
+    if ($kb > 0) {
+        return "{$kb} KB";
+    }
+
+    return "{$size} B";
+}
 
 function _getBannerSizeText($type, $filename)
 {
-    $size = phpAds_ImageSize($type, $filename);
-    if (round($size / 1024) == 0) {
-         $size = $size." bytes";
-    }
-    else {
-         $size = round($size / 1024)." Kb";
-    }
-
-    return $size;
+    return _getPrettySize(phpAds_ImageSize($type, $filename));
 }
-
-?>

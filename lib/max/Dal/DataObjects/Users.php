@@ -24,22 +24,22 @@ class DataObjects_Users extends DB_DataObjectCommon
     /* the code below is auto generated do not remove the above tag */
 
     public $__table = 'users';                           // table name
-    public $user_id;                         // MEDIUMINT(9) => openads_mediumint => 129 
-    public $contact_name;                    // VARCHAR(255) => openads_varchar => 130 
-    public $email_address;                   // VARCHAR(64) => openads_varchar => 130 
-    public $username;                        // VARCHAR(64) => openads_varchar => 2 
-    public $password;                        // VARCHAR(64) => openads_varchar => 2 
-    public $language;                        // VARCHAR(5) => openads_varchar => 2 
-    public $default_account_id;              // MEDIUMINT(9) => openads_mediumint => 1 
-    public $comments;                        // TEXT() => openads_text => 34 
-    public $active;                          // TINYINT(1) => openads_tinyint => 145 
-    public $sso_user_id;                     // INT(11) => openads_int => 1 
-    public $date_created;                    // DATETIME() => openads_datetime => 14 
-    public $date_last_login;                 // DATETIME() => openads_datetime => 14 
-    public $email_updated;                   // DATETIME() => openads_datetime => 14 
+    public $user_id;                         // MEDIUMINT(9) => openads_mediumint => 129
+    public $contact_name;                    // VARCHAR(255) => openads_varchar => 130
+    public $email_address;                   // VARCHAR(64) => openads_varchar => 130
+    public $username;                        // VARCHAR(64) => openads_varchar => 2
+    public $password;                        // VARCHAR(64) => openads_varchar => 2
+    public $language;                        // VARCHAR(5) => openads_varchar => 2
+    public $default_account_id;              // MEDIUMINT(9) => openads_mediumint => 1
+    public $comments;                        // TEXT() => openads_text => 34
+    public $active;                          // TINYINT(1) => openads_tinyint => 145
+    public $sso_user_id;                     // INT(11) => openads_int => 1
+    public $date_created;                    // DATETIME() => openads_datetime => 14
+    public $date_last_login;                 // DATETIME() => openads_datetime => 14
+    public $email_updated;                   // DATETIME() => openads_datetime => 14
 
     /* Static get */
-    function staticGet($k,$v=NULL) { return DB_DataObject::staticGet('DataObjects_Users',$k,$v); }
+    function staticGet($k,$v=NULL) { return DB_DataObject::staticGetFromClassName('DataObjects_Users',$k,$v); }
 
     var $defaultValues = array(
                 'contact_name' => '',
@@ -200,30 +200,6 @@ class DataObjects_Users extends DB_DataObjectCommon
     }
 
     /**
-     * This method should be called when a user claims existing sso account
-     * and it turns out that the sso account he wants to use is already linked
-     * to existing user. In such case all accounts and permissions
-     * from his partial account should be relinked to his existing account.
-     *
-     * @param integer $fromUserId
-     * @param integer $toUserId
-     * @return boolean
-     */
-    function relinkAccounts($existingUserId, $partialUserId)
-    {
-        $existingAccountIds = $this->getLinkedAccountsIds($existingUserId);
-        $partialAccountIds = $this->getLinkedAccountsIds($partialUserId);
-        $newAccounts = array_diff($partialAccountIds, $existingAccountIds);
-        foreach ($newAccounts as $newAccountId) {
-            if (!OA_Permission::setAccountAccess($newAccountId, $existingUserId)) {
-                return false;
-            }
-        }
-        return $this->addUserPermissions($existingUserId,
-            $this->getUsersPermissions($partialUserId));
-    }
-
-    /**
      * Sets on the user account accounts/permissions.
      *
      * @param integer $userId
@@ -291,30 +267,6 @@ class DataObjects_Users extends DB_DataObjectCommon
     }
 
     /**
-     * Deletes users who are not linked with any sso account, never logged
-     * in and their account was created before deleteUnverifiedUsersAfter days.
-     * Where deleteUnverifiedUsersAfter is defined in config in
-     * "authentication" section.
-     *
-     * @return boolean
-     */
-    function deleteUnverifiedUsers($deleteOlderThanSeconds = null)
-    {
-        if (empty($deleteOlderThanSeconds)) {
-            // by default 28 days
-            $deleteOlderThanSeconds = OA::getConfigOption('authentication',
-                'deleteUnverifiedUsersAfter', 2419200);
-        }
-        $monthAgo = new Date();
-        $monthAgo->subtractSeconds($deleteOlderThanSeconds);
-
-        $this->whereAdd('date_created < \'' . $this->formatDate($monthAgo).'\'');
-        $this->whereAdd('sso_user_id IS NULL');
-        $this->whereAdd('date_last_login IS NULL');
-        return $this->delete(DB_DATAOBJECT_WHEREADD_ONLY);
-    }
-
-    /**
      * Reads users data from database and returns them as array when
      * key is user id and value is array of user values
      *
@@ -371,7 +323,7 @@ class DataObjects_Users extends DB_DataObjectCommon
      *                      that needs to be able to see the audit trail
      *                      entry, if such an account exists.
      */
-    function getOwningAccountIds()
+    public function getOwningAccountIds($resetCache = false)
     {
         // Special case - return the admin account ID only.
         // This is because we can only store one account ID for each

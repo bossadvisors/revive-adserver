@@ -29,8 +29,11 @@ function MAX_checkClient_Browser($limitation, $op, $aParams = array())
 {
     if (empty($aParams)) {
         $aParams = $GLOBALS['_MAX']['CLIENT'];
+
+        if (!isset($aParams['browser'])) {
+            $aParams['browser'] = $aParams['wrapper']->getLegacyBrowser();
+        }
     }
+
     return MAX_limitationsMatchArray('browser', $limitation, $op, $aParams);
 }
-
-?>

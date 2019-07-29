@@ -99,7 +99,7 @@ class Date_Span {
      * @see    set()
      * @access public
      */
-    function Date_Span($time = 0, $format = null)
+    function __construct($time = 0, $format = null)
     {
         $this->set($time, $format);
     }
@@ -244,9 +244,9 @@ class Date_Span {
             $pm = 'am';
             $day = $hour = $minute = $second = 0;
             for ($i = 0; $i < strlen($format); $i++) {
-                $char = $format{$i};
+                $char = $format[$i];
                 if ($char == '%') {
-                    $nextchar = $format{++$i};
+                    $nextchar = $format[++$i];
                     switch ($nextchar) {
                         case 'c':
                             $str .= '%d, %d:%d:%d';
@@ -340,7 +340,7 @@ class Date_Span {
                 if (is_null($val)) {
                     return false;
                 }
-                $$vars[$i] = $val;
+                ${$vars[$i]} = $val;
             }
             if (strcasecmp($pm, 'pm') == 0) {
                 $hour += 12;
@@ -554,9 +554,9 @@ class Date_Span {
         }
         $output = '';
         for ($i = 0; $i < strlen($format); $i++) {
-            $char = $format{$i};
+            $char = $format[$i];
             if ($char == '%') {
-                $nextchar = $format{++$i};
+                $nextchar = $format[++$i];
                 switch ($nextchar) {
                     case 'C':
                         $output .= sprintf(

@@ -24,7 +24,6 @@ require_once 'memory.php';
  */
 function RV_initialSystemCheck()
 {
-    $errorUrl = 'http://www.openx.org/help/2.8/pre-init-error/';
     $installed = OX_checkSystemInstalled();
     $aErrors = array();
     $erorCode = RV_checkSystemInitialRequirements($aErrors);
@@ -211,7 +210,9 @@ function RV_checkSystemInitialRequirements(&$aErrors){
         'file_exists',
         'ini_set',
         'parse_ini_file',
-        'version_compare'
+        'version_compare',
+        'set_include_path',
+        'scandir'
     );
 
     // Prepare error strings, in the simplest possible way
@@ -286,22 +287,21 @@ function RV_checkSystemInitialRequirements(&$aErrors){
     $aNeededFunctions = array_intersect($aDisabledFunctions, $aRequiredFunctions);
     if (count($aNeededFunctions) > 0) {
         $isSystemOK = false;
+        if ($return === true) {
+            $return = -3;
+        }
         foreach ($aNeededFunctions as $functionName) {
             $aErrors[] = $errorString1 . $functionName . $errorString2;
         }
     }
 
-    // Check PHP version, as use of the minimum required version of PHP > 5.3.0
+    // Check PHP version, as use of anything below the minimum required version of PHP
     // may result in parse errors, which we want to avoid
-    $errorMessage = "PHP version 5.3.0, or greater, was not detected.";
-    if (function_exists('version_compare')) {
-        $result = version_compare(phpversion(), '5.3.0', '<');
-        if ($result) {
-            $aErrors[] = $errorMessage;
-            $isSystemOK = false;
-            if ($return === true) {
-                $return = -3;
-            }
+    if (PHP_VERSION_ID < 70008) {
+        $aErrors[] = "PHP version 7.0.8, or greater, was not detected.";
+        $isSystemOK = false;
+        if ($return === true) {
+            $return = -3;
         }
     }
 
@@ -313,10 +313,9 @@ function RV_checkSystemInitialRequirements(&$aErrors){
         $memoryCanBeSet = OX_checkMemoryCanBeSet();
         if (!$memoryCanBeSet) {
             $minimumRequiredMemoryInMB = $minimumRequiredMemory / 1048576;
-            $errorMessage = 'The PHP "memory_limit" value is set to less than the required minimum of ' .
-                            $minimumRequiredMemoryInMB . 'MB, but because the built in PHP function "ini_set" ' .
-                            'has been disabled, the memory limit cannot be automatically increased.';
-            $aErrors[] = $errorMessage;
+            $aErrors[] = 'The PHP "memory_limit" value is set to less than the required minimum of ' .
+                         $minimumRequiredMemoryInMB . 'MB, but because the built in PHP function "ini_set" ' .
+                         'has been disabled, the memory limit cannot be automatically increased.';
             $isSystemOK = false;
             if ($return === true) {
                 $return = -4;

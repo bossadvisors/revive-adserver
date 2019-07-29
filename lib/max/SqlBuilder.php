@@ -70,6 +70,7 @@ class SqlBuilder
             $aColumns += array('cam.campaignid' => 'campaign_id', 'cam.campaignname' => 'campaignname', 'cam.clientid' => 'client_id', 'cam.anonymous' => 'anonymous', 'cam.type' => 'type');
             if ($allFields) $aColumns += array('cam.campaignid' => 'campaign_id', 'cam.campaignname' => 'campaignname', 'cam.clientid' => 'client_id', 'cam.views' => 'views', 'cam.clicks' => 'clicks', 'cam.conversions' => 'conversions', 'cam.priority' => 'priority', 'cam.weight' => 'weight', 'cam.target_impression' => 'target_impression', 'cam.target_click' => 'target_click', 'cam.target_conversion' => 'target_conversion', 'cam.anonymous' => 'anonymous', 'cam.companion' => 'companion', 'cam.comments' => 'comments', 'cam.revenue' => 'revenue', 'cam.revenue_type' => 'revenue_type', 'cam.updated' => 'updated', 'cam.block' => 'block', 'cam.capping' => 'capping', 'cam.session_capping' => 'session_capping', 'cam.activate_time' => 'activate_time', 'cam.expire_time' => 'expire_time', 'cam.show_capped_no_cookie' => 'show_capped_no_cookie');
             break;
+            
         case 'category' :
             $aColumns += array('cat.category_id' => 'category_id', 'cat.name' => 'name');
             break;
@@ -82,6 +83,7 @@ class SqlBuilder
         case 'channel_limitation' :
             $aColumns += array('chl.logical' => 'logical', 'chl.type' => 'type', 'chl.comparison' => 'comparison', 'chl.data' => 'data', 'chl.executionorder' => 'executionorder');
             break;
+        
         case 'image' :
             $aColumns += array('i.filename' => 'file_name');
             if ($allFields) $aColumns += array('i.t_stamp' => 't_stamp', 'i.contents' => 'contents');
@@ -229,7 +231,7 @@ class SqlBuilder
         if(substr($entity, 0, strlen($matchingEntitiesToFix)) == $matchingEntitiesToFix) {
             // postgresql throws an error: column "m.campaignid" must appear in the GROUP BY clause or be used in an aggregate function
             // we therefore remove the column ad_id built on a concatenation of various other fields, as this particular field
-            // is not in use in the Global History stats screen (when entity == history_*)
+            // is not in use in the Global Statistics stats screen (when entity == history_*)
             if(false !== ($found = array_search('ad_id',$aColumns))) {
                 unset($aColumns[$found]);
             }
@@ -528,6 +530,9 @@ class SqlBuilder
         if (!empty($aParams['ad_type'])) {
             if ($aParams['ad_type'] == "!txt") {
                 SqlBuilder::_addLimitation($aLimitations, 'ad_type', 'd.storagetype', 'txt', MAX_LIMITATION_NOT_EQUAL);
+            } else if ($aParams['ad_type'] == "!htmltxt") {
+                SqlBuilder::_addLimitation($aLimitations, 'ad_type', 'd.storagetype', 'txt', MAX_LIMITATION_NOT_EQUAL);
+                SqlBuilder::_addLimitation($aLimitations, 'ad_type', 'd.storagetype', 'html', MAX_LIMITATION_NOT_EQUAL);
             } else {
                 SqlBuilder::_addLimitation($aLimitations, 'ad_type', 'd.storagetype', $aParams['ad_type']);
             }
@@ -1089,7 +1094,7 @@ class SqlBuilder
         }
 
         $query = $columns . $tables . $where . $group;
-//var_dump($query);
+        // var_dump($query);
         return  SqlBuilder::_query($query, $primaryKey);
     }
 
@@ -1102,7 +1107,7 @@ class SqlBuilder
      */
     function _query($query, $primaryKey)
     {
-//        var_dump($query);
+        // var_dump($query);
         $oDbh = OA_DB::singleton();
         $aResult =  $oDbh->queryAll($query);
         $aDataEntities = array();
@@ -1110,7 +1115,6 @@ class SqlBuilder
         {
             return false;
         }
-
 
         foreach ($aResult AS $k => $dataEntity)
         {
@@ -1160,7 +1164,7 @@ class SqlBuilder
 
         $aData = array();
         foreach ($aArgs as $arg) {
-            $aData[] = $oDbh->quote($arg);
+            $aData[] = $arg;
             $aData[] = "'_'";
         }
 

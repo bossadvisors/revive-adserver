@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once LIB_PATH . '/Plugin/Component.php';
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OX/Translation.php';
@@ -252,14 +254,14 @@ class Plugins_InvocationTags extends OX_Component
         if (!empty($GLOBALS['_MAX']['CONF']['ui']['applicationName'])) {
             $name = $GLOBALS['_MAX']['CONF']['ui']['applicationName'];
         }
-        $buffer = "<!--/*
-  *
-  * " . $name . " " . $this->getName() . "
-  * - Generated with " . PRODUCT_NAME . " v" . VERSION . "\n";
-        if (!empty($thirdpartyname)) {
-            $buffer .= "  * - " . $thirdpartyname . "\n";
-        }
-        $buffer .= "  *\n  */-->\n\n";
+
+        $buffer = sprintf("<!-- %s %s %s- Generated with %s v%s -->\n",
+            $name,
+            $this->getName(),
+            empty($thirdpartyname) ? '' : "(click tracking for: {$thirdpartyname}) ",
+            PRODUCT_NAME,
+            VERSION
+        );
 
         if (!empty($mi->comments)) {
             $oTrans = new OX_Translation();

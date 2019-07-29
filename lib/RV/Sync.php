@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once MAX_PATH . '/lib/OA/DB.php';
 require_once MAX_PATH . '/lib/OA/Dal/ApplicationVariables.php';
@@ -38,7 +40,7 @@ class RV_Sync
      * @param array $conf array, if null reads the global variable
      * @param array $pref array, if null reads the global variable
      */
-    function RV_Sync($conf = null, $pref = null)
+    function __construct($conf = null, $pref = null)
     {
         $this->aConf = is_null($conf) ? $GLOBALS['_MAX']['CONF'] : $conf;
         $this->aPref = is_null($pref) ? $GLOBALS['_MAX']['PREF'] : $pref;
@@ -79,7 +81,7 @@ class RV_Sync
             'stable'  => 0.4
         );
 
-        $version = OA::stripVersion(strtolower($version), array('dev', 'stable'));
+        $version = RV::stripVersion(strtolower($version), array('dev', 'stable'));
 
         if (preg_match('/^v/', $version)) {
             $v = preg_split('/[.-]/', substr($version, 1));
@@ -185,7 +187,7 @@ class RV_Sync
         if ($this->aConf['sync']['shareStack']) {
             // Thanks, admin user! You're a star! Prepare the technology stack
             // data and add it to the XML-RPC call
-            if ($this->oDbh->dbsyntax == 'mysql') {
+            if ($this->oDbh->dbsyntax == 'mysql' || $this->oDbh->dbsyntax == 'mysqli') {
                 $dbms = 'MySQL';
             } else if ($this->oDbh->dbsyntax == 'pgsql') {
                 $dbms = 'PostgreSQL';

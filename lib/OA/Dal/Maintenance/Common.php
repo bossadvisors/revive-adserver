@@ -10,10 +10,10 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/max/Dal/Common.php';
-
 require_once MAX_PATH . '/lib/OA.php';
-
 require_once LIB_PATH . '/OperationInterval.php';
 
 /**
@@ -29,9 +29,9 @@ class OA_Dal_Maintenance_Common extends MAX_Dal_Common
     /**
      * The class constructor method.
      */
-    function OA_Dal_Maintenance_Common()
+    function __construct()
     {
-        parent::MAX_Dal_Common();
+        parent::__construct();
     }
 
     /**

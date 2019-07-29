@@ -43,7 +43,7 @@ function MAX_querystringConvertParams()
     $paramPos = strpos($qs, $paramStr);
     if (is_numeric($paramPos)) {
         $qs = urldecode(substr($qs, $paramPos + strlen($paramStr)));
-        $delim = $qs{0};
+        $delim = $qs[0];
         if (is_numeric($delim)) {
             $delim = substr($qs, 1, $delim);
         }
@@ -71,10 +71,12 @@ function MAX_querystringConvertParams()
         $n = isset($aGet[$conf['var']['n']]) ? $aGet[$conf['var']['n']] : '';
     }
     if (!empty($n) && !empty($_COOKIE[$conf['var']['vars']][$n])) {
-        $aVars = unserialize(stripslashes($_COOKIE[$conf['var']['vars']][$n]));
-        foreach ($aVars as $name => $value) {
-            if (!isset($_GET[$name])) {
-                $aGet[$name] = $value;
+        $aVars = json_decode($_COOKIE[$conf['var']['vars']][$n], true);
+        if (is_array($aVars)) {
+            foreach ($aVars as $name => $value) {
+                if (!isset($_GET[$name])) {
+                    $aGet[$name] = $value;
+                }
             }
         }
     }

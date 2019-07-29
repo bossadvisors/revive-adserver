@@ -19,7 +19,7 @@
                 {if $clientId == -1 || $campaignId == -1}
                 <span class='inlineIcon iconBannerAddDisabled'>{t str=AddBanner}</span>
                 {else}
-                <a href='banner-edit.php?clientid={$clientId}&campaignid={$campaignId}' class='inlineIcon iconBannerAdd'>{t str=AddBanner}</a>
+                <a href='banner-edit.php?clientid={$clientId}&amp;campaignid={$campaignId}' class='inlineIcon iconBannerAdd'>{t str=AddBanner}</a>
                 {/if}
             </li>
             {/if}
@@ -32,18 +32,18 @@
                 <!--
 
                 $('#deleteSelection').click(function(event) {
-					event.preventDefault();
+                    event.preventDefault();
 
-					if (!$(this).parents('li').hasClass('inactive')) {
-						var ids = [];
-						$(this).parents('.tableWrapper').find('.toggleSelection input:checked').each(function() {
-							ids.push(this.value);
-						});
+                    if (!$(this).parents('li').hasClass('inactive')) {
+                        var ids = [];
+                        $(this).parents('.tableWrapper').find('.toggleSelection input:checked').each(function() {
+                            ids.push(this.value);
+                        });
 
-						if (!tablePreferences.warningBeforeDelete || confirm("{/literal}{t str=ConfirmDeleteBanners}{literal}")) {
-    						window.location = 'banner-delete.php?clientid={/literal}{$clientId}{literal}&campaignid={/literal}{$campaignId}&{rv_add_session_token}{literal}&bannerid=' + ids.join(',');
-						}
-					}
+                        if (!tablePreferences.warningBeforeDelete || confirm("{/literal}{t str=ConfirmDeleteBanners}{literal}")) {
+                            window.location = 'banner-delete.php?clientid={/literal}{$clientId}{literal}&campaignid={/literal}{$campaignId}&{rv_add_session_token}{literal}&bannerid=' + ids.join(',');
+                        }
+                    }
                 });
 
                 //-->
@@ -65,8 +65,8 @@
                     <div class='panel'>
                         <div>
                             <ul>
-                                <li><a href='campaign-banners.php?clientid={$clientId}&campaignid={$campaignId}&hideinactive=0'>All banners</a></li>
-                                <li><a href='campaign-banners.php?clientid={$clientId}&campaignid={$campaignId}&hideinactive=1'>Active banners</a></li>
+                                <li><a href='campaign-banners.php?clientid={$clientId}&amp;campaignid={$campaignId}&amp;hideinactive=0'>All banners</a></li>
+                                <li><a href='campaign-banners.php?clientid={$clientId}&amp;campaignid={$campaignId}&amp;hideinactive=1'>Active banners</a></li>
                             </ul>
                         </div>
                     </div>
@@ -92,6 +92,9 @@
                 <th class='{ox_column_class item=name order=up default=1}'>
                     {ox_column_title item=name order=up default=1 str=Name url=campaign-banners.php}
                 </th>
+                <th class='{ox_column_class item=updated order=up default=0}'>
+                    {ox_column_title item=updated order=up default=0 str=Updated url=campaign-banners.php}
+                </th>
                 <th>
                     &nbsp;
                 </th>
@@ -114,7 +117,7 @@
                 <div class='tableMessage'>
                     <div class='panel'>
                         {if $clientId != -1}
-                        	{if $campaignId != -1}
+                            {if $campaignId != -1}
                                 {if $hideinactive}
                                     {$aCount.banners_hidden} {t str=InactiveBannersHidden}
                                 {else}
@@ -159,23 +162,26 @@
                   {ox_entity_id type="Banner" id=$bannerId}
                 </td>
                 <td>
+                    {ox_column_updated updated=$banner.updated}
+                </td>
+                <td>
                     {$banner.preview}
                 </td>
                 <td class='alignRight verticalActions'>
                     <ul class='rowActions'>
                       {if $canACL}
                         <li>
-                            <a href='banner-acl.php?clientid={$clientId}&campaignid={$campaignId}&bannerid={$bannerId}' class='inlineIcon iconBannerApplyLimitations'>{t str=ACL}</a>
+                            <a href='banner-acl.php?clientid={$clientId}&amp;campaignid={$campaignId}&amp;bannerid={$bannerId}' class='inlineIcon iconBannerApplyLimitations'>{t str=ACL}</a>
                         </li>
                         {/if}
                         {if !$banner.active && $canActivate}
                         <li>
-                            <a href='banner-activate.php?clientid={$clientId}&campaignid={$campaignId}&bannerid={$bannerId}&value=1' class='inlineIcon iconActivate'>{t str=Activate}</a>
+                            <a href='banner-activate.php?{rv_add_session_token}&amp;clientid={$clientId}&amp;campaignid={$campaignId}&amp;bannerid={$bannerId}&amp;value=1' class='inlineIcon iconActivate'>{t str=Activate}</a>
                         </li>
                         {/if}
                         {if $banner.active && $canDeactivate}
                         <li>
-                            <a href='banner-activate.php?clientid={$clientId}&campaignid={$campaignId}&bannerid={$bannerId}&value=0' class='inlineIcon iconDeactivate'>{t str=Deactivate}</a>
+                            <a href='banner-activate.php?{rv_add_session_token}&amp;clientid={$clientId}&amp;campaignid={$campaignId}&amp;bannerid={$bannerId}&amp;value=0' class='inlineIcon iconDeactivate'>{t str=Deactivate}</a>
                         </li>
                         {/if}
                     </ul>
@@ -183,7 +189,7 @@
                 <td class='hasPanel'>
                     <div class='panel'>
                         <table cellspacing='0' summary=''>
-                            {if $banner.type != 'txt'}
+                            {if $banner.width > 0}
                             <tr>
                                 <th>{t str=Size}</th>
                                 <td>{ox_banner_size width=$banner.width height=$banner.height}</td>
@@ -191,7 +197,15 @@
                             {/if}
                             <tr>
                                 <th>{t str=Url}</th>
-                                <td>{$banner.url}</td>
+                                <td>
+                                {if $banner.url_trimmed}
+                                    <span title="{$banner.url|escape}">
+                                        {$banner.url_trimmed|escape}
+                                    </span>
+                                {else}
+                                    {$banner.url|escape}
+                                {/if}
+                                </td>
                             </tr>
                             <tr>
                                 <th>{t str=Weight}</th>

@@ -99,14 +99,6 @@ class OA_Admin_Statistics_Delivery_CommonHistory extends OA_Admin_Statistics_Del
     }
 
     /**
-     * PHP4-style constructor
-     */
-    function OA_Admin_Statistics_Delivery_CommonHistory($params)
-    {
-        $this->__construct($params);
-    }
-
-    /**
      * The final "child" implementation of the parental abstract method,
      * to test if the appropriate data array is empty, or not.
      *
@@ -234,7 +226,7 @@ class OA_Admin_Statistics_Delivery_CommonHistory extends OA_Admin_Statistics_Del
 
         // Merge plugin additional $oPlugin
         foreach ($this->aPlugins as $oPlugin) {
-            $oPlugin->mergeData($aStats, $this->aEmptyRow, $method, $aParams + $this->aDates);
+            $oPlugin->mergeData($aStats, $method, $aParams + $this->aDates, $this->aEmptyRow);
         }
 
         if (count($aStats) == 0) {

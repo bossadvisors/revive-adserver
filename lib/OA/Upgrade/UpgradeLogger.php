@@ -23,6 +23,11 @@ class OA_UpgradeLogger
     var $logFile;
 
     /**
+     * @var array
+     */
+    private $logBuffer = [];
+
+    /**
      * php5 class constructor
      *
      * simpletest throws a BadGroupTest error
@@ -39,7 +44,7 @@ class OA_UpgradeLogger
      *
      * @return boolean
      */
-    function OA_UpgradeLogger()
+    function __construct()
     {
         //this->__construct();
         $this->logFile = MAX_PATH."/var/install.log";

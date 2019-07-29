@@ -10,6 +10,8 @@
 +---------------------------------------------------------------------------+
 */
 
+require_once RV_PATH . '/lib/RV.php';
+
 require_once MAX_PATH . '/lib/OA.php';
 require_once LIB_PATH . '/Extension/bannerTypeHtml/bannerTypeHtml.php';
 require_once MAX_PATH . '/lib/max/Plugin/Common.php';
@@ -99,7 +101,7 @@ class Plugins_BannerTypeHTML_openXHtmlAdsense_adsense extends Plugins_BannerType
      * @param unknown_type $aVariables
      * @return unknown
      */
-    function preprocessForm($insert, $bannerid, &$aFields, &$aVariables)
+    function preProcessForm($insert, $bannerid, &$aFields, &$aVariables)
     {
         $aAdType = explode('.',$aFields['gas_type']);
         $aFields['gas_ad_type']         = $aAdType[0];
@@ -119,7 +121,7 @@ class Plugins_BannerTypeHTML_openXHtmlAdsense_adsense extends Plugins_BannerType
         return true;
     }
 
-    function processForm($insert, $bannerid, $aFields)
+    function processForm($insert, $bannerid, &$aFields, &$aVariables)
     {
         $doBanners = OA_Dal::factoryDO('banners_ox_adsense');
         if ($insert)

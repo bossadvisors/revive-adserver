@@ -10,7 +10,7 @@
 +---------------------------------------------------------------------------+
 */
 
-require_once MAX_PATH . '/lib/max/Admin/Languages.php';
+require_once MAX_PATH . '/lib/RV/Admin/Languages.php';
 
 /**
  * @package    MaxUI
@@ -47,6 +47,11 @@ class Language_Loader {
         if (is_null($lang) && !empty($aPref['language'])) {
             $lang = $aPref['language'];
         }
+
+        $PRODUCT_NAME = PRODUCT_NAME;
+        $PRODUCT_DOCSURL = PRODUCT_DOCSURL;
+        $phpAds_dbmsname = phpAds_dbmsname;
+
         // Always load the English language, in case of incomplete translations
         if (file_exists (MAX_PATH . '/lib/max/language/en/' . $section . '.lang.php')) {
             include MAX_PATH . '/lib/max/language/en/' . $section . '.lang.php';
@@ -63,13 +68,12 @@ class Language_Loader {
             if ($lang != 'en') {
                 include MAX_PATH . '/lib/max/language/' . $lang . '/' . $section . '.lang.php';
             }
-        } else{
+        } else {
             // Check if using full language name (polish), if so then set to use two letter abbr (pl).
-            $oLang = new MAX_Admin_Languages();
             if (!empty($aConf['max']['language'])) {
                 $confMaxLanguage = $aConf['max']['language'];
-                if (in_array($confMaxLanguage, array_keys($oLang->aLanguageMap))) {
-                    $confMaxLanguage = $oLang->aLanguageMap[$confMaxLanguage];
+                if (isset(RV_Admin_Languages::$aOldLanguagesMap[$confMaxLanguage])) {
+                    $confMaxLanguage = RV_Admin_Languages::$aOldLanguagesMap[$confMaxLanguage];
                 }
             }
 

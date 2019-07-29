@@ -27,6 +27,14 @@
 
 function parseDeliveryIniFile($configPath = null, $configFile = null, $sections = true)
 {
+$fixMysqli = function($conf) {
+if ('mysql' === $conf['database']['type'] && !extension_loaded('mysql') && extension_loaded('mysqli')) {
+$conf['database']['type'] = 'mysqli';
+} elseif ('mysqli' === $conf['database']['type'] && !extension_loaded('mysqli') && extension_loaded('mysql')) {
+$conf['database']['type'] = 'mysql';
+}
+return $conf;
+};
 if (!$configPath) {
 $configPath = MAX_PATH . '/var';
 }
@@ -41,7 +49,7 @@ $realconf = @parse_ini_file(MAX_PATH . '/var/' . $conf['realConfig'] . '.conf.ph
 $conf = mergeConfigFiles($realconf, $conf);
 }
 if (!empty($conf)) {
-return $conf;
+return $fixMysqli($conf);
 } elseif ($configFile === '.plugin') {
 $pluginType = basename($configPath);
 $defaultConfig = MAX_PATH . '/plugins/' . $pluginType . '/default.plugin.conf.php';
@@ -58,7 +66,7 @@ if (isset($conf['realConfig'])) {
 $conf = @parse_ini_file(MAX_PATH . '/var/' . $conf['realConfig'] . '.conf.php', $sections);
 }
 if (!empty($conf)) {
-return $conf;
+return $fixMysqli($conf);
 }
 if (file_exists(MAX_PATH . '/var/INSTALLED')) {
 echo "Revive Adserver has been installed, but no configuration file was found.\n";
@@ -213,7 +221,7 @@ OA_setTimeZone('UTC');
 }
 function OA_setTimeZoneLocal()
 {
-$tz = !empty($GLOBALS['_MAX']['PREF']['timezone']) ? $GLOBALS['_MAX']['PREF']['timezone'] : 'GMT';
+$tz = !empty($GLOBALS['_MAX']['PREF']['timezone']) ? $GLOBALS['_MAX']['PREF']['timezone'] : 'UTC';
 OA_setTimeZone($tz);
 }
 function OX_getHostName()
@@ -247,6 +255,10 @@ $oxPearPath = MAX_PATH . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pe
 $oxZendPath = MAX_PATH . DIRECTORY_SEPARATOR . 'lib';
 set_include_path($oxPearPath . PATH_SEPARATOR . $oxZendPath . PATH_SEPARATOR . get_include_path());
 }
+function RV_getContainer()
+{
+return $GLOBALS['_MAX']['DI'];
+}
 
 OX_increaseMemoryLimit(OX_getMinimumRequiredMemory());
 if (!defined('E_DEPRECATED')) {
@@ -255,6 +267,7 @@ define('E_DEPRECATED', 0);
 setupServerVariables();
 setupDeliveryConfigVariables();
 $conf = $GLOBALS['_MAX']['CONF'];
+include MAX_PATH.'/lib/vendor/autoload.php';
 $GLOBALS['_OA']['invocationType'] = array_search(basename($_SERVER['SCRIPT_FILENAME']), $conf['file']);
 if (!empty($conf['debug']['production'])) {
 error_reporting(E_ALL & ~(E_NOTICE | E_WARNING | E_DEPRECATED | E_STRICT));
@@ -287,6 +300,9 @@ $GLOBALS['_MAX']['COOKIE']['CACHE'][$name] = array($value, $expire);
 }
 function MAX_cookieSetViewerIdAndRedirect($viewerId) {
 $aConf = $GLOBALS['_MAX']['CONF'];
+if (!empty($aConf['privacy']['disableViewerId'])) {
+return;
+}
 MAX_cookieAdd($aConf['var']['viewerId'], $viewerId, _getTimeYearFromNow());
 MAX_cookieFlush();
 if ($GLOBALS['_MAX']['SSL_REQUEST']) {
@@ -355,14 +371,19 @@ $GLOBALS['_MAX']['CONF']['var']['blockLoggingClick'],
 function MAX_cookieGetUniqueViewerId($create = true)
 {
 static $uniqueViewerId = null;
-if(!is_null($uniqueViewerId)) {
+ if (null !== $uniqueViewerId) {
 return $uniqueViewerId;
 }
+
 $conf = $GLOBALS['_MAX']['CONF'];
+$privacyViewerId = empty($conf['privacy']['disableViewerId']) ? null : '01000111010001000101000001010010';
 if (isset($_COOKIE[$conf['var']['viewerId']])) {
-$uniqueViewerId = $_COOKIE[$conf['var']['viewerId']];
+$uniqueViewerId = $privacyViewerId ?: $_COOKIE[$conf['var']['viewerId']];
 } elseif ($create) {
-$uniqueViewerId = md5(uniqid('', true));  $GLOBALS['_MAX']['COOKIE']['newViewerId'] = true;
+$uniqueViewerId = $privacyViewerId ?: md5(uniqid('', true));
+$GLOBALS['_MAX']['COOKIE']['newViewerId'] = true;
+} else {
+$uniqueViewerId = null;
 }
 return $uniqueViewerId;
 }
@@ -443,7 +464,7 @@ if (!empty($GLOBALS['_MAX']['COOKIE']['CACHE'])) {
 reset($GLOBALS['_MAX']['COOKIE']['CACHE']);
 while (list($name,$v) = each ($GLOBALS['_MAX']['COOKIE']['CACHE'])) {
 list($value, $expire) = $v;
-if ($name == $conf['var']['viewerId']) {
+if ($name === $conf['var']['viewerId']) {
 MAX_cookieClientCookieSet($name, $value, $expire, '/', !empty($conf['cookie']['viewerIdDomain']) ? $conf['cookie']['viewerIdDomain'] : $domain);
 } else {
 MAX_cookieSet($name, $value, $expire, '/', $domain);
@@ -514,6 +535,7 @@ function MAX_remotehostSetInfo($run = false)
 {
 if (empty($GLOBALS['_OA']['invocationType']) || $run || ($GLOBALS['_OA']['invocationType'] != 'xmlrpc')) {
 MAX_remotehostProxyLookup();
+MAX_remotehostAnonymise();
 MAX_remotehostReverseLookup();
 MAX_remotehostSetGeoInfo();
 }
@@ -593,6 +615,12 @@ $GLOBALS['_MAX']['CLIENT_GEO'] = OX_Delivery_Common_hook('getGeoInfo', array(), 
 }
 }
 }
+function MAX_remotehostAnonymise()
+{
+if (!empty($GLOBALS['_MAX']['CONF']['privacy']['anonymiseIp'])) {
+$_SERVER['REMOTE_ADDR'] = preg_replace('/\d+$/', '0', $_SERVER['REMOTE_ADDR']);
+}
+}
 function MAX_remotehostPrivateAddress($ip)
 {
 $ip = ip2long($ip);
@@ -634,6 +662,9 @@ $GLOBALS['_MAX']['FILES'][$file] = true;
 
 $file = '/lib/OA/Dal/Delivery.php';
 $GLOBALS['_MAX']['FILES'][$file] = true;
+function OA_Dal_Delivery_isValidResult($result) {
+return is_resource($result) || $result instanceof mysqli_result;
+}
 function OA_Dal_Delivery_getAccountTZs()
 {
 $aConf = $GLOBALS['_MAX']['CONF'];
@@ -646,7 +677,7 @@ $query = "
             name = 'admin_account_id'
     ";
 $res = OA_Dal_Delivery_query($query);
-if (is_resource($res) && OA_Dal_Delivery_numRows($res)) {
+if (OA_Dal_Delivery_isValidResult($res) && OA_Dal_Delivery_numRows($res)) {
 $adminAccountId = (int)OA_Dal_Delivery_result($res, 0, 0);
 } else {
 $adminAccountId = false;
@@ -668,7 +699,7 @@ $aResult = array(
 'adminAccountId' => $adminAccountId,
 'aAccounts' => array()
 );
-if (is_resource($res)) {
+if (OA_Dal_Delivery_isValidResult($res)) {
 while ($row = OA_Dal_Delivery_fetchAssoc($res)) {
 $accountId = (int)$row['account_id'];
 if ($accountId === $adminAccountId) {
@@ -720,7 +751,7 @@ $query = "
           AND
             a.agencyid = m.agencyid";
 $rZoneInfo = OA_Dal_Delivery_query($query);
-if (!is_resource($rZoneInfo)) {
+if (!OA_Dal_Delivery_isValidResult($rZoneInfo)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : false;
 }
 $aZoneInfo = OA_Dal_Delivery_fetchAssoc($rZoneInfo);
@@ -738,7 +769,7 @@ $query = "
             OR
             p.preference_name = 'default_banner_destination_url'";
 $rPreferenceInfo = OA_Dal_Delivery_query($query);
-if (!is_resource($rPreferenceInfo)) {
+if (!OA_Dal_Delivery_isValidResult($rPreferenceInfo)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : false;
 }
 if (OA_Dal_Delivery_numRows($rPreferenceInfo) != 2) {
@@ -817,7 +848,7 @@ $query = "
             AND
             apa.preference_id = $default_banner_destination_url_id";
 $rDefaultBannerInfo = OA_Dal_Delivery_query($query);
-if (!is_resource($rDefaultBannerInfo)) {
+if (!OA_Dal_Delivery_isValidResult($rDefaultBannerInfo)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : false;
 }
 if (OA_Dal_Delivery_numRows($rDefaultBannerInfo) == 0) {
@@ -864,7 +895,7 @@ $rZones = OA_Dal_Delivery_query("
     WHERE
         z.affiliateid={$publisherid}
     ");
-if (!is_resource($rZones)) {
+if (!OA_Dal_Delivery_isValidResult($rZones)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : false;
 }
 while ($aZone = OA_Dal_Delivery_fetchAssoc($rZones)) {
@@ -925,10 +956,12 @@ $query = "
             d.parameters AS parameters,
             d.transparent AS transparent,
             d.ext_bannertype AS ext_bannertype,
+            d.iframe_friendly AS iframe_friendly,
             az.priority AS priority,
             az.priority_factor AS priority_factor,
             az.to_be_delivered AS to_be_delivered,
             c.campaignid AS campaign_id,
+            c.campaignname AS campaign_name,
             c.priority AS campaign_priority,
             c.weight AS campaign_weight,
             c.companion AS campaign_companion,
@@ -962,7 +995,7 @@ $query = "
             c.status <= 0
     ";
 $rAds = OA_Dal_Delivery_query($query);
-if (!is_resource($rAds)) {
+if (!OA_Dal_Delivery_isValidResult($rAds)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 }
 $aConversionLinkedCreatives = MAX_cacheGetTrackerLinkedCreatives();
@@ -1034,7 +1067,7 @@ $query =
 ."AND "
 ."c.status <= 0 ";
 $rAds = OA_Dal_Delivery_query($query);
-if (!is_resource($rAds)) {
+if (!OA_Dal_Delivery_isValidResult($rAds)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 }
 while ($aAd = OA_Dal_Delivery_fetchAssoc($rAds)) {
@@ -1077,7 +1110,7 @@ $totals = array(
 );
 $query = OA_Dal_Delivery_buildAdInfoQuery($search, $lastpart, $precondition);
 $rAds = OA_Dal_Delivery_query($query);
-if (!is_resource($rAds)) {
+if (!OA_Dal_Delivery_isValidResult($rAds)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 }
 while ($aAd = OA_Dal_Delivery_fetchAssoc($rAds)) {
@@ -1122,7 +1155,7 @@ $totals = array(
 );
 $query = OA_Dal_Delivery_buildQuery($search, $lastpart, $precondition);
 $rAds = OA_Dal_Delivery_query($query);
-if (!is_resource($rAds)) {
+if (!OA_Dal_Delivery_isValidResult($rAds)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 }
 $aConversionLinkedCreatives = MAX_cacheGetTrackerLinkedCreatives();
@@ -1205,6 +1238,7 @@ $query = "
         d.parameters AS parameters,
         d.transparent AS transparent,
         d.ext_bannertype AS ext_bannertype,
+        d.iframe_friendly AS iframe_friendly,
         c.campaignid AS campaign_id,
         c.block AS block_campaign,
         c.capping AS cap_campaign,
@@ -1214,7 +1248,8 @@ $query = "
         c.clickwindow AS clickwindow,
         c.viewwindow AS viewwindow,
         m.advertiser_limitation AS advertiser_limitation,
-        m.agencyid AS agency_id
+        m.agencyid AS agency_id,
+        c.status AS campaign_status
     FROM
         ".OX_escapeIdentifier($conf['table']['prefix'].$conf['table']['banners'])." AS d,
         ".OX_escapeIdentifier($conf['table']['prefix'].$conf['table']['campaigns'])." AS c,
@@ -1227,7 +1262,7 @@ $query = "
         m.clientid = c.clientid
     ";
 $rAd = OA_Dal_Delivery_query($query);
-if (!is_resource($rAd)) {
+if (!OA_Dal_Delivery_isValidResult($rAd)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 return (OA_Dal_Delivery_fetchAssoc($rAd));
@@ -1243,7 +1278,7 @@ $rLimitation = OA_Dal_Delivery_query("
             ".OX_escapeIdentifier($conf['table']['prefix'].$conf['table']['channel'])."
     WHERE
             channelid={$channelid}");
-if (!is_resource($rLimitation)) {
+if (!OA_Dal_Delivery_isValidResult($rLimitation)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 }
 $limitations = OA_Dal_Delivery_fetchAssoc($rLimitation);
@@ -1261,7 +1296,7 @@ $rCreative = OA_Dal_Delivery_query("
         WHERE
             filename = '".OX_escapeString($filename)."'
     ");
-if (!is_resource($rCreative)) {
+if (!OA_Dal_Delivery_isValidResult($rCreative)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 $aResult = OA_Dal_Delivery_fetchAssoc($rCreative);
@@ -1290,7 +1325,7 @@ $rTracker = OA_Dal_Delivery_query("
         WHERE
             t.trackerid={$trackerid}
     ");
-if (!is_resource($rTracker)) {
+if (!OA_Dal_Delivery_isValidResult($rTracker)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 return (OA_Dal_Delivery_fetchAssoc($rTracker));
@@ -1319,7 +1354,7 @@ $rCreatives = OA_Dal_Delivery_query("
           AND b.campaignid = ct.campaignid
           " . ((!empty($trackerid)) ? ' AND t.trackerid='.$trackerid : '') . "
     ");
-if (!is_resource($rCreatives)) {
+if (!OA_Dal_Delivery_isValidResult($rCreatives)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 $output = array();
@@ -1349,7 +1384,7 @@ $rVariables = OA_Dal_Delivery_query("
         WHERE
             v.trackerid={$trackerid}
     ");
-if (!is_resource($rVariables)) {
+if (!OA_Dal_Delivery_isValidResult($rVariables)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 $output = array();
@@ -1369,7 +1404,7 @@ $result = OA_Dal_Delivery_query("
             ".OX_escapeIdentifier($conf['table']['prefix'].$conf['table']['application_variable'])."
         WHERE name = 'maintenance_timestamp'
     ");
-if (!is_resource($result)) {
+if (!OA_Dal_Delivery_isValidResult($result)) {
 return (defined('OA_DELIVERY_CACHE_FUNCTION_ERROR')) ? OA_DELIVERY_CACHE_FUNCTION_ERROR : null;
 } else {
 $result = OA_Dal_Delivery_fetchAssoc($result);
@@ -1415,6 +1450,7 @@ $aColumns = array(
 'd.parameters AS parameters',
 'd.transparent AS transparent',
 'd.ext_bannertype AS ext_bannertype',
+'d.iframe_friendly AS iframe_friendly',
 'az.priority AS priority',
 'az.priority_factor AS priority_factor',
 'az.to_be_delivered AS to_be_delivered',
@@ -1968,11 +2004,7 @@ return;
 }
 $included = true;
 $conf = $GLOBALS['_MAX']['CONF'];
-if (isset($conf['origin']['type']) && is_readable(MAX_PATH . '/lib/OA/Dal/Delivery/' . strtolower($conf['origin']['type']) . '.php')) {
-require(MAX_PATH . '/lib/OA/Dal/Delivery/' . strtolower($conf['origin']['type']) . '.php');
-} else {
 require(MAX_PATH . '/lib/OA/Dal/Delivery/' . strtolower($conf['database']['type']) . '.php');
-}
 }
 
 
@@ -2052,19 +2084,19 @@ $buffer .= "
 }
 }
 if (!empty($variableQuerystring)) {
-$conversionInfoParams = array();
 foreach ($conversionInfo as $plugin => $pluginData) {
+$conversionInfoParams = array();
 if (is_array($pluginData)) {
 foreach ($pluginData as $key => $value) {
 $conversionInfoParams[] = $key . '=' . urlencode($value);
 }
 }
-}
 $conversionInfoParams = '&' . implode('&', $conversionInfoParams);
 $buffer .= "
     document.write (\"<\" + \"script language='JavaScript' type='text/javascript' src='\");
-    document.write (\"$url?trackerid=$trackerid{$conversionInfoParams}{$variableQuerystring}'\");";
+    document.write (\"$url?trackerid=$trackerid&plugin={$plugin}{$conversionInfoParams}{$variableQuerystring}'\");";
 $buffer .= "\n\tdocument.write (\"><\\/scr\"+\"ipt>\");";
+}
 }
 }
 if(!empty($tracker['appendcode'])) {
@@ -2138,6 +2170,9 @@ OX_Delivery_Common_hook('logRequest', array($adId, $zoneId, $aAd, _viewersHostOk
 function MAX_Delivery_log_logAdImpression($adId, $zoneId)
 {
 if (empty($GLOBALS['_MAX']['CONF']['logging']['adImpressions'])) { return true; }
+if (MAX_commonIsAdActionBlockedBecauseInactive($adId)) {
+return true;
+}
 OX_Delivery_Common_hook('logImpression', array($adId, $zoneId, _viewersHostOkayToLog($adId, $zoneId)));
 }
 function MAX_Delivery_log_logAdClick($adId, $zoneId)
@@ -2165,7 +2200,7 @@ return $aConversionInfo;
 }
 return false;
 }
-function MAX_Delivery_log_logVariableValues($aVariables, $trackerId, $serverConvId, $serverRawIp)
+function MAX_Delivery_log_logVariableValues($aVariables, $trackerId, $serverConvId, $serverRawIp, $pluginId = null)
 {
 $aConf = $GLOBALS['_MAX']['CONF'];
 foreach ($aVariables as $aVariable) {
@@ -2196,7 +2231,11 @@ continue;
 $aVariables[$aVariable['variable_id']]['value'] = $value;
 }
 if (count($aVariables)) {
-OX_Delivery_Common_hook('logConversionVariable', array($aVariables, $trackerId, $serverConvId, $serverRawIp, _viewersHostOkayToLog(null, null, $trackerId)));
+OX_Delivery_Common_hook(
+'logConversionVariable',
+array($aVariables, $trackerId, $serverConvId, $serverRawIp, _viewersHostOkayToLog(null, null, $trackerId)),
+empty($pluginId) ? null : $pluginId.'Variable'
+);
 }
 }
 function _viewersHostOkayToLog($adId=0, $zoneId=0, $trackerId=0)
@@ -2446,8 +2485,8 @@ MAX_header($header);
 function MAX_commonSetNoCacheHeaders()
 {
 MAX_header('Pragma: no-cache');
-MAX_header('Cache-Control: private, max-age=0, no-cache');
-MAX_header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+MAX_header('Cache-Control: no-cache, no-store, must-revalidate');
+MAX_header('Expires: 0');
 MAX_header('Access-Control-Allow-Origin: *');
 }
 function MAX_commonAddslashesRecursive($a)
@@ -2607,6 +2646,14 @@ $GLOBALS['_MAX']['CONF']['var']['lastView'],
 $GLOBALS['_MAX']['CONF']['var']['blockLoggingClick'],
 );
 if (strtolower($charset) == 'unicode') { $charset = 'utf-8'; }
+}
+function MAX_commonIsAdActionBlockedBecauseInactive($adId)
+{
+if (!empty($GLOBALS['_MAX']['CONF']['logging']['blockInactiveBanners'])) {
+$aAdInfo = MAX_cacheGetAd($adId);
+return $aAdInfo['status'] || $aAdInfo['campaign_status'];
+}
+return false;
 }
 function MAX_commonDisplay1x1()
 {
@@ -2775,6 +2822,14 @@ return $return;
 }
 function OX_Delivery_Common_getFunctionFromComponentIdentifier($identifier, $hook = null)
 {
+if (preg_match('/[^a-zA-Z0-9:]/', $identifier)) {
+if (PHP_SAPI === 'cli') {
+exit(1);
+} else {
+MAX_sendStatusCode(400);
+exit;
+}
+}
 $aInfo = explode(':', $identifier);
 $functionName = 'Plugin_' . implode('_', $aInfo) . '_Delivery' . (!empty($hook) ? '_' . $hook : '');
 if (!function_exists($functionName)) {
@@ -3043,19 +3098,6 @@ $limitations = OA_Dal_Delivery_getChannelLimitations($channelid);
 $limitations = OA_Delivery_Cache_store_return($sName, $limitations);
 }
 return $limitations;
-}
-function MAX_cacheGetGoogleJavaScript($cached = true)
-{
-$sName = OA_Delivery_Cache_getName(__FUNCTION__);
-if (!$cached || ($output = OA_Delivery_Cache_fetch($sName)) === false) {
-$file = '/lib/max/Delivery/google.php';
-if(!isset($GLOBALS['_MAX']['FILES'][$file])) {
-include MAX_PATH . $file;
-}
-$output = MAX_googleGetJavaScript();
-$output = OA_Delivery_Cache_store_return($sName, $output);
-}
-return $output;
 }
 function OA_cacheGetPublisherZones($affiliateid, $cached = true)
 {

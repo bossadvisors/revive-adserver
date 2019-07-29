@@ -44,6 +44,8 @@ if (OA_Permission::isAccount(OA_ACCOUNT_ADVERTISER)) {
 /*-------------------------------------------------------*/
 
 if (isset($convert)) {
+    OA_Permission::checkSessionToken();
+
     $doBanners = OA_Dal::factoryDO('banners');
     $doBanners->get($bannerid);
     $row = $doBanners->toArray();
@@ -207,6 +209,7 @@ if ($result) {
     echo "<input type='hidden' name='clientid' value='$clientid'>";
     echo "<input type='hidden' name='campaignid' value='$campaignid'>";
     echo "<input type='hidden' name='bannerid' value='$bannerid'>";
+    echo "<input type='hidden' name='token' value='".htmlspecialchars(phpAds_SessionGetToken(), ENT_QUOTES)."'>";
 
     echo "<tr><td height='25' colspan='4' bgcolor='#FFFFFF'><img src='" . OX::assetPath() . "/images/".$phpAds_TextDirection."/icon-undo.gif' align='absmiddle'>&nbsp;<b>".$strHardcodedLinks."</b></td></tr>";
     echo "<tr><td height='1' colspan='4' bgcolor='#888888'><img src='" . OX::assetPath() . "/images/break.gif' height='1' width='100%'></td></tr>";

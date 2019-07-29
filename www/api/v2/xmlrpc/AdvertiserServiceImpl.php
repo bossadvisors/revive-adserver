@@ -38,9 +38,9 @@ class AdvertiserServiceImpl extends BaseServiceImpl
      * The AdvertiserServiceImpl method is the constructor for the
      * AdvertiserServiceImpl class.
      */
-    function AdvertiserServiceImpl()
+    function __construct()
     {
-        $this->BaseServiceImpl();
+        parent::__construct();
         $this->_dllAdvertiser = new OA_Dll_Advertiser();
     }
 
@@ -168,6 +168,34 @@ class AdvertiserServiceImpl extends BaseServiceImpl
 
             return $this->_validateResult(
                 $this->_dllAdvertiser->getAdvertiserDailyStatistics(
+                    $advertiserId, $oStartDate, $oEndDate, $localTZ, $aData));
+        } else {
+
+            return false;
+        }
+    }
+
+    /**
+     * The getAdvertiserHourlyStatistics method returns hourly statistics for an
+     * advertiser for a specified period.
+     *
+     * @access public
+     *
+     * @param string $sessionId
+     * @param integer $advertiserId
+     * @param date $oStartDate
+     * @param date $oEndDate
+     * @param bool $localTZ
+     * @param array &$aData  return data
+     *
+     * @return boolean
+     */
+    function getAdvertiserHourlyStatistics($sessionId, $advertiserId, $oStartDate, $oEndDate, $localTZ, &$aData)
+    {
+        if ($this->verifySession($sessionId)) {
+
+            return $this->_validateResult(
+                $this->_dllAdvertiser->getAdvertiserHourlyStatistics(
                     $advertiserId, $oStartDate, $oEndDate, $localTZ, $aData));
         } else {
 

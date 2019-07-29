@@ -338,7 +338,7 @@ class XML_RPC_Server
      *
      * @return void
      */
-    function XML_RPC_Server($dispMap, $serviceNow = 1, $debug = 0)
+    function __construct($dispMap, $serviceNow = 1, $debug = 0)
     {
         global $HTTP_RAW_POST_DATA;
 
@@ -373,7 +373,7 @@ class XML_RPC_Server
 
         if ($XML_RPC_Server_debuginfo != '') {
             return "<!-- PEAR XML_RPC SERVER DEBUG INFO:\n\n"
-                   . $GLOBALS['XML_RPC_func_ereg_replace']('--', '- - ', $XML_RPC_Server_debuginfo)
+                   . str_replace('--', '- - ', $XML_RPC_Server_debuginfo)
                    . "-->\n";
         } else {
             return '';
@@ -430,9 +430,9 @@ class XML_RPC_Server
          * that someone composed a single header with multiple lines, which
          * the RFCs allow.
          */
-        $this->server_headers = $GLOBALS['XML_RPC_func_ereg_replace']("[\r\n]+[ \t]+",
+        $this->server_headers = preg_replace("/[\r\n]+[ \t]+/",
                                 ' ', trim($this->server_headers));
-        $headers = $GLOBALS['XML_RPC_func_split']("[\r\n]+", $this->server_headers);
+        $headers = preg_split("/[\r\n]+/", $this->server_headers);
         foreach ($headers as $header)
         {
             header($header);
@@ -458,6 +458,12 @@ class XML_RPC_Server
      */
     function createServerPayload()
     {
+        global $HTTP_RAW_POST_DATA;
+
+        if (!isset($HTTP_RAW_POST_DATA)) {
+            $HTTP_RAW_POST_DATA = file_get_contents('php://input');
+        }
+
         $r = $this->parseRequest();
         $this->server_payload = '<?xml version="1.0" encoding="'
                               . $this->encoding . '"?>' . "\n"

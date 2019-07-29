@@ -54,16 +54,6 @@ class OA_XmlRpc
     }
 
     /**
-     * PHP4 style constructor
-     *
-     * @see OA_XmlRpc::__construct
-     */
-    function OA_XmlRpc($host, $path, $port = 0, $ssl = false, $timeout = 15)
-    {
-        $this->__construct($host, $path, $port, $ssl, $timeout);
-    }
-
-    /**
      * This method retrieves a banner from a remote OpenX installation using XML-RPC.
      *
      * @param string $what       The "what" parameter, see docs for more info
@@ -203,8 +193,9 @@ class OA_XmlRpc
 
         // If an array of zones was passed into $what, then serialise this for the XML-RPC call
         if (is_array($what)) {
-            $what = serialize($what);
+            $what = http_build_query($what);
         }
+
         XML_RPC_Client::setAutoBase64(true);
         // Create the XML-RPC message
         $message = new XML_RPC_Message('openads.spc', array(

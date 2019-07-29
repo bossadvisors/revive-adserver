@@ -99,7 +99,7 @@ class OA_DB_Upgrade
      * php4 class constructor
      *
      */
-    function OA_DB_Upgrade($oLogger='')
+    function __construct($oLogger='')
     {
         //this->__construct();
         $this->path_changes = MAX_PATH.'/etc/changes/';
@@ -379,6 +379,11 @@ class OA_DB_Upgrade
      */
     function upgrade($versionFrom='')
     {
+        if (!$this->oTable->oDbh instanceof MDB2_Driver_pgsql) {
+            // Ensure upgrades are run in compatibility mode
+            $this->oTable->oDbh->exec("SET SESSION sql_mode='MYSQL40'");
+        }
+
         $this->_logOnly('verifying '.$this->timingStr.' changes');
         $result = $this->oSchema->verifyAlterDatabase($this->aChanges[$this->timingStr]);
         if (!$this->_isPearError($result, 'MDB2_SCHEMA verification failed'))
@@ -469,28 +474,36 @@ class OA_DB_Upgrade
     {
         $this->_logOnly('running integrity check');
         $this->_logOnly('comparing database '.$this->oSchema->db->connected_database_name.' with schema '.$this->file_schema);
+
         // compare the schema and implemented definitions
         $aDefinitionOld = $this->_getDefinitionFromDatabase();
-        if ($this->_isPearError($aDefinitionOld, 'error getting database definition'))
-        {
+
+        if ($this->_isPearError($aDefinitionOld, 'error getting database definition')) {
             return false;
         }
+
         $aDefinitionNew = $this->_stripPrefixesFromDatabaseDefinition($this->aDefinitionNew);
+
         OA_DB::setCaseSensitive();
         $aDiffs = $this->oSchema->compareDefinitions($aDefinitionNew, $aDefinitionOld);
         OA_DB::disableCaseSensitive();
-        if ($this->_isPearError($aDiffs, 'error comparing definitions'))
-        {
+
+        if ($this->_isPearError($aDiffs, 'error comparing definitions')) {
             return false;
         }
-        $aOptions = array (
-                            'output_mode'   =>    'file',
-                            'output'        =>    $filename,
-                            'end_of_line'   =>    "\n",
-                            'xsl_file'      =>    "xsl/mdb2_schema.xsl",
-                            'custom_tags'   =>    array(),
-                            'split'         =>    true,
-                          );
+
+        // Ignore differences in default values and not null constraints (see #900)
+        $aDiffs = $this->skipDefaultAndNotNulls($aDiffs);
+
+        $aOptions = [
+            'output_mode'   =>    'file',
+            'output'        =>    $filename,
+            'end_of_line'   =>    "\n",
+            'xsl_file'      =>    "xsl/mdb2_schema.xsl",
+            'custom_tags'   =>    array(),
+            'split'         =>    true,
+        ];
+
         if ($this->_isPearError($this->oSchema->dumpChangeset($aDiffs, $aOptions), 'error writing changeset'))
         {
             return false;
@@ -1594,7 +1607,7 @@ class OA_DB_Upgrade
                             {
                                 if (array_key_exists('rename', $aField_tasks))
                                 {
-                                    $method -= $aField_tasks['rename'];
+                                    $method = $aField_tasks['rename'];
                                     $this->_logOnly('task found: '.$method);
                                     $was = $this->_getPreviousFieldname($table, $field);
                                     if ($was)
@@ -2173,6 +2186,7 @@ class OA_DB_Upgrade
         switch ($this->oSchema->db->dbsyntax)
         {
             case 'mysql':
+            case 'mysqli':
                 $engine = $this->oSchema->db->getOption('default_table_type');
                 $this->aSQLStatements['table_copy']     = "CREATE TABLE %s ENGINE={$engine} (SELECT * FROM %s)";
                 $this->aSQLStatements['table_move']     = "";
@@ -2514,9 +2528,9 @@ class OA_DB_Upgrade
                 campaignid
         ";
 
-        OX::disableErrorHandling();
+        RV::disableErrorHandling();
         $aResult = $this->oSchema->db->queryAll($query);
-        OX::enableErrorHandling();
+        RV::enableErrorHandling();
 
         if (!PEAR::isError($aResult) && count($aResult) > 0) {
             $warning = false;
@@ -2543,6 +2557,47 @@ class OA_DB_Upgrade
         return true;
     }
 
-}
+    /**
+     * We have historically been skipping integrity check for default and not null constraints and unfortunately
+     * the old migrations aren't accurate. Which means that a 2.0.11 or 2.6 upgraded to 2.8.11 has a schema with some
+     * different defaults / not nulls from a fresh 2.8.11 install.
+     *
+     * Also openads_datetime and openads_date are created allowing NULLs and without a default (vs zero dates on MySQL)
+     * and integrity check would fail on those too.
+     *
+     * @todo there are a couple of "better fix this" to-dos in lib/OA/DB/CustomDatatypes/pgsql.php
+     *
+     * @param array $aDiffs
+     *
+     * @return array
+     */
+    private function skipDefaultAndNotNulls($aDiffs)
+    {
+        if (!empty($aDiffs['tables']['change'])) {
+            foreach ($aDiffs['tables']['change'] as $tbl => &$tblDiff) {
+                if (empty($tblDiff['change'])) {
+                    continue;
+                }
 
-?>
+                foreach ($tblDiff['change'] as $field => $fldDiff) {
+                    unset($tblDiff['change'][$field]['default']);
+                    unset($tblDiff['change'][$field]['notnull']);
+
+                    if (1 === count($tblDiff['change'][$field])) {
+                        unset($tblDiff['change'][$field]);
+                    }
+                }
+
+                if (empty($tblDiff['change'])) {
+                    unset($tblDiff['change']);
+                }
+            }
+
+            $aDiffs['tables']['change'] = array_filter($aDiffs['tables']['change'], function ($tblDiff) {
+                return !empty($tblDiff);
+            });
+        }
+
+        return $aDiffs;
+    }
+}

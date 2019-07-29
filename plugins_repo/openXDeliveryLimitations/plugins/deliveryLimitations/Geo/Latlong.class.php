@@ -31,9 +31,9 @@ require_once MAX_PATH . '/lib/max/Delivery/limitations.delivery.php';
  */
 class Plugins_DeliveryLimitations_Geo_Latlong extends Plugins_DeliveryLimitations_CommaSeparatedData
 {
-    function Plugins_DeliveryLimitations_Geo_Latlong()
+    function __construct()
     {
-        $this->Plugins_DeliveryLimitations_ArrayData();
+        parent::__construct();
         $this->nameEnglish = 'Geo - Latitude/Longitude';
     }
 
@@ -51,7 +51,7 @@ class Plugins_DeliveryLimitations_Geo_Latlong extends Plugins_DeliveryLimitation
      *
      * @return boolean
      */
-    function isAllowed()
+    function isAllowed($page = false)
     {
         return ((isset($GLOBALS['_MAX']['GEO_DATA']['latitude']))
             || $GLOBALS['_MAX']['CONF']['geotargeting']['showUnavailable']);

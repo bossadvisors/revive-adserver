@@ -70,6 +70,9 @@ images                              =
 imagesSSL                           =
 
 [file]
+asyncjs                             = asyncjs.php
+asyncjsjs                           = async.js
+asyncspc                            = asyncspc.php
 click                               = ck.php
 conversionvars                      = tv.php
 content                             = ac.php
@@ -99,14 +102,6 @@ ftpPath                             =
 ftpUsername                         =
 ftpPassword                         =
 ftpPassive                          =
-
-[origin]
-type                                = "None"
-host                                =
-port                                = 80
-script                              = /www/delivery/dxmlrpc.php
-timeout                             = 10
-protocol                            = http
 
 ;------------------------------------------------------------------------------------------;
 ; Delivery Details                                                                         ;
@@ -138,6 +133,8 @@ cgiForceStatusHeader                = false ; Set this to true if using a CGI sa
 clicktracking                       = "No"
 ecpmSelectionRate                   = 0.9
 enableControlOnPureCPM              = true
+assetClientCacheExpire              = 3600  ; Used to create the browser caching directive
+                                            ; of semi-static delivery files, e.g. asyncjs.php
 
 [defaultBanner]
 imageUrl                            =       ; If banner was deleted and ai.php script
@@ -147,6 +144,10 @@ imageUrl                            =       ; If banner was deleted and ai.php s
 policies                            = true
 compactPolicy                       = CUR ADM OUR NOR STA NID
 policyLocation                      =
+
+[privacy]
+disableViewerId                     = true
+anonymiseIp                         = true
 
 ;------------------------------------------------------------------------------------------;
 ; User Interface Settings                                                                  ;
@@ -173,19 +174,20 @@ defaultClickConnectionWindow        =
 ignoreHosts                         =         ; Comma separated list of hosts
 ignoreUserAgents                    =         ; Pipe separated list of user-agents to ignore
 enforceUserAgents                   =         ; Pipe separated list of user-agents to enforce
-blockAdClicksWindow                 = 0      ; window for block clicks logging in seconds
+blockAdClicksWindow                 = 0       ; Window for block clicks logging in seconds
+blockInactiveBanners                = 1       ; Should recording of impressions, clicks & re-direction be blocked if the banner is inactive?
 
 [maintenance]
 autoMaintenance                     = 1
 
 timeLimitScripts                    = 1800    ; Should maintenance scripts be limited to run no longer than
-                                             ; this many seconds? Set to 0 for no time limit
+                                              ; this many seconds? Set to 0 for no time limit
 
 operationInterval                   = 60
 
-blockAdImpressions                  = 0      ; How many seconds must be between impressions and clicks
-blockAdClicks                       = 0      ; from the same viewer ID for them to count? Set to 0 seconds
-                                             ; for all to count.
+blockAdImpressions                  = 0       ; How many seconds must be between impressions and clicks
+blockAdClicks                       = 0       ; from the same viewer ID for them to count? Set to 0 seconds
+                                              ; for all to count.
 
 channelForecasting                  = false
 pruneCompletedCampaignsSummaryData  = false
@@ -359,6 +361,7 @@ lastClick           = OXLCA         ; Used to track the last time an ad was clic
 blockLoggingClick   = OXBLC         ; Used to log the last time an ad was clicked
 fallBack            = oxfb          ; Used to flag if this impression was from a rich-media fallback creative
 trace               = OXTR          ; Used to trigger delivery engine tracing code (if enabled)
+product             = revive        ; Used in async tags as prefix, etc
 
 ;------------------------------------------------------------------------------------------;
 ; Load Balancing / Distributed Statistics                                                  ;

@@ -126,9 +126,9 @@ class XML_Parser_Simple extends XML_Parser
      *                       named after elements (handleElement_$name())
      * @param string $tgenc  a valid target encoding
      */
-    function XML_Parser_Simple($srcenc = null, $mode = 'event', $tgtenc = null)
+    function __construct($srcenc = null, $mode = 'event', $tgtenc = null)
     {
-        $this->XML_Parser($srcenc, $mode, $tgtenc);
+        parent::__construct($srcenc, $mode, $tgtenc);
     }
 
     /**
@@ -143,7 +143,7 @@ class XML_Parser_Simple extends XML_Parser
         }
 
         if ($this->mode != 'func' && $this->mode != 'event') {
-            return $this->raiseError('Unsupported mode given', XML_PARSER_ERROR_UNSUPPORTED_MODE);
+            return $this->customRaiseError('Unsupported mode given', XML_PARSER_ERROR_UNSUPPORTED_MODE);
         }
         xml_set_object($this->parser, $this->_handlerObj);
 
